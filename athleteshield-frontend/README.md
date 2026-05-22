@@ -1,36 +1,236 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AthleteShield Frontend
 
-## Getting Started
+A privacy-first athlete identity verification platform. AthleteShield provides role-based portals for athletes, coaches, federations, administrators, and investigators — handling verification workflows, credential issuance, and abuse reporting with end-to-end encryption and full audit capabilities.
 
-First, run the development server:
+---
+
+## Overview
+
+AthleteShield connects athletes with sports federations to enable secure identity verification and credential issuance. Key capabilities include:
+
+- **Athlete portal** — manage profiles, upload documents, request verification, view credentials with QR codes
+- **Federation portal** — review verification requests, approve/reject with reasons, manage members
+- **Admin/Investigator portal** — manage abuse reports, view audit logs, monitor system metrics
+- **Public features** — anonymous abuse report submission, report tracking, QR credential verification
+
+---
+
+## Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| [Next.js 14+](https://nextjs.org/) | React framework with App Router |
+| [TypeScript](https://www.typescriptlang.org/) | Type safety |
+| [Tailwind CSS](https://tailwindcss.com/) | Utility-first styling |
+| [Zustand](https://zustand-demo.pmnd.rs/) | Client state management |
+| [TanStack Query](https://tanstack.com/query) | Server state and data fetching |
+| [React Hook Form](https://react-hook-form.com/) | Form management |
+| [Zod](https://zod.dev/) | Schema validation |
+| [Axios](https://axios-http.com/) | HTTP client with interceptors |
+| [Recharts](https://recharts.org/) | Data visualization |
+| [qrcode.react](https://github.com/zpao/qrcode.react) | QR code generation |
+| [html5-qrcode](https://github.com/mebjas/html5-qrcode) | QR code scanning |
+
+---
+
+## Prerequisites
+
+- **Node.js** 18.17 or later
+- **npm** 9+ (or pnpm / yarn)
+- A running instance of the [AthleteShield backend API](../README.md) (NestJS, default port 4000)
+
+---
+
+## Setup
+
+1. **Clone the repository**
+
+   ```bash
+   git clone <repository-url>
+   cd athleteshield-frontend
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment variables**
+
+   Copy the example env file and fill in your values:
+
+   ```bash
+   cp .env.example .env.local
+   ```
+
+   See the [Environment Variables](#environment-variables) section for details.
+
+4. **Start the development server**
+
+   ```bash
+   npm run dev
+   ```
+
+   The app will be available at [http://localhost:3000](http://localhost:3000).
+
+---
+
+## Environment Variables
+
+Create a `.env.local` file in the project root. Use `.env.example` as a template.
+
+| Variable | Description | Example |
+|---|---|---|
+| `NEXT_PUBLIC_API_URL` | Base URL of the AthleteShield backend API | `http://localhost:4000/api/v1` |
+| `NEXT_PUBLIC_APP_NAME` | Application display name | `AthleteShield` |
+
+> Variables prefixed with `NEXT_PUBLIC_` are exposed to the browser. Do not store secrets in these variables.
+
+---
+
+## Development
+
+### Start the dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Runs Next.js in development mode with hot reload at [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Lint
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+```
 
-## Learn More
+Runs ESLint across the project using the Next.js ESLint config.
 
-To learn more about Next.js, take a look at the following resources:
+### Type checking
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npx tsc --noEmit
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Testing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Run all tests
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm test
+```
+
+Runs the full Vitest test suite once.
+
+### Run tests with UI
+
+```bash
+npm run test:ui
+```
+
+Opens the Vitest browser UI for interactive test exploration.
+
+### Run tests with coverage
+
+```bash
+npm run test:coverage
+```
+
+Generates a coverage report in the `coverage/` directory.
+
+### Run end-to-end tests
+
+```bash
+npm run test:e2e
+```
+
+Runs Playwright end-to-end tests. Requires the dev server (or a production build) to be running.
+
+> **Note:** E2E tests require a running backend API. Set `NEXT_PUBLIC_API_URL` to point at your test environment before running.
+
+---
+
+## Build & Deploy
+
+### Production build
+
+```bash
+npm run build
+```
+
+Compiles and optimizes the application for production. Output goes to `.next/`.
+
+### Start production server
+
+```bash
+npm start
+```
+
+Serves the production build locally. Run `npm run build` first.
+
+### Environment configuration for production
+
+Set the following environment variables in your hosting environment (Vercel, Docker, etc.):
+
+```
+NEXT_PUBLIC_API_URL=https://api.your-domain.com/api/v1
+NEXT_PUBLIC_APP_NAME=AthleteShield
+```
+
+### Deploying to Vercel
+
+1. Push your code to a Git repository (GitHub, GitLab, Bitbucket).
+2. Import the project in the [Vercel dashboard](https://vercel.com/new).
+3. Set the environment variables under **Project Settings → Environment Variables**.
+4. Vercel will automatically run `npm run build` and deploy on every push to the main branch.
+
+### Deploying with Docker
+
+```dockerfile
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM node:18-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
+EXPOSE 3000
+CMD ["node", "server.js"]
+```
+
+> Enable Next.js standalone output by adding `output: 'standalone'` to `next.config.js` when using Docker.
+
+---
+
+## Project Structure
+
+```
+athleteshield-frontend/
+├── app/                    # Next.js App Router pages
+│   ├── (admin)/            # Admin/Investigator portal
+│   ├── (athlete)/          # Athlete portal
+│   ├── (auth)/             # Login and registration
+│   ├── (federation)/       # Federation portal
+│   └── (public)/           # Public pages (report, track, verify-qr)
+├── components/
+│   ├── features/           # Feature-specific components
+│   ├── forms/              # Shared form components
+│   ├── layouts/            # Layout and navigation components
+│   └── ui/                 # Base UI components
+├── lib/
+│   ├── api/                # Axios API client
+│   ├── stores/             # Zustand state stores
+│   └── validations/        # Zod validation schemas
+├── types/                  # TypeScript type definitions
+├── .env.example            # Environment variable template
+└── middleware.ts            # Next.js route protection middleware
+```

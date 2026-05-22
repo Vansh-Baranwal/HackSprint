@@ -1,6 +1,10 @@
 import { create } from 'zustand';
 import type { Notification } from '@/types';
-import { apiClient } from '@/lib/api/client';
+import {
+  fetchNotifications as apiFetchNotifications,
+  markNotificationAsRead,
+  markAllNotificationsAsRead,
+} from '@/lib/api/notifications';
 
 interface NotificationStore {
   notifications: Notification[];
@@ -39,8 +43,8 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
       };
     });
 
-    // Update on server
-    apiClient.patch(`/notifications/${id}/read`).catch(console.error);
+    // Persist read status to server
+    markNotificationAsRead(id).catch(console.error);
   },
 
   markAllAsRead: () => {
@@ -53,8 +57,8 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
       unreadCount: 0,
     }));
 
-    // Update on server
-    apiClient.post('/notifications/mark-all-read').catch(console.error);
+    // Persist to server
+    markAllNotificationsAsRead().catch(console.error);
   },
 
   removeNotification: (id) => {
@@ -72,7 +76,7 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
 
   fetchNotifications: async () => {
     try {
-      const notifications = await apiClient.get<Notification[]>('/notifications');
+      const notifications = await apiFetchNotifications();
       set({
         notifications,
         unreadCount: notifications.filter((n) => n.status !== 'READ').length,
