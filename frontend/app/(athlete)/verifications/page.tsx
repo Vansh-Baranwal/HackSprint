@@ -17,16 +17,21 @@ export default function VerificationsPage() {
 
   const fetchData = async () => {
     try {
-      const [requestsData, profileData] = await Promise.all([
-        apiClient.get<VerificationRequest[]>('/verification-requests/my-requests'),
-        apiClient.get<any>('/athlete/profile'),
-      ]);
-      setRequests(requestsData);
+      // 1. Fetch profile to get documents
+      const profileData = await apiClient.get<any>('/athlete/profile');
       const docs = (profileData.documents || []).map((doc: any) => ({
         ...doc,
         sizeBytes: Number(doc.sizeBytes),
       }));
       setDocuments(docs);
+
+      // 2. Fetch requests (wrap in its own try/catch because the endpoint might be 404)
+      try {
+        const requestsData = await apiClient.get<VerificationRequest[]>('/verification-requests/my-requests');
+        setRequests(requestsData);
+      } catch (reqErr) {
+        setRequests([]);
+      }
     } catch (err: any) {
       error('Failed to load data');
     } finally {
