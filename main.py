@@ -1,9 +1,12 @@
 import os
 import json
+from typing import List, Optional
 import pandas as pd
 import numpy as np
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
 
 # Import modular engines directly from your models module directory
 from models.injury_risk_engine import AcuteInjuryRiskEngine
@@ -12,15 +15,46 @@ from models.metabolic_regulator import MetabolicRegulatorEngine
 from weekly_wrapped import BodyWrappedEngine
 
 # =================================================================
+# PYDANTIC SCHEMAS FOR INPUT VALIDATION
+# =================================================================
+class TelemetryLog(BaseModel):
+    date: Optional[str] = None
+    workout_duration_minutes: Optional[float] = None
+    workout_intensity: Optional[str] = None
+    running_power: Optional[float] = None
+    cadence: Optional[float] = None
+    symptoms_logging: Optional[str] = None
+    weight_kg: Optional[float] = None
+    active_calories: Optional[float] = None
+    calories_consumed: Optional[float] = None
+    basal_metabolic_rate: Optional[float] = None
+    blood_glucose_mg_dl: Optional[float] = None
+    hrv_rmssd: Optional[float] = None
+    sleep_efficiency: Optional[float] = None
+    resting_heart_rate: Optional[float] = None
+
+class StandardPredictionRequest(BaseModel):
+    athlete_id: str
+    logs: List[TelemetryLog]
+
+class MetabolicPredictionRequest(BaseModel):
+    athlete_id: str
+    weight_category_floor_kg: Optional[float] = 70.0
+    logs: List[TelemetryLog]
+
+class WeeklyWrappedRequest(BaseModel):
+    athlete_id: str
+    history: List[TelemetryLog]
+
+# =================================================================
 # WEB SERVICE INITIALIZATION LAYER
 # =================================================================
 app = FastAPI(
-    title="HackSprint Athlete Performance API",
-    description="Production analytics telemetry engine running on 4-part split arrays.",
+    title="ScreenSense Athlete Performance API",
+    description="Asynchronous analytics telemetry engine supporting explicit multi-model routing.",
     version="1.0.0"
 )
 
-# Enable CORS so your frontend app or mobile dashboard can fetch data securely
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -30,18 +64,26 @@ app.add_middleware(
 )
 
 # =================================================================
-# RESOURCE LAYER: MEMORY-SAFE 4-PART REASSEMBLY STREAM
+# HELPER DATA CONVERSION CORES
 # =================================================================
+def logs_to_dataframe(logs: List[TelemetryLog]) -> pd.DataFrame:
+    """Converts Pydantic request lists into a sanitised DataFrame."""
+    raw_dicts = [log.model_dump(exclude_unset=True) for log in logs]
+    df = pd.DataFrame(raw_dicts)
+    
+    # Handle chronological parsing if timestamps are provided
+    if 'date' in df.columns:
+        df['timestamp'] = pd.to_datetime(df['date'])
+        df = df.sort_values('timestamp').reset_index(drop=True)
+    
+    return preprocess_for_models(df)
+
 def load_and_combine_split_data() -> pd.DataFrame:
-    """
-    Sequentially reads the 4 split dataset parts from the root data directory.
-    Keeps memory usage low to prevent Render OOM crashes.
-    """
+    """Sequentially reads 4 split dataset parts from the data directory."""
     data_folder = "data"
     file_names = [f"wearable_data_part_{i}.csv" for i in range(1, 5)]
     chunk_list = []
 
-    print("\n[STREAMING] Reassembling Data Streams...")
     for file_name in file_names:
         file_path = os.path.join(data_folder, file_name)
         if os.path.exists(file_path):
@@ -50,124 +92,145 @@ def load_and_combine_split_data() -> pd.DataFrame:
         else:
             raise FileNotFoundError(f"Missing critical split file segment: '{file_path}'")
 
-    full_df = pd.concat(chunk_list, ignore_index=True)
-    return full_df
+    return pd.concat(chunk_list, ignore_index=True)
 
-# =================================================================
-# DEFENSIVE PREPROCESSING & DOWNSAMPLING LAYER
-# =================================================================
 def preprocess_for_models(df: pd.DataFrame) -> pd.DataFrame:
     processed_df = df.copy()
-
-    # 1. Clean and enforce chronological order
-    if 'timestamp' in processed_df.columns:
-        processed_df['timestamp'] = pd.to_datetime(processed_df['timestamp'])
-        processed_df = processed_df.sort_values('timestamp').reset_index(drop=True)
-    else:
-        time_cols = [c for c in processed_df.columns if 'time' in c.lower()]
-        if time_cols:
-            processed_df = processed_df.rename(columns={time_cols[0]: 'timestamp'})
-            processed_df['timestamp'] = pd.to_datetime(processed_df['timestamp'])
-            processed_df = processed_df.sort_values('timestamp').reset_index(drop=True)
-
-    # 2. Structural Alignment Mapping
-    mapping = {
-        'weight': 'weight_kg',
-        'resting_hr': 'resting_heart_rate',
-        'hrv': 'hrv_rmssd',
-        'active_cal': 'active_calories',
-        'bmr': 'basal_metabolic_rate'
-    }
-    for old_col, target_col in mapping.items():
-        if target_col not in processed_df.columns:
-            matched = [c for c in processed_df.columns if old_col in c.lower()]
-            if matched:
-                processed_df = processed_df.rename(columns={matched[0]: target_col})
-            else:
-                processed_df[target_col] = np.nan
-
-    # 3. Handle high-density row shrinking for memory safety
-    if len(processed_df) > 1000:
-        if 'timestamp' in processed_df.columns:
-            processed_df['date'] = processed_df['timestamp'].dt.date
-            agg_dict = {col: 'mean' for col in processed_df.select_dtypes(include=[np.number]).columns}
-            for sum_col in ['workout_duration_minutes', 'active_calories', 'calories_consumed']:
-                if sum_col in agg_dict: agg_dict[sum_col] = 'sum'
-            
-            processed_df = processed_df.groupby('date').agg(agg_dict).reset_index()
-            processed_df = processed_df.rename(columns={'date': 'timestamp'})
-        else:
-            processed_df = processed_df.iloc[::1000].reset_index(drop=True)
-
-    processed_df = processed_df.ffill().bfill()
     
-    # Core Backup Metrics Defaults
+    # Fill remaining missing parameters via directional interpolation
+    if not processed_df.empty:
+        processed_df = processed_df.ffill().bfill()
+    
     core_defaults = {
-        'weight_kg': 72.5, 'bmi': 22.3, 'muscle_mass_kg': 34.2, 'cadence': 165.0,
-        'running_power': 260.0, 'resting_heart_rate': 52.0, 'hrv_rmssd': 55.0,
-        'hrv_sdnn': 60.0, 'sleep_efficiency': 90.0, 'skin_temperature_c': 36.4,
-        'sleep_respiratory_rate': 14.0, 'active_calories': 500.0, 'basal_metabolic_rate': 1750.0,
-        'workout_duration_minutes': 45.0, 'workout_intensity': 'medium', 'calories_consumed': 2400.0,
-        'blood_glucose_mg_dl': 100.0, 'ovulation_tracking': 0, 'symptoms_logging': 'none'
+        'weight_kg': 72.5, 'resting_heart_rate': 52.0, 'hrv_rmssd': 55.0,
+        'active_calories': 500.0, 'basal_metabolic_rate': 1750.0,
+        'workout_duration_minutes': 45.0, 'calories_consumed': 2400.0
     }
     for col, default_val in core_defaults.items():
         if col not in processed_df.columns or processed_df[col].isna().all():
             processed_df[col] = default_val
-
-    metadata_cols = ['device_name', 'watch_manufacturer', 'sync_timestamp', 'data_source']
-    processed_df = processed_df.drop(columns=[c for c in metadata_cols if c in processed_df.columns], errors='ignore')
-
+            
     return processed_df
 
 # =================================================================
-# PRODUCTION ENDPOINTS (ASGI INTEGRATION ROUTER)
+# PRODUCTION ENDPOINTS (THE 7 SPECIFIED ROUTES)
 # =================================================================
-@app.get("/")
-def read_root():
-    """Service Health Probe Diagnostic Endpoint."""
+
+# 1. Health Status Check
+@app.get("/health")
+def health_check():
+    data_path = "data/wearable_data_part_1.csv"
     return {
-        "status": "online",
-        "service": "HackSprint Athlete Performance Engine Core",
-        "endpoints_available": ["/api/analytics/latest"]
+        "status": "ok",
+        "engines": ["injury_risk", "cns_fatigue", "metabolic"],
+        "data_file_present": os.path.exists(data_path),
+        "data_path": "data/wearable_data.csv",
+        "chunk_size": 10000
     }
 
-@app.get("/api/analytics/latest")
-def get_performance_analytics():
-    """
-    Compiles data parts dynamically and computes model inferences 
-    as a structured HTTP payload response.
-    """
+# 2. Acute Injury Risk Assessment
+@app.post("/predict/injury-risk")
+def predict_injury_risk(payload: StandardPredictionRequest):
     try:
-        # 1. Pipeline execution reassembly
-        raw_history = load_and_combine_split_data()
-        sanitised_history = preprocess_for_models(raw_history)
-        
-        if len(sanitised_history) < 7:
-            sanitised_history = pd.concat([sanitised_history] * 7, ignore_index=True)
+        df = logs_to_dataframe(payload.logs)
+        engine = AcuteInjuryRiskEngine(trained_model=None)
+        prediction_json = json.loads(engine.predict_latest(df))
+        prediction_json["athlete_id"] = payload.athlete_id
+        return prediction_json
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
-        # 2. Instantiate core internal models
+# 3. CNS Fatigue & Illness Onset Assessment
+@app.post("/predict/cns-fatigue")
+def predict_cns_fatigue(payload: StandardPredictionRequest):
+    try:
+        df = logs_to_dataframe(payload.logs)
+        engine = CNSFatigueEngine(anomaly_detector=None)
+        prediction_json = json.loads(engine.predict_latest(df))
+        prediction_json["athlete_id"] = payload.athlete_id
+        return prediction_json
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# 4. Metabolic & Weight Regulation Assessment
+@app.post("/predict/metabolic")
+def predict_metabolic(payload: MetabolicPredictionRequest):
+    try:
+        df = logs_to_dataframe(payload.logs)
+        engine = MetabolicRegulatorEngine(weight_regressor=None)
+        prediction_json = json.loads(engine.predict_latest(df, target_category_floor_kg=payload.weight_category_floor_kg))
+        prediction_json["athlete_id"] = payload.athlete_id
+        return prediction_json
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# 5. Composite Parallel Assessment
+@app.post("/predict/all")
+def predict_all(payload: StandardPredictionRequest):
+    try:
+        df = logs_to_dataframe(payload.logs)
+        
         ortho_engine = AcuteInjuryRiskEngine(trained_model=None)
         cns_engine = CNSFatigueEngine(anomaly_detector=None)
         metabolic_engine = MetabolicRegulatorEngine(weight_regressor=None)
-
-        # 3. Request evaluations from inference vectors
-        m1_data = json.loads(ortho_engine.predict_latest(sanitised_history))
-        m2_data = json.loads(cns_engine.predict_latest(sanitised_history))
-        m3_data = json.loads(metabolic_engine.predict_latest(sanitised_history, target_category_floor_kg=72.0))
         
-        # 4. Generate the feature wrapped payload
-        wrapped_payload = BodyWrappedEngine.generate_weekly_recap(sanitised_history)
-
-        # 5. Serve the complete compiled data package via HTTP JSON
         return {
-            "success": True,
-            "metrics": {
-                "injury_risk_assessment": m1_data,
-                "cns_fatigue_assessment": m2_data,
-                "metabolic_assessment": m3_data
-            },
-            "weekly_wrapped": wrapped_payload
+            "athlete_id": payload.athlete_id,
+            "injury_risk": json.loads(ortho_engine.predict_latest(df)),
+            "cns_fatigue": json.loads(cns_engine.predict_latest(df)),
+            "metabolic": json.loads(metabolic_engine.predict_latest(df, target_category_floor_kg=70.0))
         }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
-    except Exception as error_context:
-        raise HTTPException(status_code=500, detail=f"Pipeline inference breakdown: {str(error_context)}")
+# 6. Memory-Efficient Chunked CSV Streaming (NDJSON Response)
+@app.post("/predict/stream-csv")
+def stream_csv_analysis(
+    file_path: str = Query("data", description="Path to telemetry directory"),
+    chunk_size: int = Query(10000, description="Rows per stream window"),
+    weight_floor_kg: float = Query(70.0, description="Weight filter threshold")
+):
+    def generate_chunks():
+        try:
+            full_df = load_and_combine_split_data()
+            total_rows = len(full_df)
+            
+            ortho_engine = AcuteInjuryRiskEngine(trained_model=None)
+            cns_engine = CNSFatigueEngine(anomaly_detector=None)
+            metabolic_engine = MetabolicRegulatorEngine(weight_regressor=None)
+            
+            idx = 1
+            for start in range(0, total_rows, chunk_size):
+                end = min(start + chunk_size, total_rows)
+                chunk_df = full_df.iloc[start:end].copy()
+                
+                chunk_payload = {
+                    "chunk_index": idx,
+                    "chunk_row_start": start,
+                    "chunk_row_end": end - 1,
+                    "rows_processed": len(chunk_df),
+                    "injury_risk": json.loads(ortho_engine.predict_latest(preprocess_for_models(chunk_df))),
+                    "cns_fatigue": json.loads(cns_engine.predict_latest(preprocess_for_models(chunk_df))),
+                    "metabolic": json.loads(metabolic_engine.predict_latest(preprocess_for_models(chunk_df), target_category_floor_kg=weight_floor_kg))
+                }
+                yield json.dumps(chunk_payload) + "\n"
+                idx += 1
+        except Exception as streaming_error:
+            yield json.dumps({"error": f"Streaming pipeline disruption: {str(streaming_error)}"}) + "\n"
+
+    return StreamingResponse(generate_chunks(), media_type="application/x-ndjson")
+
+# 7. Weekly Body Wrapped
+@app.post("/api/v1/analytics/wrapped")
+def get_weekly_wrapped(payload: WeeklyWrappedRequest):
+    if len(payload.history) < 7:
+        raise HTTPException(
+            status_code=422, 
+            detail="Unprocessable Entity: Body Wrapped execution vector requires an absolute minimum history window of 7 telemetry log sequences."
+        )
+    try:
+        df = logs_to_dataframe(payload.history)
+        wrapped_payload = BodyWrappedEngine.generate_weekly_recap(df)
+        return {"status": "success", "wrapped": wrapped_payload}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
