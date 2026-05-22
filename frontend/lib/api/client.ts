@@ -7,7 +7,9 @@ class ApiClient {
   private refreshQueue: Array<(token: string) => void> = [];
 
   constructor() {
-    const rawUrl = process.env.NEXT_PUBLIC_API_URL || 'https://atheleai.onrender.com';
+    const isClient = typeof window !== 'undefined';
+    // Use relative path in browser to trigger Next.js rewrites and bypass CORS
+    const rawUrl = isClient ? '' : (process.env.NEXT_PUBLIC_API_URL || 'https://atheleai.onrender.com');
     const cleanUrl = rawUrl.endsWith('/') ? rawUrl.slice(0, -1) : rawUrl;
     const finalBaseUrl = cleanUrl.endsWith('/api/v1') ? cleanUrl : `${cleanUrl}/api/v1`;
 

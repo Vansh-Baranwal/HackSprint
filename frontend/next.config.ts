@@ -56,6 +56,16 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+
+  // Setup proxy to bypass CORS issues by routing /api requests to the backend
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://atheleai.onrender.com/api/:path*',
+      },
+    ];
+  },
 };
 
 export default nextConfig;
