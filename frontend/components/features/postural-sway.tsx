@@ -451,7 +451,9 @@ export function PosturalSway() {
           <Activity className="w-5 h-5 text-orange-500" />
           Diagnostics
         </CardTitle>
-        <Badge variant="outline" className="border-orange-500/30 text-orange-400 font-bank">v1.0</Badge>
+        <span className="inline-flex items-center justify-center rounded-full border border-orange-500/30 text-orange-400 font-bank text-xs px-2 py-0.5">
+          v1.0
+        </span>
       </CardHeader>
       <CardBody className="p-6 md:p-8">
         {renderContent()}
