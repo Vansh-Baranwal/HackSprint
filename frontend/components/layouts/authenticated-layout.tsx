@@ -90,7 +90,7 @@ export const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({ childr
         <div className="absolute bottom-[-10%] right-[-10%] h-[600px] w-[600px] rounded-full bg-red-600/10 mix-blend-screen blur-[120px]" />
       </div>
 
-      <div className="relative z-10 flex h-full w-full">
+      <div className="relative z-10 flex h-full w-full flex-col lg:flex-row">
         <Navigation
           userRoles={user.roles}
           userName={`${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email}

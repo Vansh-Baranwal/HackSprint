@@ -21,7 +21,7 @@ export default function AthleteDashboardPage() {
         </div>
 
         {/* Summary Cards */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardBody>
               <div className="flex items-center gap-4">
@@ -85,7 +85,7 @@ export default function AthleteDashboardPage() {
             <CardTitle>Quick Actions</CardTitle>
           </CardHeader>
           <CardBody>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Link href="/documents">
                 <Button variant="secondary" className="w-full justify-start">
                   <Upload className="mr-2 h-5 w-5" />
