@@ -1,0 +1,749 @@
+/* PosturalSway.css */
+/* Dark, clinical, precise — medical instrument aesthetic */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700&display=swap');
+
+/* ── Tokens ───────────────────────────────────────────────────────────────── */
+:root {
+  --bg:        #080c10;
+  --surface:   #0e1318;
+  --surface2:  #141b22;
+  --border:    rgba(255,255,255,0.07);
+  --border2:   rgba(255,255,255,0.14);
+
+  --text:      #e8edf2;
+  --muted:     #6b7f8f;
+  --hint:      #3d505f;
+
+  --accent:    #4EB8FF;
+  --accent2:   #FF7B54;
+  --purple:    #A78BFA;
+
+  --ok:        #34d399;
+  --ok-bg:     rgba(52,211,153,0.1);
+  --warn:      #fbbf24;
+  --warn-bg:   rgba(251,191,36,0.1);
+  --danger:    #f87171;
+  --danger-bg: rgba(248,113,113,0.1);
+
+  --radius:    12px;
+  --radius-sm: 6px;
+  --mono:      'DM Mono', monospace;
+  --sans:      'Syne', sans-serif;
+}
+
+/* ── Reset ────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Root layout ──────────────────────────────────────────────────────────── */
+.ps-root {
+  min-height: 100vh;
+  background: var(--bg);
+  font-family: var(--sans);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+.ps-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 28px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.ps-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ps-logo-icon {
+  font-size: 20px;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.ps-logo-text {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text);
+}
+
+.ps-header-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+}
+
+/* ── Main ─────────────────────────────────────────────────────────────────── */
+.ps-main {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 32px 16px 48px;
+}
+
+.ps-card {
+  width: 100%;
+  max-width: 560px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+/* ── Screens shared ───────────────────────────────────────────────────────── */
+.ps-screen {
+  padding: 36px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Idle screen ──────────────────────────────────────────────────────────── */
+.ps-idle { align-items: center; text-align: center; }
+
+.ps-idle-hero {
+  position: relative;
+  width: 80px;
+  height: 110px;
+  margin: 0 auto 4px;
+}
+
+.ps-phone-icon {
+  width: 60px;
+  height: 80px;
+  color: var(--accent);
+  position: relative;
+  z-index: 2;
+  margin: 15px auto 0;
+  display: block;
+}
+
+.ps-idle-rings {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ps-idle-rings span {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  opacity: 0;
+  animation: ring 2.4s ease-out infinite;
+}
+
+.ps-idle-rings span:nth-child(1) { width: 70px;  height: 70px;  animation-delay: 0s; }
+.ps-idle-rings span:nth-child(2) { width: 96px;  height: 96px;  animation-delay: 0.6s; }
+.ps-idle-rings span:nth-child(3) { width: 120px; height: 120px; animation-delay: 1.2s; }
+
+@keyframes ring {
+  0%   { opacity: 0.5; transform: scale(0.7); }
+  100% { opacity: 0;   transform: scale(1.2); }
+}
+
+.ps-idle-copy { max-width: 360px; }
+
+.ps-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.ps-subtitle {
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.ps-instructions {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ps-step {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-size: 13.5px;
+  color: var(--text);
+  text-align: left;
+}
+
+.ps-step-num {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+}
+
+.ps-notice {
+  max-width: 360px;
+  font-size: 12px;
+  color: var(--muted);
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  display: flex;
+  gap: 8px;
+  line-height: 1.5;
+}
+
+.ps-notice-icon {
+  flex-shrink: 0;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.ps-baseline-info {
+  font-size: 12px;
+  color: var(--ok);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ps-baseline-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ok);
+  flex-shrink: 0;
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────────────── */
+.ps-btn-primary {
+  width: 100%;
+  max-width: 360px;
+  padding: 14px;
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.ps-btn-primary:hover  { opacity: 0.88; }
+.ps-btn-primary:active { transform: scale(0.98); }
+
+.ps-btn-secondary {
+  padding: 10px 20px;
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.ps-btn-secondary:hover { background: rgba(78,184,255,0.08); }
+
+/* ── Countdown screen ─────────────────────────────────────────────────────── */
+.ps-countdown {
+  align-items: center;
+  justify-content: center;
+  min-height: 340px;
+  text-align: center;
+}
+
+.ps-countdown-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.ps-countdown-num {
+  font-size: 96px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent);
+  animation: pop 0.35s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+
+@keyframes pop {
+  from { transform: scale(0.6); opacity: 0.4; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.ps-countdown-sub {
+  font-size: 14px;
+  color: var(--muted);
+  height: 20px;
+}
+
+/* ── Recording screen ─────────────────────────────────────────────────────── */
+.ps-recording { align-items: center; }
+
+.ps-ring-wrap {
+  position: relative;
+  width: 128px;
+  height: 128px;
+  flex-shrink: 0;
+}
+
+.ps-ring {
+  width: 128px;
+  height: 128px;
+  transform: rotate(-90deg);
+}
+
+.ps-ring-track {
+  fill: none;
+  stroke: var(--surface2);
+  stroke-width: 6;
+}
+
+.ps-ring-fill {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.ps-ring-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ps-ring-time {
+  font-family: var(--mono);
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--text);
+  line-height: 1;
+}
+
+.ps-ring-timelbl {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.ps-rec-signal {
+  width: 100%;
+}
+
+.ps-signal-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.ps-canvas {
+  display: block;
+  width: 100%;
+  height: 80px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface2);
+}
+
+.ps-axis-legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+.ps-axis-legend span {
+  font-family: var(--mono);
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.leg-x::before { content: ''; display: inline-block; width: 14px; height: 2px; background: #4EB8FF; border-radius: 1px; }
+.leg-y::before { content: ''; display: inline-block; width: 14px; height: 2px; background: #FF7B54; border-radius: 1px; }
+.leg-x, .leg-y { color: var(--muted); }
+
+.ps-live-vals {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.ps-live-val {
+  flex: 1;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ps-axis-lbl {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.ax-x { color: #4EB8FF; }
+.ax-y { color: #FF7B54; }
+.ax-z { color: var(--purple); }
+
+.ps-axis-num {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text);
+}
+
+.ps-rec-hint {
+  font-size: 12px;
+  color: var(--hint);
+  text-align: center;
+}
+
+/* ── Processing screen ────────────────────────────────────────────────────── */
+.ps-processing {
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+}
+
+.ps-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.ps-proc-label {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.ps-proc-sub {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ── Result screen ────────────────────────────────────────────────────────── */
+.ps-result { gap: 20px; }
+
+.ps-result-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ps-badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--mono);
+  padding: 4px 14px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.badge-ok   { background: var(--ok-bg);      color: var(--ok);     border: 1px solid rgba(52,211,153,0.25); }
+.badge-warn { background: var(--warn-bg);    color: var(--warn);   border: 1px solid rgba(251,191,36,0.25); }
+.badge-bad  { background: var(--danger-bg);  color: var(--danger); border: 1px solid rgba(248,113,113,0.25); }
+
+.ps-zscore {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  padding: 4px 12px;
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+}
+
+.ps-recommendation {
+  font-size: 13.5px;
+  line-height: 1.55;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid;
+  border-radius: 0;
+}
+
+.rec-ok   { color: var(--ok);     background: var(--ok-bg);     border-color: var(--ok); }
+.rec-warn { color: var(--warn);   background: var(--warn-bg);   border-color: var(--warn); }
+.rec-bad  { color: var(--danger); background: var(--danger-bg); border-color: var(--danger); }
+
+.ps-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.ps-metric-tile {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ps-metric-tile.highlight {
+  border-color: var(--accent);
+  background: rgba(78,184,255,0.05);
+}
+
+.ps-metric-val {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.ps-metric-unit {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.ps-metric-lbl {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.3;
+}
+
+.ps-stab-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.ps-stab-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  align-self: flex-start;
+}
+
+.ps-stab {
+  width: 220px !important;
+  height: 220px !important;
+  background: var(--surface2) !important;
+}
+
+.ps-baseline-prompt {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ps-baseline-prompt p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.ps-result-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.ps-result-actions .ps-btn-primary {
+  flex: 1;
+  max-width: none;
+}
+
+/* ── Error screen ─────────────────────────────────────────────────────────── */
+.ps-error {
+  align-items: center;
+  justify-content: center;
+  min-height: 260px;
+  gap: 16px;
+}
+
+.ps-error-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--danger);
+  color: var(--danger);
+  font-size: 22px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ps-error-msg {
+  font-size: 14px;
+  color: var(--muted);
+  text-align: center;
+  max-width: 320px;
+  line-height: 1.55;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .ps-screen { padding: 24px 20px; }
+  .ps-metrics-grid { grid-template-columns: repeat(2, 1fr); }
+  .ps-header { padding: 14px 20px; }
+  .ps-countdown-num { font-size: 72px; }
+}
+
+/* ── Back button ───────────────────────────────────────────────────────────── */
+.ps-back-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: color 0.15s;
+}
+.ps-back-btn:hover { color: var(--text); }
+
+/* ── Simulation mode switcher (idle screen, desktop only) ──────────────────── */
+.ps-sim-switcher {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ps-sim-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.ps-sim-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.ps-sim-btn {
+  flex: 1;
+  padding: 8px 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+/* Active states per severity */
+.ps-sim-btn.ps-sim-active.ps-sim-healthy {
+  background: rgba(52,211,153,0.1);
+  border-color: rgba(52,211,153,0.4);
+  color: #34d399;
+}
+.ps-sim-btn.ps-sim-active.ps-sim-borderline {
+  background: rgba(251,191,36,0.1);
+  border-color: rgba(251,191,36,0.4);
+  color: #fbbf24;
+}
+.ps-sim-btn.ps-sim-active.ps-sim-high {
+  background: rgba(248,113,113,0.1);
+  border-color: rgba(248,113,113,0.4);
+  color: #f87171;
+}
+
+/* ── Sim badge (recording screen) ─────────────────────────────────────────── */
+.ps-sim-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  padding: 4px 12px;
+  border-radius: 20px;
+  align-self: center;
+  border: 1px solid;
+}
+
+.ps-sim-badge.ps-sim-healthy {
+  background: rgba(52,211,153,0.08);
+  border-color: rgba(52,211,153,0.3);
+  color: #34d399;
+}
+.ps-sim-badge.ps-sim-borderline {
+  background: rgba(251,191,36,0.08);
+  border-color: rgba(251,191,36,0.3);
+  color: #fbbf24;
+}
+.ps-sim-badge.ps-sim-high {
+  background: rgba(248,113,113,0.08);
+  border-color: rgba(248,113,113,0.3);
+  color: #f87171;
+}
