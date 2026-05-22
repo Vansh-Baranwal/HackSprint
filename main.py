@@ -67,15 +67,28 @@ app.add_middleware(
 # HELPER DATA CONVERSION CORES
 # =================================================================
 def logs_to_dataframe(logs: List[TelemetryLog]) -> pd.DataFrame:
-    """Converts Pydantic request lists into a sanitised DataFrame."""
-    raw_dicts = [log.model_dump(exclude_unset=True) for log in logs]
+    """Converts Pydantic request lists into a structurally aligned DataFrame."""
+    # 1. Maintain complete schema positioning by allowing padded None elements
+    raw_dicts = [log.model_dump() for log in logs]
     df = pd.DataFrame(raw_dicts)
     
-    # Handle chronological parsing if timestamps are provided
+    if df.empty:
+        return preprocess_for_models(df)
+
+    # 2. Bridge payload parameter names directly to what engines look for
     if 'date' in df.columns:
         df['timestamp'] = pd.to_datetime(df['date'])
         df = df.sort_values('timestamp').reset_index(drop=True)
     
+    # 3. Explicitly check for specific parameters to feed core metrics
+    mapping = {
+        'resting_heart_rate': 'resting_heart_rate',
+        'hrv_rmssd': 'hrv_rmssd'
+    }
+    for model_key, df_target in mapping.items():
+        if model_key in df.columns and df_target not in df.columns:
+            df[df_target] = df[model_key]
+
     return preprocess_for_models(df)
 
 def load_and_combine_split_data() -> pd.DataFrame:
@@ -97,9 +110,8 @@ def load_and_combine_split_data() -> pd.DataFrame:
 def preprocess_for_models(df: pd.DataFrame) -> pd.DataFrame:
     processed_df = df.copy()
     
-    # Fill remaining missing parameters via directional interpolation
-    if not processed_df.empty:
-        processed_df = processed_df.ffill().bfill()
+    # Fill structural payload gaps via directional backfill/forwardfill
+    processed_df = processed_df.ffill().bfill()
     
     core_defaults = {
         'weight_kg': 72.5, 'resting_heart_rate': 52.0, 'hrv_rmssd': 55.0,
@@ -109,6 +121,9 @@ def preprocess_for_models(df: pd.DataFrame) -> pd.DataFrame:
     for col, default_val in core_defaults.items():
         if col not in processed_df.columns or processed_df[col].isna().all():
             processed_df[col] = default_val
+        else:
+            # Clean up lingering missing values within the column
+            processed_df[col] = processed_df[col].fillna(default_val)
             
     return processed_df
 
