@@ -62,7 +62,7 @@ export const VerificationRequestForm: React.FC<VerificationRequestFormProps> = (
     }
   };
 
-  const availableDocuments = documents.filter(doc => doc.status === 'AVAILABLE');
+  const availableDocuments = documents.filter(doc => doc.status === 'AVAILABLE' || doc.status === 'PENDING_SCAN');
 
   return (
     <Card>
