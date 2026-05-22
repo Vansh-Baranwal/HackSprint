@@ -117,7 +117,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add resize control
     - _Requirements: 10.4_
   
-  - [-] 5.5 Create FileUpload component
+  - [x] 5.5 Create FileUpload component
     - Implement drag-and-drop zone with react-dropzone
     - Add file type and size validation
     - Add preview for images
@@ -125,7 +125,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add remove file button
     - _Requirements: 5.2, 5.3, 5.6, 10.5_
   
-  - [ ] 5.6 Create Modal component
+  - [x] 5.6 Create Modal component
     - Implement overlay background
     - Add close button
     - Add header, body, footer sections
@@ -133,7 +133,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Implement focus trap
     - _Requirements: 7.4, 19.1_
   
-  - [ ] 5.7 Create Toast notification component
+  - [-] 5.7 Create Toast notification component
     - Implement variants: success, error, warning, info
     - Add auto-dismiss after timeout
     - Add manual dismiss button
