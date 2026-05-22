@@ -194,15 +194,15 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit, error: ext
         onChange={(value) => setValue('role', value as UserRole, { shouldValidate: true })}
       />
 
-      <Button type="submit" isLoading={isLoading} className="w-full">
+      <Button type="submit" isLoading={isLoading} className="w-full bg-gradient-to-r from-orange-600 to-red-500 hover:from-orange-500 hover:to-red-400 text-white border-0 shadow-[0_0_15px_rgba(249,115,22,0.3)] transition-all font-bank uppercase tracking-widest text-xs h-12 rounded-full">
         {isLoading ? 'Creating account...' : 'Create account'}
       </Button>
 
-      <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+      <p className="text-center text-sm text-gray-400 font-bank">
         Already have an account?{' '}
         <Link
           href="/login"
-          className="font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+          className="font-medium text-orange-400 hover:text-orange-300"
         >
           Sign in here
         </Link>

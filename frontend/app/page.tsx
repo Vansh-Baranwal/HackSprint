@@ -77,7 +77,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 overflow-hidden selection:bg-blue-500/30">
+    <div className="min-h-screen bg-black text-gray-100 overflow-hidden selection:bg-orange-500/30">
       
       {/* Interactive Cursor Background (Spotlight) */}
       {isMounted && (
@@ -86,7 +86,7 @@ export default function HomePage() {
           style={{
             x: smoothMouseX,
             y: smoothMouseY,
-            background: 'radial-gradient(circle, rgba(37,99,235,0.4) 0%, rgba(14,165,233,0.1) 40%, rgba(0,0,0,0) 70%)',
+            background: 'radial-gradient(circle, rgba(249,115,22,0.4) 0%, rgba(239,68,68,0.1) 40%, rgba(0,0,0,0) 70%)',
           }}
         />
       )}
@@ -131,7 +131,7 @@ export default function HomePage() {
               <motion.div key={i} variants={navItemVariants} whileHover={{ y: -2, scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <Link href={`#${item.split(' ')[0].toLowerCase()}`} className="text-gray-300 transition-colors hover:text-white relative group">
                   {item}
-                  <span className="absolute -bottom-1.5 left-0 w-0 h-0.5 bg-blue-500 transition-all group-hover:w-full"></span>
+                  <span className="absolute -bottom-1.5 left-0 w-0 h-0.5 bg-orange-500 transition-all group-hover:w-full"></span>
                 </Link>
               </motion.div>
             ))}
@@ -146,7 +146,7 @@ export default function HomePage() {
             </Link>
             <Link href="/register">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button className="bg-blue-600 hover:bg-blue-500 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)] transition-all duration-300 hover:shadow-[0_0_25px_rgba(37,99,235,0.8)] rounded-full px-5 py-2 h-9 border-0 font-bank text-xs">
+                <Button className="bg-orange-600 hover:bg-orange-500 text-white shadow-[0_0_15px_rgba(249,115,22,0.4)] transition-all duration-300 hover:shadow-[0_0_25px_rgba(249,115,22,0.8)] rounded-full px-5 py-2 h-9 border-0 font-bank text-xs">
                   Get Started
                 </Button>
               </motion.div>
@@ -170,8 +170,8 @@ export default function HomePage() {
             style={{ backgroundImage: "url('/hero-bg.jpg')" }}
           />
           {/* Overlays to ensure text readability */}
-          <div className="absolute inset-0 bg-gradient-to-b from-gray-950 via-gray-950/70 to-black/80" />
-          <div className="absolute inset-0 bg-blue-950/20 mix-blend-overlay" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-black/50 to-black/80" />
+          <div className="absolute inset-0 bg-zinc-950/30 mix-blend-overlay" />
         </motion.div>
 
         {/* Hero Content */}
@@ -196,7 +196,7 @@ export default function HomePage() {
                 initial={{ opacity: 0, scale: 0.8, filter: "blur(5px)" }}
                 animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                 transition={{ duration: 1.5, delay: 0.8, type: "spring" }}
-                className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500 animate-gradient-x"
+                className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-red-500 animate-gradient-x"
               >
                 Global
               </motion.span>
@@ -211,7 +211,7 @@ export default function HomePage() {
             <motion.div variants={textVariants} className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link href="/register" className="w-full sm:w-auto">
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Button className="h-12 w-full rounded-full bg-blue-600 border-0 px-8 text-sm text-white shadow-[0_0_20px_rgba(37,99,235,0.4)] transition-all hover:bg-blue-500 hover:shadow-[0_0_30px_rgba(37,99,235,0.8)] sm:w-auto z-20 relative font-bank uppercase tracking-widest overflow-hidden group">
+                  <Button className="h-12 w-full rounded-full bg-orange-600 border-0 px-8 text-sm text-white shadow-[0_0_20px_rgba(249,115,22,0.4)] transition-all hover:bg-orange-500 hover:shadow-[0_0_30px_rgba(249,115,22,0.8)] sm:w-auto z-20 relative font-bank uppercase tracking-widest overflow-hidden group">
                     <span className="relative z-10">Join the Platform</span>
                     <div className="absolute inset-0 h-full w-full bg-white/20 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 ease-out" />
                   </Button>
@@ -219,7 +219,7 @@ export default function HomePage() {
               </Link>
               <Link href="/verify-qr" className="w-full sm:w-auto">
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Button variant="outline" className="h-12 w-full rounded-full border-white/20 bg-white/5 px-8 text-sm text-white backdrop-blur-sm transition-colors hover:bg-white/20 sm:w-auto text-gray-200 z-20 relative font-bank uppercase tracking-widest hover:border-blue-400/50">
+                  <Button variant="outline" className="h-12 w-full rounded-full border-white/20 bg-white/5 px-8 text-sm text-white backdrop-blur-sm transition-colors hover:bg-white/20 sm:w-auto text-gray-200 z-20 relative font-bank uppercase tracking-widest hover:border-orange-400/50">
                     <QrCode className="mr-2 h-4 w-4" />
                     Verify Credential
                   </Button>
@@ -245,14 +245,14 @@ export default function HomePage() {
             <motion.div 
               animate={{ height: ["20%", "40%", "20%"], opacity: [0.5, 1, 0.5] }}
               transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-              className="w-1 rounded-full bg-blue-400" 
+              className="w-1 rounded-full bg-orange-400" 
             />
           </motion.div>
         </motion.div>
       </div>
 
       {/* Features Section */}
-      <section className="relative z-20 -mt-10 bg-gray-950 pb-24 pt-16">
+      <section className="relative z-20 -mt-10 bg-black pb-24 pt-16">
         <div className="container mx-auto px-6">
           <motion.div 
             initial="hidden"
@@ -269,14 +269,14 @@ export default function HomePage() {
               id="performance"
               variants={cardVariants}
               whileHover={{ y: -10, rotateX: 2, rotateY: -2, scale: 1.02 }}
-              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gray-900/50 p-6 backdrop-blur-xl transition-all duration-300 hover:bg-gray-800/80 shadow-xl"
+              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/40 p-6 backdrop-blur-xl transition-all duration-300 hover:bg-neutral-800/60 shadow-xl"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
               <div className="relative z-10">
                 <motion.div 
                   whileHover={{ rotate: 360, scale: 1.1 }}
                   transition={{ duration: 0.8, type: "spring" }}
-                  className="mb-5 inline-flex rounded-xl bg-blue-500/20 p-3 text-blue-400 ring-1 ring-inset ring-blue-500/30"
+                  className="mb-5 inline-flex rounded-xl bg-orange-500/20 p-3 text-orange-400 ring-1 ring-inset ring-orange-500/30"
                 >
                   <Activity className="h-6 w-6" />
                 </motion.div>
@@ -292,14 +292,14 @@ export default function HomePage() {
               id="event"
               variants={cardVariants}
               whileHover={{ y: -10, scale: 1.02 }}
-              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gray-900/50 p-6 backdrop-blur-xl transition-all duration-300 hover:bg-gray-800/80 shadow-xl"
+              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/40 p-6 backdrop-blur-xl transition-all duration-300 hover:bg-neutral-800/60 shadow-xl"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
               <div className="relative z-10">
                 <motion.div 
                   whileHover={{ rotate: 360, scale: 1.1 }}
                   transition={{ duration: 0.8, type: "spring" }}
-                  className="mb-5 inline-flex rounded-xl bg-cyan-500/20 p-3 text-cyan-400 ring-1 ring-inset ring-cyan-500/30"
+                  className="mb-5 inline-flex rounded-xl bg-amber-500/20 p-3 text-amber-400 ring-1 ring-inset ring-amber-500/30"
                 >
                   <Calendar className="h-6 w-6" />
                 </motion.div>
@@ -315,14 +315,14 @@ export default function HomePage() {
               id="secure"
               variants={cardVariants}
               whileHover={{ y: -10, rotateX: 2, rotateY: 2, scale: 1.02 }}
-              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gray-900/50 p-6 backdrop-blur-xl transition-all duration-300 hover:bg-gray-800/80 shadow-xl"
+              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/40 p-6 backdrop-blur-xl transition-all duration-300 hover:bg-neutral-800/60 shadow-xl"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+              <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
               <div className="relative z-10">
                 <motion.div 
                   whileHover={{ rotate: 360, scale: 1.1 }}
                   transition={{ duration: 0.8, type: "spring" }}
-                  className="mb-5 inline-flex rounded-xl bg-indigo-500/20 p-3 text-indigo-400 ring-1 ring-inset ring-indigo-500/30"
+                  className="mb-5 inline-flex rounded-xl bg-red-500/20 p-3 text-red-400 ring-1 ring-inset ring-red-500/30"
                 >
                   <Shield className="h-6 w-6" />
                 </motion.div>
@@ -337,8 +337,8 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative z-20 border-t border-white/10 bg-blue-950/30 py-20 backdrop-blur-sm overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-blue-950/80" />
+      <section className="relative z-20 border-t border-white/10 bg-orange-950/30 py-20 backdrop-blur-sm overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-orange-950/80" />
         <motion.div 
           initial={{ opacity: 0, scale: 0.9, y: 30 }}
           whileInView={{ opacity: 1, scale: 1, y: 0 }}
@@ -352,7 +352,7 @@ export default function HomePage() {
           >
             Take your game to the next level
           </motion.h2>
-          <p className="mx-auto mt-4 max-w-2xl text-base text-blue-200/80 font-bank">
+          <p className="mx-auto mt-4 max-w-2xl text-base text-orange-200/80 font-bank">
             Join thousands of professional athletes, coaches, and federations already utilizing AthleteShield.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -361,7 +361,7 @@ export default function HomePage() {
                 whileHover={{ scale: 1.05, rotate: [-1, 1, 0] }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Button className="h-12 w-full rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-8 text-sm text-white border-0 shadow-[0_0_20px_rgba(37,99,235,0.4)] transition-all hover:shadow-[0_0_30px_rgba(34,211,238,0.6)] sm:w-auto relative z-20 font-bank uppercase tracking-widest group overflow-hidden">
+                <Button className="h-12 w-full rounded-full bg-gradient-to-r from-orange-600 to-red-500 px-8 text-sm text-white border-0 shadow-[0_0_20px_rgba(249,115,22,0.4)] transition-all hover:shadow-[0_0_30px_rgba(239,68,68,0.6)] sm:w-auto relative z-20 font-bank uppercase tracking-widest group overflow-hidden">
                   <span className="relative z-10">Create Free Account</span>
                   <div className="absolute inset-0 bg-white/20 -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
                 </Button>
@@ -382,7 +382,7 @@ export default function HomePage() {
               >
                 <Trophy className="h-4 w-4 text-yellow-500" />
               </motion.div>
-              <span className="text-xs tracking-widest uppercase">© 2024 AthleteShield. All rights reserved.</span>
+              <span className="text-xs tracking-widest uppercase">© 2026 VONN. All rights reserved.</span>
             </div>
             <div className="flex gap-6">
               <motion.div whileHover={{ y: -2 }}>

@@ -80,28 +80,28 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, error: externalE
             checked={rememberMe}
             onChange={(e) => setRememberMe(e.target.checked)}
             disabled={isLoading}
-            className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+            className="h-4 w-4 rounded border-zinc-700 bg-neutral-900/50 text-orange-600 focus:ring-2 focus:ring-orange-500"
           />
-          <span className="text-sm text-gray-700 dark:text-gray-300">Remember me</span>
+          <span className="text-sm text-gray-400 font-bank">Remember me</span>
         </label>
 
         <Link
           href="/forgot-password"
-          className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+          className="text-sm font-bank text-orange-400 hover:text-orange-300"
         >
           Forgot password?
         </Link>
       </div>
 
-      <Button type="submit" isLoading={isLoading} className="w-full">
+      <Button type="submit" isLoading={isLoading} className="w-full bg-gradient-to-r from-orange-600 to-red-500 hover:from-orange-500 hover:to-red-400 text-white border-0 shadow-[0_0_15px_rgba(249,115,22,0.3)] transition-all font-bank uppercase tracking-widest text-xs h-12 rounded-full">
         {isLoading ? 'Signing in...' : 'Sign in'}
       </Button>
 
-      <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+      <p className="text-center text-sm text-gray-400 font-bank">
         Don't have an account?{' '}
         <Link
           href="/register"
-          className="font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+          className="font-medium text-orange-400 hover:text-orange-300"
         >
           Register here
         </Link>

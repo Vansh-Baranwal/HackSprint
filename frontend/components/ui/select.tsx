@@ -51,9 +51,9 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
               disabled={disabled}
               className={cn(
                 'flex h-10 w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm',
-                'focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+                'focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2',
                 'disabled:cursor-not-allowed disabled:opacity-50',
-                'dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100',
+                'dark:border-white/10 dark:bg-neutral-900/40 dark:text-gray-100 backdrop-blur-sm',
                 error && 'border-red-500 focus:border-red-500 focus:ring-red-500',
                 className
               )}
@@ -76,7 +76,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
                       placeholder="Search..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="h-9 w-full rounded-md border border-gray-300 bg-white pl-9 pr-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                      className="h-9 w-full rounded-md border border-gray-300 bg-white pl-9 pr-3 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-white/10 dark:bg-neutral-900/40 dark:text-gray-100 backdrop-blur-sm"
                     />
                   </div>
                 </div>
@@ -94,7 +94,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
                         }}
                         className={cn(
                           'cursor-pointer px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700',
-                          option.value === value && 'bg-blue-50 text-blue-600 dark:bg-blue-900 dark:text-blue-300'
+                          option.value === value && 'bg-orange-500/20 text-orange-400 dark:bg-orange-950/40 dark:text-orange-300'
                         )}
                         role="option"
                         aria-selected={option.value === value}
@@ -143,9 +143,9 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             onChange={(e) => onChange?.(e.target.value)}
             className={cn(
               'flex h-10 w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-10 text-sm',
-              'focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+              'focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2',
               'disabled:cursor-not-allowed disabled:opacity-50',
-              'dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100',
+              'dark:border-white/10 dark:bg-neutral-900/40 dark:text-gray-100 backdrop-blur-sm',
               error && 'border-red-500 focus:border-red-500 focus:ring-red-500',
               className
             )}
