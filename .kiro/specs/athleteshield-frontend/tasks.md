@@ -453,7 +453,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
 
 
 - [ ] 17. Federation Portal - Verification Review
-  - [-] 17.1 Create VerificationRequestCard component
+  - [x] 17.1 Create VerificationRequestCard component
     - Display athlete name and profile summary
     - Display request date and status
     - Display attached documents list
@@ -462,13 +462,13 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Open document preview modal on click
     - _Requirements: 7.2, 7.5_
   
-  - [ ] 17.2 Create RejectionModal component
+  - [x] 17.2 Create RejectionModal component
     - Add textarea for rejection reason
     - Add cancel and confirm buttons
     - Add validation for required reason
     - _Requirements: 7.4_
   
-  - [ ] 17.3 Create verification dashboard at app/(federation)/verification-requests/page.tsx
+  - [x] 17.3 Create verification dashboard at app/(federation)/verification-requests/page.tsx
     - Fetch and display all pending verification requests
     - Render VerificationRequestCard for each request
     - Handle approve action
@@ -485,7 +485,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - **Validates: Requirements 7.2, 7.3, 7.4, 7.5, 7.6**
 
 - [ ] 18. Federation Portal - Member Management
-  - [ ] 18.1 Create MemberList component
+  - [x] 18.1 Create MemberList component
     - Display table of federation members
     - Show columns: name, email, role, status, join date
     - Add "Add member" button
@@ -493,14 +493,14 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add filter by status
     - _Requirements: 21.1, 21.4, 21.5_
   
-  - [ ] 18.2 Create AddMemberForm component
+  - [x] 18.2 Create AddMemberForm component
     - Add email input
     - Add role selection
     - Add invitation message textarea
     - Add send invitation button
     - _Requirements: 21.2_
   
-  - [ ] 18.3 Create members page at app/(federation)/members/page.tsx
+  - [x] 18.3 Create members page at app/(federation)/members/page.tsx
     - Fetch and display all federation members
     - Render MemberList component
     - Render AddMemberForm component
@@ -518,7 +518,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - **Validates: Requirements 21.2, 21.3, 21.4, 21.5, 21.6**
 
 - [ ] 19. Federation Portal - Dashboard
-  - [ ] 19.1 Create federation dashboard at app/(federation)/dashboard/page.tsx
+  - [x] 19.1 Create federation dashboard at app/(federation)/dashboard/page.tsx
     - Display summary cards: pending requests, approved verifications, active members
     - Display recent verification requests
     - Display quick actions: review request, add member
@@ -531,7 +531,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 21. Admin/Investigator Portal - Report Management
-  - [ ] 21.1 Create ReportCard component
+  - [x] 21.1 Create ReportCard component
     - Display report summary information
     - Show status badge
     - Show severity indicator
@@ -540,7 +540,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add assign/reassign button
     - _Requirements: 12.1, 12.2_
   
-  - [ ] 21.2 Create ReportDetails component
+  - [x] 21.2 Create ReportDetails component
     - Display full incident description
     - Display evidence files list
     - Display investigation timeline
@@ -549,7 +549,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add save changes button
     - _Requirements: 12.2, 12.3, 12.4_
   
-  - [ ] 21.3 Create reports dashboard at app/(admin)/reports/page.tsx
+  - [x] 21.3 Create reports dashboard at app/(admin)/reports/page.tsx
     - Fetch and display all abuse reports
     - Render ReportCard for each report
     - Add filtering: status, date range, assigned investigator, severity
@@ -566,7 +566,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - **Validates: Requirements 12.2, 12.3, 12.4**
 
 - [ ] 22. Admin Portal - Audit Logs
-  - [ ] 22.1 Create AuditLogTable component
+  - [x] 22.1 Create AuditLogTable component
     - Display paginated table of audit logs
     - Show columns: timestamp, user, action, resource, IP, result
     - Add filter controls: date range, user, action type, resource type
@@ -574,14 +574,14 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add click row to view details
     - _Requirements: 13.1, 13.2, 13.3, 13.4_
   
-  - [ ] 22.2 Create AuditLogDetails modal component
+  - [x] 22.2 Create AuditLogDetails modal component
     - Display full log entry details
     - Show request/response data
     - Show user agent information
     - Add close button
     - _Requirements: 13.5_
   
-  - [ ] 22.3 Create audit logs page at app/(admin)/audit-logs/page.tsx
+  - [x] 22.3 Create audit logs page at app/(admin)/audit-logs/page.tsx
     - Fetch and display audit logs
     - Render AuditLogTable component
     - Handle filtering and pagination
@@ -595,14 +595,14 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - **Validates: Requirements 13.2, 13.4, 13.5**
 
 - [ ] 23. Admin Portal - Metrics Dashboard
-  - [ ] 23.1 Create MetricCard component
+  - [x] 23.1 Create MetricCard component
     - Display single metric value
     - Show trend indicator (up/down)
     - Show comparison to previous period
     - Add icon representing metric type
     - _Requirements: 22.2_
   
-  - [ ] 23.2 Create TimeSeriesChart component
+  - [x] 23.2 Create TimeSeriesChart component
     - Implement line chart using Recharts
     - Add responsive design
     - Add tooltip on hover
@@ -610,7 +610,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add axis labels
     - _Requirements: 22.3_
   
-  - [ ] 23.3 Create metrics dashboard at app/(admin)/metrics/page.tsx
+  - [-] 23.3 Create metrics dashboard at app/(admin)/metrics/page.tsx
     - Fetch system metrics from Backend_API
     - Display summary cards: total users by role, active verifications, issued credentials, pending reports
     - Display time-series charts: daily registrations, verification requests, report submissions
