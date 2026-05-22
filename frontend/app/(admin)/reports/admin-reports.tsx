@@ -15,12 +15,9 @@ import type { AbuseReport, ReportStatus, ReportSeverity } from '@/types';
 export default function AdminReportsPage() {
   const [reports, setReports] = useState<AbuseReport[]>([]);
   const [filteredReports, setFilteredReports] = useState<AbuseReport[]>([]);
-  const [investigators, setInvestigators] = useState<Array<{ id: string; name: string }>>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedReport, setSelectedReport] = useState<AbuseReport | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const [showAssignModal, setShowAssignModal] = useState(false);
-  const [assignToUserId, setAssignToUserId] = useState('');
   
   // Filters
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -31,12 +28,11 @@ export default function AdminReportsPage() {
 
   useEffect(() => {
     fetchReports();
-    fetchInvestigators();
   }, []);
 
   useEffect(() => {
     applyFilters();
-  }, [reports, statusFilter, severityFilter, assignedFilter]);
+  }, [reports, statusFilter, severityFilter]);
 
   const fetchReports = async () => {
     try {
@@ -46,15 +42,6 @@ export default function AdminReportsPage() {
       error('Failed to load reports');
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const fetchInvestigators = async () => {
-    try {
-      const data = await apiClient.get<any[]>('/admin/investigators');
-      setInvestigators(data.map((inv) => ({ id: inv.id, name: inv.name })));
-    } catch (err: any) {
-      // Silently fail
     }
   };
 
@@ -69,39 +56,12 @@ export default function AdminReportsPage() {
       filtered = filtered.filter((r) => r.severity === severityFilter);
     }
 
-    if (assignedFilter === 'assigned') {
-      filtered = filtered.filter((r) => r.assignedToUserId);
-    } else if (assignedFilter === 'unassigned') {
-      filtered = filtered.filter((r) => !r.assignedToUserId);
-    }
-
     setFilteredReports(filtered);
   };
 
   const handleViewDetails = (report: AbuseReport) => {
     setSelectedReport(report);
     setShowDetailsModal(true);
-  };
-
-  const handleAssign = (report: AbuseReport) => {
-    setSelectedReport(report);
-    setAssignToUserId(report.assignedToUserId || '');
-    setShowAssignModal(true);
-  };
-
-  const confirmAssign = async () => {
-    if (!selectedReport) return;
-
-    try {
-      await apiClient.post(`/admin/reports/${selectedReport.id}/assign`, {
-        assignedToUserId: assignToUserId || null,
-      });
-      success('Report assigned successfully');
-      setShowAssignModal(false);
-      fetchReports();
-    } catch (err: any) {
-      error(err.response?.data?.message || 'Failed to assign report');
-    }
   };
 
   const handleUpdateReport = async (reportId: string, updates: any) => {
@@ -183,16 +143,6 @@ export default function AdminReportsPage() {
                 { value: 'CRITICAL', label: 'Critical' },
               ]}
             />
-            <Select
-              label="Assignment"
-              value={assignedFilter}
-              onChange={(e) => setAssignedFilter(e.target.value)}
-              options={[
-                { value: 'all', label: 'All Reports' },
-                { value: 'assigned', label: 'Assigned' },
-                { value: 'unassigned', label: 'Unassigned' },
-              ]}
-            />
           </div>
         </Card>
 
@@ -211,7 +161,6 @@ export default function AdminReportsPage() {
                 key={report.id}
                 report={report}
                 onViewDetails={handleViewDetails}
-                onAssign={handleAssign}
               />
             ))}
           </div>
@@ -227,38 +176,8 @@ export default function AdminReportsPage() {
             >
               <ReportDetails
                 report={selectedReport}
-                investigators={investigators}
                 onUpdate={handleUpdateReport}
               />
-            </Modal>
-
-            <Modal
-              isOpen={showAssignModal}
-              onClose={() => setShowAssignModal(false)}
-              title="Assign Report"
-            >
-              <div className="space-y-4">
-                <Select
-                  label="Assign to Investigator"
-                  value={assignToUserId}
-                  onChange={(e) => setAssignToUserId(e.target.value)}
-                  options={[
-                    { value: '', label: 'Unassigned' },
-                    ...investigators.map((inv) => ({
-                      value: inv.id,
-                      label: inv.name,
-                    })),
-                  ]}
-                />
-                <div className="flex justify-end gap-3">
-                  <Button variant="secondary" onClick={() => setShowAssignModal(false)}>
-                    Cancel
-                  </Button>
-                  <Button onClick={confirmAssign}>
-                    Confirm
-                  </Button>
-                </div>
-              </div>
             </Modal>
           </>
         )}

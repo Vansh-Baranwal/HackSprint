@@ -13,7 +13,6 @@ import type { Federation, Document } from '@/types';
 import { CheckCircle } from 'lucide-react';
 
 const verificationRequestSchema = z.object({
-  federationId: z.string().min(1, 'Please select a federation'),
   purpose: z.string().min(10, 'Purpose must be at least 10 characters'),
   documentIds: z.array(z.string()).min(1, 'Please select at least one document'),
 });
@@ -29,8 +28,6 @@ export const VerificationRequestForm: React.FC<VerificationRequestFormProps> = (
   documents,
   onSubmit,
 }) => {
-  const [federations, setFederations] = useState<Federation[]>([]);
-  const [isLoadingFederations, setIsLoadingFederations] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedDocuments, setSelectedDocuments] = useState<string[]>([]);
 
@@ -46,26 +43,6 @@ export const VerificationRequestForm: React.FC<VerificationRequestFormProps> = (
       documentIds: [],
     },
   });
-
-  useEffect(() => {
-    const fetchFederations = async () => {
-      try {
-        const data = await apiClient.get<Federation[]>('/federations');
-        setFederations(data.filter(f => f.status === 'ACTIVE'));
-      } catch (err) {
-        console.error('Failed to load federations');
-      } finally {
-        setIsLoadingFederations(false);
-      }
-    };
-
-    fetchFederations();
-  }, []);
-
-  const federationOptions: SelectOption[] = federations.map((fed) => ({
-    value: fed.id,
-    label: `${fed.name} (${fed.country})`,
-  }));
 
   const handleDocumentToggle = (documentId: string) => {
     const newSelection = selectedDocuments.includes(documentId)
@@ -94,16 +71,6 @@ export const VerificationRequestForm: React.FC<VerificationRequestFormProps> = (
       </CardHeader>
       <CardBody>
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
-          <Select
-            label="Federation"
-            options={federationOptions}
-            error={errors.federationId?.message}
-            disabled={isSubmitting || isLoadingFederations}
-            required
-            value={watch('federationId') || ''}
-            onChange={(value) => setValue('federationId', value, { shouldValidate: true })}
-          />
-
           <Textarea
             label="Purpose of Verification"
             placeholder="Describe why you need this verification (e.g., competition registration, club membership, etc.)"

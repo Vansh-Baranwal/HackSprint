@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { AuthenticatedLayout } from '@/components/layouts/authenticated-layout';
 import { DocumentUpload } from '@/components/features/document-upload';
 import { DocumentList } from '@/components/features/document-list';
+import { QRVerificationPanel } from '@/components/features/qr-verification-panel';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { useToast } from '@/components/ui/toast';
 import { apiClient } from '@/lib/api/client';
@@ -12,6 +13,7 @@ import type { Document, DocumentType } from '@/types';
 export default function DocumentsPage() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [qrToken, setQrToken] = useState<string | null>(null);
   const { success, error } = useToast();
 
   const fetchDocuments = async () => {
@@ -44,11 +46,16 @@ export default function DocumentsPage() {
       });
       
       const parsedDoc: Document = {
-        ...uploaded,
-        sizeBytes: Number(uploaded.sizeBytes),
+        ...uploaded.document,
+        sizeBytes: Number(uploaded.document.sizeBytes),
       };
       
       setDocuments((prev) => [parsedDoc, ...prev]);
+      
+      if (uploaded.qr && uploaded.qr.token) {
+        setQrToken(uploaded.qr.token);
+      }
+      
       success(`${file.name} uploaded successfully`);
     } catch (err: any) {
       error(err.response?.data?.message || `Failed to upload ${file.name}`);
@@ -85,6 +92,8 @@ export default function DocumentsPage() {
         </div>
 
         <DocumentUpload onUpload={handleUpload} />
+
+        {qrToken && <QRVerificationPanel qrToken={qrToken} />}
 
         {isLoading ? (
           <div className="flex items-center justify-center py-12">

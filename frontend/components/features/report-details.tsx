@@ -9,13 +9,11 @@ import type { AbuseReport, ReportStatus } from '@/types';
 
 interface ReportDetailsProps {
   report: AbuseReport;
-  investigators?: Array<{ id: string; name: string }>;
-  onUpdate: (reportId: string, updates: { status?: ReportStatus; assignedToUserId?: string }) => Promise<void>;
+  onUpdate: (reportId: string, updates: { status?: ReportStatus }) => Promise<void>;
 }
 
-export function ReportDetails({ report, investigators = [], onUpdate }: ReportDetailsProps) {
+export function ReportDetails({ report, onUpdate }: ReportDetailsProps) {
   const [status, setStatus] = useState(report.status);
-  const [assignedTo, setAssignedTo] = useState(report.assignedToUserId || '');
   const [isSaving, setIsSaving] = useState(false);
 
   const handleSave = async () => {
@@ -23,7 +21,6 @@ export function ReportDetails({ report, investigators = [], onUpdate }: ReportDe
     try {
       const updates: any = {};
       if (status !== report.status) updates.status = status;
-      if (assignedTo !== report.assignedToUserId) updates.assignedToUserId = assignedTo;
 
       if (Object.keys(updates).length > 0) {
         await onUpdate(report.id, updates);
@@ -33,7 +30,7 @@ export function ReportDetails({ report, investigators = [], onUpdate }: ReportDe
     }
   };
 
-  const hasChanges = status !== report.status || assignedTo !== report.assignedToUserId;
+  const hasChanges = status !== report.status;
 
   return (
     <Card className="p-6">
@@ -131,19 +128,6 @@ export function ReportDetails({ report, investigators = [], onUpdate }: ReportDe
               { value: 'ESCALATED', label: 'Escalated' },
               { value: 'RESOLVED', label: 'Resolved' },
               { value: 'CLOSED', label: 'Closed' },
-            ]}
-          />
-
-          <Select
-            label="Assign Investigator"
-            value={assignedTo}
-            onChange={(e) => setAssignedTo(e.target.value)}
-            options={[
-              { value: '', label: 'Unassigned' },
-              ...investigators.map((inv) => ({
-                value: inv.id,
-                label: inv.name,
-              })),
             ]}
           />
 

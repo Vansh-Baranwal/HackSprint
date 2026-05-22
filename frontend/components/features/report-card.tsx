@@ -8,7 +8,6 @@ import type { AbuseReport, ReportStatus, ReportSeverity } from '@/types';
 interface ReportCardProps {
   report: AbuseReport;
   onViewDetails: (report: AbuseReport) => void;
-  onAssign: (report: AbuseReport) => void;
 }
 
 const statusColors: Record<ReportStatus, 'default' | 'warning' | 'error' | 'success'> = {
@@ -29,7 +28,7 @@ const severityColors: Record<ReportSeverity, 'default' | 'warning' | 'error'> = 
   CRITICAL: 'error',
 };
 
-export function ReportCard({ report, onViewDetails, onAssign }: ReportCardProps) {
+export function ReportCard({ report, onViewDetails }: ReportCardProps) {
   return (
     <Card className="p-6">
       <div className="space-y-4">
@@ -81,13 +80,6 @@ export function ReportCard({ report, onViewDetails, onAssign }: ReportCardProps)
             className="flex-1"
           >
             View Details
-          </Button>
-          <Button
-            size="sm"
-            onClick={() => onAssign(report)}
-            className="flex-1"
-          >
-            {report.assignedToUserId ? 'Reassign' : 'Assign'}
           </Button>
         </div>
       </div>
