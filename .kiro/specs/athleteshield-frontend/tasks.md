@@ -152,19 +152,19 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add animated shimmer effect
     - _Requirements: 16.5_
   
-  - [-] 5.10 Create Badge component
+  - [x] 5.10 Create Badge component
     - Implement status indicators
     - Add color variants for different statuses
     - Implement sizes: sm, md, lg
     - _Requirements: 6.4, 8.3, 11.2_
   
-  - [ ] 5.11 Create Card component
+  - [x] 5.11 Create Card component
     - Implement container with shadow
     - Add header, body, footer sections
     - Add hover effects
     - _Requirements: 8.2, 12.2_
   
-  - [ ] 5.12 Create Table component
+  - [-] 5.12 Create Table component
     - Implement responsive table
     - Add sortable columns
     - Add pagination
