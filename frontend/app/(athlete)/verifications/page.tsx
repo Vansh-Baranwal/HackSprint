@@ -39,13 +39,11 @@ export default function VerificationsPage() {
   }, []);
 
   const handleSubmit = async (data: {
-    federationId: string;
     purpose: string;
     documentIds: string[];
   }) => {
     try {
       const newRequest = await apiClient.post<VerificationRequest>('/verification-requests', {
-        federationId: data.federationId,
         purpose: data.purpose,
         requestedClaims: {
           documentIds: data.documentIds,
