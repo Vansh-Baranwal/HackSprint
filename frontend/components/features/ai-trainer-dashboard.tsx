@@ -2,51 +2,140 @@
 
 import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardBody } from '@/components/ui/card';
-import { BrainCircuit, Activity, TrendingUp, AlertTriangle, Battery, BatteryWarning } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { BrainCircuit, Activity, Heart, Flame, Moon, ArrowRight, Share2, AlertTriangle, Play, Pause } from 'lucide-react';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { cn } from '@/lib/utils/cn';
 
-interface TrainingData {
-  date: string;
-  load: number;
-  capacity: number;
+interface Slide {
+  slide_id: string;
+  header: string;
+  primary_metric: string;
+  subtext: string;
+  percentage_trend_label?: string;
+  intensity_breakdown?: Record<string, number>;
+  theme_colors?: string[];
+  recovery_metrics?: Record<string, any>;
 }
 
-interface AnalyticsPayload {
-  readinessScore: number;
-  fatigueLevel: 'Low' | 'Moderate' | 'High' | 'Critical';
-  recommendedAction: string;
-  aiAnalysis: string;
-  weeklyData: TrainingData[];
+interface WrappedResponse {
+  status: string;
+  wrapped: {
+    time_horizon: string;
+    slides: Slide[];
+    shareable_summary_card: {
+      title: string;
+      total_minutes_active: number;
+      total_calories_burned: number;
+      archetype: string;
+      archetype_tier: string;
+      avg_sleep_efficiency: string;
+      avg_hrv_ms: number;
+      theme_colors: string[];
+    }
+  }
   isMock?: boolean;
 }
 
-const MOCK_DATA: AnalyticsPayload = {
-  readinessScore: 42,
-  fatigueLevel: 'High',
-  recommendedAction: 'Active Recovery / Rest',
-  aiAnalysis: "Warning: Over-trained. Your accumulated training load over the last 3 days has significantly exceeded your recovery capacity. Your central nervous system is showing signs of high fatigue. I strongly recommend skipping high-intensity intervals today and focusing on mobility or complete rest.",
-  weeklyData: [
-    { date: 'Mon', load: 40, capacity: 85 },
-    { date: 'Tue', load: 85, capacity: 80 },
-    { date: 'Wed', load: 60, capacity: 70 },
-    { date: 'Thu', load: 95, capacity: 65 },
-    { date: 'Fri', load: 90, capacity: 50 },
-    { date: 'Sat', load: 80, capacity: 40 },
-    { date: 'Sun', load: 20, capacity: 45 }, // Today
-  ],
+const MOCK_DATA: WrappedResponse = {
+  status: "success",
+  wrapped: {
+    time_horizon: "Past 7 Days",
+    slides: [
+      {
+        slide_id: "total_minutes",
+        header: "YOUR BODY WAS TUNED IN",
+        primary_metric: "255 mins",
+        subtext: "Spent in active training states. Moving 5,015 active kilocalories total.",
+        percentage_trend_label: "-14% vs last week"
+      },
+      {
+        slide_id: "top_genre",
+        header: "YOUR GO-TO STIMULUS",
+        primary_metric: "HIGH",
+        subtext: "This training intensity single-handedly dominated your neuromuscular profile this week.",
+        percentage_trend_label: "Top Training Genre",
+        intensity_breakdown: {
+          "high": 3,
+          "medium": 2,
+          "low": 2
+        }
+      },
+      {
+        slide_id: "cns_vibe",
+        header: "YOUR PHYSIOLOGICAL VIBE TYPE",
+        primary_metric: "The Steady Cruiser",
+        subtext: "Balanced recovery metrics paired with consistent daily energy outputs. True homeostatic flow state.",
+        theme_colors: ["#10B981", "#059669"],
+        recovery_metrics: {
+          avg_hrv_rmssd_ms: 50.3,
+          avg_sleep_efficiency_pct: 92.1,
+          avg_resting_hr_bpm: 50.7,
+          hrv_trend_vs_last_week: "-23%"
+        }
+      },
+      {
+        slide_id: "body_quirk",
+        header: "THE GLYCOGEN HIGH-POINT",
+        primary_metric: "135 mg/dL",
+        subtext: "Your peak systemic fuel saturation window lit up the charts on Sunday!",
+        percentage_trend_label: "Metabolic Peak"
+      }
+    ],
+    shareable_summary_card: {
+      title: "ScreenSense Body Wrapped",
+      total_minutes_active: 255,
+      total_calories_burned: 5015,
+      archetype: "The Steady Cruiser",
+      archetype_tier: "homeostasis",
+      avg_sleep_efficiency: "92%",
+      avg_hrv_ms: 50.3,
+      theme_colors: ["#10B981", "#059669"]
+    }
+  },
   isMock: true,
 };
 
+// Generate 7 days of dummy logs for the POST payload
+const generateHistoryLogs = () => {
+  const logs = [];
+  const today = new Date();
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    logs.push({
+      date: d.toISOString().split('T')[0],
+      workout_duration_minutes: Math.floor(Math.random() * 60) + 30,
+      active_calories: Math.floor(Math.random() * 500) + 200,
+      hrv_rmssd: Math.floor(Math.random() * 40) + 40,
+      sleep_efficiency: 0.8 + Math.random() * 0.15,
+      resting_heart_rate: Math.floor(Math.random() * 15) + 45,
+      blood_glucose_mg_dl: Math.floor(Math.random() * 40) + 90
+    });
+  }
+  return logs;
+};
+
 export function AITrainerDashboard() {
-  const [data, setData] = useState<AnalyticsPayload | null>(null);
+  const [data, setData] = useState<WrappedResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
   useEffect(() => {
     async function fetchAnalytics() {
       try {
-        const response = await fetch('https://hacksprint-mtyl.onrender.com/api/analytics/latest', {
-          // Add a short timeout so the UI doesn't hang forever if the API is frozen
-          signal: AbortSignal.timeout(5000)
+        const payload = {
+          athlete_id: "athlete_1",
+          history: generateHistoryLogs()
+        };
+
+        const response = await fetch('https://hacksprint-mtyl.onrender.com/api/v1/analytics/wrapped', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+          signal: AbortSignal.timeout(10000) // 10s timeout
         });
         
         if (!response.ok) {
@@ -54,16 +143,14 @@ export function AITrainerDashboard() {
         }
         
         const result = await response.json();
-        // Assume the API matches our format, if not we map it. 
-        // For safety, we check if it has the fields we need.
-        if (result && result.readinessScore !== undefined) {
+        if (result && result.wrapped) {
           setData(result);
         } else {
           throw new Error('Invalid data structure');
         }
       } catch (error) {
         console.error('Failed to fetch AI Trainer data, falling back to mock data:', error);
-        // Fallback to mock data to ensure the hackathon demo works!
+        // Fallback to mock data
         setData(MOCK_DATA);
       } finally {
         setIsLoading(false);
@@ -75,142 +162,174 @@ export function AITrainerDashboard() {
 
   if (isLoading) {
     return (
-      <div className="flex h-64 items-center justify-center bg-neutral-900/40 rounded-xl border border-white/5">
+      <div className="flex flex-col h-64 items-center justify-center bg-neutral-900/40 rounded-xl border border-white/5 space-y-4">
         <LoadingSpinner size="lg" />
+        <p className="text-gray-400 font-bank animate-pulse tracking-widest uppercase text-sm">Processing 7-Day Telemetry...</p>
       </div>
     );
   }
 
   if (!data) return null;
 
-  const maxLoad = Math.max(...data.weeklyData.map(d => Math.max(d.load, d.capacity)), 100);
+  const slides = data.wrapped.slides;
+  const summary = data.wrapped.shareable_summary_card;
+  const themeColors = summary.theme_colors || ["#000000", "#111111"];
+  const gradientStyle = {
+    background: `linear-gradient(135deg, ${themeColors[0]}40, ${themeColors[1]}80)`,
+  };
+
+  const nextSlide = () => {
+    if (activeSlideIndex < slides.length) {
+      setActiveSlideIndex(prev => prev + 1);
+    }
+  };
+
+  const prevSlide = () => {
+    if (activeSlideIndex > 0) {
+      setActiveSlideIndex(prev => prev - 1);
+    }
+  };
+
+  const isSummaryView = activeSlideIndex === slides.length;
 
   return (
-    <div className="space-y-6">
+    <div className="relative rounded-3xl overflow-hidden transition-all duration-1000 shadow-2xl min-h-[600px] flex flex-col" style={gradientStyle}>
+      {/* Decorative Overlays */}
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm z-0" />
+      <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full blur-[100px] opacity-50 z-0 pointer-events-none" style={{ backgroundColor: themeColors[0] }} />
+      <div className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full blur-[120px] opacity-30 z-0 pointer-events-none" style={{ backgroundColor: themeColors[1] }} />
+
+      {/* Header Bar */}
+      <div className="relative z-10 flex justify-between items-center p-6 border-b border-white/10">
+        <div className="flex items-center gap-2 text-white">
+          <BrainCircuit className="w-5 h-5" />
+          <span className="font-heading tracking-widest uppercase font-bold">Body Wrapped</span>
+        </div>
+        <div className="text-white/60 font-bank text-xs uppercase tracking-widest bg-black/20 px-3 py-1 rounded-full border border-white/10">
+          {data.wrapped.time_horizon}
+        </div>
+      </div>
+
       {data.isMock && (
-        <div className="bg-orange-500/10 border border-orange-500/20 text-orange-400 px-4 py-2 rounded-lg text-sm font-bank flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4 shrink-0" />
-          External AI Engine is currently offline. Displaying cached analysis to ensure continuous functionality.
+        <div className="relative z-10 bg-black/50 border-b border-white/5 text-gray-300 px-4 py-2 text-xs font-bank flex items-center justify-center gap-2">
+          <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
+          External engine unavailable. Displaying cached weekly recap.
         </div>
       )}
 
-      {/* AI Analysis Hero Card */}
-      <Card className="border-orange-500/30 shadow-[0_0_30px_rgba(249,115,22,0.1)] overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-orange-600/10 blur-[80px] rounded-full pointer-events-none" />
-        <CardBody className="p-6 md:p-8 flex flex-col md:flex-row gap-8 relative z-10">
-          <div className="flex-shrink-0 flex items-start">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-400 to-red-600 flex items-center justify-center shadow-lg">
-              <BrainCircuit className="w-8 h-8 text-white" />
-            </div>
+      {/* Progress Bars */}
+      <div className="relative z-10 flex gap-2 px-6 pt-6">
+        {[...Array(slides.length + 1)].map((_, idx) => (
+          <div key={idx} className="h-1 flex-1 bg-white/20 rounded-full overflow-hidden">
+            <div 
+              className={cn(
+                "h-full bg-white transition-all duration-300",
+                idx < activeSlideIndex ? "w-full" : idx === activeSlideIndex ? "w-full animate-pulse" : "w-0"
+              )} 
+            />
           </div>
-          <div className="space-y-4 flex-1">
-            <h2 className="text-xl font-heading text-white tracking-widest uppercase">HackSprint AI Analysis</h2>
-            <p className="text-gray-300 font-bank leading-relaxed text-lg">
-              {data.aiAnalysis}
-            </p>
-            <div className="inline-block mt-4 px-4 py-2 bg-red-500/20 border border-red-500/30 rounded-lg">
-              <span className="text-red-400 font-heading text-sm uppercase tracking-widest flex items-center gap-2">
-                <Activity className="w-4 h-4" />
-                Recommendation: {data.recommendedAction}
-              </span>
-            </div>
-          </div>
-        </CardBody>
-      </Card>
-
-      {/* Metrics Row */}
-      <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        <Card>
-          <CardBody className="p-6 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20">
-              <TrendingUp className="w-6 h-6 text-green-400" />
-            </div>
-            <div>
-              <p className="text-xs text-gray-400 font-bank uppercase tracking-widest">Readiness Score</p>
-              <div className="flex items-baseline gap-1">
-                <span className={`text-3xl font-black font-heading ${data.readinessScore > 70 ? 'text-green-400' : data.readinessScore > 40 ? 'text-amber-400' : 'text-red-400'}`}>
-                  {data.readinessScore}
-                </span>
-                <span className="text-gray-500 text-sm">/ 100</span>
-              </div>
-            </div>
-          </CardBody>
-        </Card>
-
-        <Card>
-          <CardBody className="p-6 flex items-center gap-4">
-            <div className={`w-12 h-12 rounded-full flex items-center justify-center border ${data.fatigueLevel === 'High' || data.fatigueLevel === 'Critical' ? 'bg-red-500/10 border-red-500/20' : 'bg-blue-500/10 border-blue-500/20'}`}>
-              {data.fatigueLevel === 'High' || data.fatigueLevel === 'Critical' ? (
-                <BatteryWarning className="w-6 h-6 text-red-400" />
-              ) : (
-                <Battery className="w-6 h-6 text-blue-400" />
-              )}
-            </div>
-            <div>
-              <p className="text-xs text-gray-400 font-bank uppercase tracking-widest">CNS Fatigue Level</p>
-              <span className={`text-2xl font-black font-heading ${data.fatigueLevel === 'High' || data.fatigueLevel === 'Critical' ? 'text-red-400' : 'text-white'}`}>
-                {data.fatigueLevel}
-              </span>
-            </div>
-          </CardBody>
-        </Card>
+        ))}
       </div>
 
-      {/* Graph Section */}
-      <Card>
-        <CardHeader className="border-b border-white/5">
-          <CardTitle className="flex items-center justify-between">
-            <span>Training Load vs Recovery Capacity</span>
-            <div className="flex gap-4 text-xs font-bank font-normal">
-              <div className="flex items-center gap-1">
-                <div className="w-3 h-3 bg-red-500 rounded-sm" />
-                <span className="text-gray-400">Load</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <div className="w-3 h-3 bg-blue-500 rounded-sm" />
-                <span className="text-gray-400">Capacity</span>
-              </div>
-            </div>
-          </CardTitle>
-        </CardHeader>
-        <CardBody className="p-6">
-          <div className="h-64 w-full flex items-end justify-between gap-2 pt-8 relative">
-            {/* Background grid lines */}
-            <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-10">
-              <div className="w-full h-[1px] bg-white" />
-              <div className="w-full h-[1px] bg-white" />
-              <div className="w-full h-[1px] bg-white" />
-              <div className="w-full h-[1px] bg-white" />
-            </div>
+      {/* Slide Content Area */}
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-8 text-center min-h-[400px]">
+        
+        {!isSummaryView ? (
+          // Individual Slide View
+          <div className="max-w-2xl w-full space-y-8 animate-in fade-in zoom-in duration-500">
+            <p className="text-white/70 font-bank tracking-[0.2em] uppercase text-sm font-bold">
+              {slides[activeSlideIndex].header}
+            </p>
+            
+            <h2 className="text-6xl md:text-8xl font-heading font-black text-white drop-shadow-2xl">
+              {slides[activeSlideIndex].primary_metric}
+            </h2>
+            
+            <p className="text-xl md:text-2xl text-white/90 font-bank leading-relaxed max-w-xl mx-auto">
+              {slides[activeSlideIndex].subtext}
+            </p>
 
-            {data.weeklyData.map((day, i) => {
-              const loadHeight = (day.load / maxLoad) * 100;
-              const capHeight = (day.capacity / maxLoad) * 100;
-              
-              return (
-                <div key={i} className="flex-1 flex flex-col items-center justify-end h-full gap-2 z-10 group">
-                  <div className="w-full flex justify-center gap-1 h-full items-end relative">
-                    {/* Tooltip on hover */}
-                    <div className="absolute -top-12 opacity-0 group-hover:opacity-100 transition-opacity bg-black border border-white/10 p-2 rounded text-xs font-bank z-20 whitespace-nowrap">
-                      Load: {day.load} | Cap: {day.capacity}
-                    </div>
-                    
-                    <div 
-                      className="w-1/3 max-w-[20px] bg-gradient-to-t from-red-600 to-red-400 rounded-t-sm transition-all duration-500" 
-                      style={{ height: `${loadHeight}%` }}
-                    />
-                    <div 
-                      className="w-1/3 max-w-[20px] bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-sm transition-all duration-500" 
-                      style={{ height: `${capHeight}%` }}
-                    />
-                  </div>
-                  <span className="text-xs font-bank text-gray-500 uppercase">{day.date}</span>
-                </div>
-              );
-            })}
+            {slides[activeSlideIndex].percentage_trend_label && (
+              <div className="inline-block mt-4 px-4 py-2 rounded-full bg-black/30 border border-white/20 backdrop-blur-md">
+                <span className="text-white font-bank font-bold tracking-widest text-sm uppercase">
+                  {slides[activeSlideIndex].percentage_trend_label}
+                </span>
+              </div>
+            )}
           </div>
-        </CardBody>
-      </Card>
+        ) : (
+          // Summary Card View
+          <div className="max-w-md w-full animate-in slide-in-from-bottom-8 duration-700">
+            <Card className="bg-black/40 backdrop-blur-xl border-white/20 overflow-hidden shadow-2xl">
+              <div className="h-2 w-full" style={{ background: `linear-gradient(90deg, ${themeColors[0]}, ${themeColors[1]})` }} />
+              <CardBody className="p-8 space-y-8">
+                <div className="text-center space-y-2">
+                  <p className="text-gray-400 font-bank text-xs uppercase tracking-widest">Your Weekly Archetype</p>
+                  <h2 className="text-3xl font-heading font-black text-white uppercase tracking-tight">
+                    {summary.archetype}
+                  </h2>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                    <Activity className="w-5 h-5 text-white/60 mb-2" />
+                    <p className="text-2xl font-bold text-white font-heading">{summary.total_minutes_active}</p>
+                    <p className="text-[10px] text-gray-400 font-bank uppercase tracking-widest">Active Mins</p>
+                  </div>
+                  <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                    <Flame className="w-5 h-5 text-white/60 mb-2" />
+                    <p className="text-2xl font-bold text-white font-heading">{summary.total_calories_burned}</p>
+                    <p className="text-[10px] text-gray-400 font-bank uppercase tracking-widest">Calories</p>
+                  </div>
+                  <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                    <Moon className="w-5 h-5 text-white/60 mb-2" />
+                    <p className="text-2xl font-bold text-white font-heading">{summary.avg_sleep_efficiency}</p>
+                    <p className="text-[10px] text-gray-400 font-bank uppercase tracking-widest">Sleep Eff.</p>
+                  </div>
+                  <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                    <Heart className="w-5 h-5 text-white/60 mb-2" />
+                    <p className="text-2xl font-bold text-white font-heading">{summary.avg_hrv_ms}</p>
+                    <p className="text-[10px] text-gray-400 font-bank uppercase tracking-widest">Avg HRV (ms)</p>
+                  </div>
+                </div>
+
+                <Button className="w-full font-bank uppercase tracking-widest gap-2 bg-white text-black hover:bg-gray-200 border-none">
+                  <Share2 className="w-4 h-4" /> Share Summary
+                </Button>
+              </CardBody>
+            </Card>
+          </div>
+        )}
+      </div>
+
+      {/* Navigation Controls */}
+      <div className="relative z-10 p-6 flex justify-between items-center bg-gradient-to-t from-black/50 to-transparent">
+        <Button 
+          variant="ghost" 
+          onClick={prevSlide}
+          disabled={activeSlideIndex === 0}
+          className="text-white hover:bg-white/10 disabled:opacity-30 font-bank uppercase tracking-widest"
+        >
+          Previous
+        </Button>
+        
+        {!isSummaryView ? (
+          <Button 
+            onClick={nextSlide}
+            className="bg-white/20 hover:bg-white/30 text-white border border-white/30 font-bank uppercase tracking-widest gap-2 backdrop-blur-md"
+          >
+            Next Slide <ArrowRight className="w-4 h-4" />
+          </Button>
+        ) : (
+          <Button 
+            onClick={() => setActiveSlideIndex(0)}
+            variant="ghost"
+            className="text-white hover:bg-white/10 font-bank uppercase tracking-widest"
+          >
+            Replay
+          </Button>
+        )}
+      </div>
     </div>
   );
 }
