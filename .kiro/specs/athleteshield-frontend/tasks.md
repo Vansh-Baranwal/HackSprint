@@ -195,7 +195,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add link to registration page
     - _Requirements: 1.1_
   
-  - [-] 6.2 Create RegisterForm component
+  - [x] 6.2 Create RegisterForm component
     - Implement input fields: email, password, confirmPassword, name
     - Add role selection dropdown with descriptions
     - Add password strength indicator
@@ -209,7 +209,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - **Property 8: API Validation Error Mapping**
     - **Validates: Requirements 2.4, 15.1, 15.2, 15.4**
   
-  - [ ] 6.4 Create login page at app/(auth)/login/page.tsx
+  - [-] 6.4 Create login page at app/(auth)/login/page.tsx
     - Render LoginForm component
     - Add privacy policy and terms of service links
     - Implement responsive layout
