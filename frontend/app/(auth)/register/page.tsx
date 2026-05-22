@@ -69,14 +69,14 @@ export default function RegisterPage() {
         <div className="text-center">
           <Link href="/" className="inline-block mb-3 hover:scale-105 transition-transform duration-300">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-red-500 font-heading font-extrabold text-3xl uppercase tracking-widest drop-shadow-[0_0_15px_rgba(249,115,22,0.3)]">
-              VONN
+              Khel Setu
             </span>
           </Link>
           <h1 className="text-3xl font-bold tracking-tight text-white font-heading uppercase">
             Create your account
           </h1>
           <p className="mt-2 text-xs text-gray-400 font-bank uppercase tracking-wider">
-            Join VONN to manage your athlete identity securely
+            Join Khel Setu to manage your athlete identity securely
           </p>
         </div>
 

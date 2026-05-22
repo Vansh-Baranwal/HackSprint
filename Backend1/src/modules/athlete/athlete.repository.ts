@@ -55,6 +55,15 @@ export class AthleteRepository {
     });
   }
 
+  createProfileByUserId(userId: string, athleteCode: string) {
+    return this.prisma.athleteProfile.create({
+      data: {
+        userId,
+        athleteCode,
+      },
+    });
+  }
+
   createDocument(input: {
     athleteProfileId: string;
     uploadedByUserId: string;

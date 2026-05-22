@@ -2,16 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { LoginForm } from '@/components/forms/login-form';
 import { apiClient } from '@/lib/api/client';
 import type { LoginFormData } from '@/lib/validations/auth';
-import type { User } from '@/types';
-import { UserRole } from '@/types';
 
 export default function LoginPage() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState<string>('');
   const registered = searchParams.get('registered');
@@ -41,20 +38,26 @@ export default function LoginPage() {
   const handleLogin = async (data: LoginFormData) => {
     try {
       setError('');
-      const user = await apiClient.post<User>('/auth/login', data);
+      const response = await apiClient.post<any>('/auth/login', data);
       
-      // Redirect based on user role
-      if (user.roles.includes(UserRole.ATHLETE)) {
-        router.push('/dashboard');
-      } else if (user.roles.includes(UserRole.FEDERATION)) {
-        router.push('/dashboard');
-      } else if (user.roles.includes(UserRole.ADMIN) || user.roles.includes(UserRole.INVESTIGATOR)) {
-        router.push('/dashboard');
-      } else {
-        router.push('/dashboard');
+      // Store auth data in localStorage
+      if (response.accessToken) {
+        localStorage.setItem('accessToken', response.accessToken);
+        // Also set as a cookie so the Next.js middleware can read it for route protection
+        document.cookie = `Access_Token=${response.accessToken}; path=/; max-age=${15 * 60}; SameSite=Lax`;
       }
+      if (response.refreshToken) {
+        localStorage.setItem('refreshToken', response.refreshToken);
+      }
+      if (response.user) {
+        localStorage.setItem('user', JSON.stringify(response.user));
+      }
+
+      // Hard redirect to dashboard to ensure clean page load
+      window.location.href = '/dashboard';
     } catch (err: any) {
-      const message = err.response?.data?.message || 'Invalid email or password';
+      console.error("Login error:", err);
+      const message = err.response?.data?.message || err.message || 'Invalid email or password';
       setError(message);
       throw new Error(message);
     }
@@ -79,14 +82,14 @@ export default function LoginPage() {
         <div className="text-center">
           <Link href="/" className="inline-block mb-3 hover:scale-105 transition-transform duration-300">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-red-500 font-heading font-extrabold text-3xl uppercase tracking-widest drop-shadow-[0_0_15px_rgba(249,115,22,0.3)]">
-              VONN
+              Khel Setu
             </span>
           </Link>
           <h1 className="text-3xl font-bold tracking-tight text-white font-heading uppercase">
             Welcome back
           </h1>
           <p className="mt-2 text-xs text-gray-400 font-bank uppercase tracking-wider">
-            Sign in to your VONN account
+            Sign in to your Khel Setu account
           </p>
         </div>
 

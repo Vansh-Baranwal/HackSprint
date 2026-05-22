@@ -16,10 +16,15 @@ export class AthleteService {
   ) {}
 
   async getProfile(user: AuthenticatedUser) {
-    const profile = await this.repository.findProfileByUserId(user.id);
+    let profile = await this.repository.findProfileByUserId(user.id);
 
     if (!profile) {
-      throw new NotFoundException('Athlete profile not found');
+      const athleteCode = this.createAthleteCode();
+      await this.repository.createProfileByUserId(user.id, athleteCode);
+      profile = await this.repository.findProfileByUserId(user.id);
+      if (!profile) {
+        throw new NotFoundException('Athlete profile not found');
+      }
     }
 
     return {
@@ -29,6 +34,15 @@ export class AthleteService {
         sizeBytes: document.sizeBytes.toString(),
       })),
     };
+  }
+
+  private createAthleteCode(): string {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let code = 'ATH-';
+    for (let i = 0; i < 8; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return code;
   }
 
   async updateProfile(user: AuthenticatedUser, dto: UpdateAthleteProfileDto) {

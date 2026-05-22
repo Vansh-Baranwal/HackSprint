@@ -382,7 +382,7 @@ export default function HomePage() {
               >
                 <Trophy className="h-4 w-4 text-yellow-500" />
               </motion.div>
-              <span className="text-xs tracking-widest uppercase">© 2026 VONN. All rights reserved.</span>
+              <span className="text-xs tracking-widest uppercase">© 2026 Khel Setu. All rights reserved.</span>
             </div>
             <div className="flex gap-6">
               <motion.div whileHover={{ y: -2 }}>

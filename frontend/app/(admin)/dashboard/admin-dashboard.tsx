@@ -56,10 +56,10 @@ export default function AdminDashboardPage() {
     <AuthenticatedLayout>
       <div className="mx-auto max-w-7xl space-y-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+          <h1 className="text-3xl font-bold text-white font-heading uppercase tracking-tight">
             Admin Dashboard
           </h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
+          <p className="mt-2 text-xs text-orange-400 font-bank uppercase tracking-wider">
             System overview and administration
           </p>
         </div>
@@ -68,14 +68,14 @@ export default function AdminDashboardPage() {
           <Card className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Total Reports</p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-2">
+                <p className="text-xs text-gray-400 font-bank uppercase tracking-wider">Total Reports</p>
+                <p className="text-3xl font-bold text-white font-heading mt-2">
                   {data?.totalReports || 0}
                 </p>
               </div>
-              <div className="p-3 bg-red-100 dark:bg-red-900/20 rounded-lg">
+              <div className="p-3 bg-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.15)] rounded-lg">
                 <svg
-                  className="w-8 h-8 text-red-600 dark:text-red-400"
+                  className="w-8 h-8 text-red-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -94,16 +94,16 @@ export default function AdminDashboardPage() {
           <Card className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-xs text-gray-400 font-bank uppercase tracking-wider">
                   Pending Investigations
                 </p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-2">
+                <p className="text-3xl font-bold text-white font-heading mt-2">
                   {data?.pendingInvestigations || 0}
                 </p>
               </div>
-              <div className="p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg">
+              <div className="p-3 bg-amber-500/20 shadow-[0_0_15px_rgba(251,191,36,0.15)] rounded-lg">
                 <svg
-                  className="w-8 h-8 text-yellow-600 dark:text-yellow-400"
+                  className="w-8 h-8 text-amber-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -122,16 +122,16 @@ export default function AdminDashboardPage() {
           <Card className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-xs text-gray-400 font-bank uppercase tracking-wider">
                   Audit Log Entries
                 </p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-2">
+                <p className="text-3xl font-bold text-white font-heading mt-2">
                   {data?.auditLogEntries || 0}
                 </p>
               </div>
-              <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+              <div className="p-3 bg-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.15)] rounded-lg">
                 <svg
-                  className="w-8 h-8 text-blue-600 dark:text-blue-400"
+                  className="w-8 h-8 text-blue-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -151,7 +151,7 @@ export default function AdminDashboardPage() {
         <div className="grid gap-6 md:grid-cols-2">
           <Card className="p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+              <h2 className="text-xl font-bold tracking-tight text-white font-heading uppercase">
                 Recent Reports
               </h2>
               <Link href="/reports">
@@ -166,13 +166,13 @@ export default function AdminDashboardPage() {
                 {data.recentReports.slice(0, 5).map((report: any) => (
                   <div
                     key={report.id}
-                    className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg"
+                    className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg transition-colors hover:bg-white/10"
                   >
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-gray-100">
+                      <p className="font-medium text-white">
                         {report.title || 'Incident Report'}
                       </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                      <p className="text-xs text-gray-400 font-bank mt-1">
                         {new Date(report.createdAt).toLocaleDateString()}
                       </p>
                     </div>
@@ -188,12 +188,12 @@ export default function AdminDashboardPage() {
           </Card>
 
           <Card className="p-6">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
+            <h2 className="text-xl font-bold tracking-tight text-white font-heading uppercase mb-6">
               System Health
             </h2>
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <div className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg">
+                <span className="text-xs font-medium text-gray-300 font-bank uppercase tracking-wider">
                   API Status
                 </span>
                 <Badge
@@ -204,8 +204,8 @@ export default function AdminDashboardPage() {
                   {data?.systemHealth.apiStatus || 'UNKNOWN'}
                 </Badge>
               </div>
-              <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <div className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg">
+                <span className="text-xs font-medium text-gray-300 font-bank uppercase tracking-wider">
                   Database Status
                 </span>
                 <Badge
@@ -216,8 +216,8 @@ export default function AdminDashboardPage() {
                   {data?.systemHealth.databaseStatus || 'UNKNOWN'}
                 </Badge>
               </div>
-              <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <div className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg">
+                <span className="text-xs font-medium text-gray-300 font-bank uppercase tracking-wider">
                   Queue Status
                 </span>
                 <Badge
@@ -233,7 +233,7 @@ export default function AdminDashboardPage() {
         </div>
 
         <Card className="p-6">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+          <h2 className="text-xl font-bold tracking-tight text-white font-heading uppercase mb-4">
             Quick Actions
           </h2>
           <div className="grid gap-4 md:grid-cols-3">

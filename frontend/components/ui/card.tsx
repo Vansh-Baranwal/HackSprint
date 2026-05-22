@@ -11,8 +11,8 @@ const Card: React.FC<CardProps> = ({ children, className, hover = false }) => {
   return (
     <div
       className={cn(
-        'rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800',
-        hover && 'transition-shadow hover:shadow-md',
+        'rounded-2xl border border-white/10 bg-neutral-900/40 shadow-2xl backdrop-blur-xl',
+        hover && 'transition-all duration-300 hover:shadow-[0_0_20px_rgba(249,115,22,0.15)] hover:border-orange-500/30',
         className
       )}
     >
@@ -30,7 +30,7 @@ const CardHeader: React.FC<CardHeaderProps> = ({ children, className }) => {
   return (
     <div
       className={cn(
-        'border-b border-gray-200 px-6 py-4 dark:border-gray-700',
+        'border-b border-white/10 px-6 py-4',
         className
       )}
     >
@@ -48,7 +48,7 @@ const CardTitle: React.FC<CardTitleProps> = ({ children, className }) => {
   return (
     <h3
       className={cn(
-        'text-lg font-semibold text-gray-900 dark:text-gray-100',
+        'text-xl font-bold tracking-tight text-white font-heading uppercase',
         className
       )}
     >
@@ -66,7 +66,7 @@ const CardDescription: React.FC<CardDescriptionProps> = ({ children, className }
   return (
     <p
       className={cn(
-        'mt-1 text-sm text-gray-500 dark:text-gray-400',
+        'mt-2 text-xs text-gray-400 font-bank uppercase tracking-wider',
         className
       )}
     >
@@ -97,7 +97,7 @@ const CardFooter: React.FC<CardFooterProps> = ({ children, className }) => {
   return (
     <div
       className={cn(
-        'border-t border-gray-200 px-6 py-4 dark:border-gray-700',
+        'border-t border-white/10 px-6 py-4',
         className
       )}
     >

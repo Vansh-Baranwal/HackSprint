@@ -81,8 +81,8 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
         notifications,
         unreadCount: notifications.filter((n) => n.status !== 'READ').length,
       });
-    } catch (error) {
-      console.error('Failed to fetch notifications:', error);
+    } catch {
+      // Notifications endpoint may not exist on this backend — silently ignore
     }
   },
 

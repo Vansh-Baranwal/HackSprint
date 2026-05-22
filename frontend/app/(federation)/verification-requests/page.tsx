@@ -74,12 +74,22 @@ export default function FederationVerificationRequestsPage() {
     }
   };
 
-  const handleViewDocument = async (documentId: string) => {
-    try {
-      const doc = await apiClient.get<Document>(`/documents/${documentId}`);
-      setSelectedDocument(doc);
+  const handleViewDocument = (documentId: string) => {
+    let foundDoc: Document | null = null;
+    for (const req of requests) {
+      if (req.documents) {
+        const doc = req.documents.find((d) => d.id === documentId);
+        if (doc) {
+          foundDoc = doc;
+          break;
+        }
+      }
+    }
+
+    if (foundDoc) {
+      setSelectedDocument(foundDoc);
       setShowDocumentPreview(true);
-    } catch (err: any) {
+    } else {
       error('Failed to load document');
     }
   };

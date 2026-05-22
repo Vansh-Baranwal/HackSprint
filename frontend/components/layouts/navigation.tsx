@@ -135,10 +135,10 @@ export const Navigation: React.FC<NavigationProps> = ({
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden h-screen w-64 flex-col border-r border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 lg:flex">
-        <div className="flex h-16 items-center border-b border-gray-200 px-6 dark:border-gray-700">
-          <Link href="/" className="text-xl font-bold text-gray-900 dark:text-gray-100">
-            AthleteShield
+      <aside className="hidden h-screen w-64 flex-col border-r border-white/10 bg-neutral-900/40 backdrop-blur-xl lg:flex">
+        <div className="flex h-16 items-center border-b border-white/10 px-6">
+          <Link href="/" className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-red-500 font-heading font-extrabold text-2xl uppercase tracking-widest drop-shadow-[0_0_15px_rgba(249,115,22,0.3)]">
+            Khel Setu
           </Link>
         </div>
 
@@ -148,10 +148,10 @@ export const Navigation: React.FC<NavigationProps> = ({
               key={item.href}
               href={item.href}
               className={cn(
-                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-300',
                 isActive(item.href)
-                  ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400'
-                  : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
+                  ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)]'
+                  : 'text-gray-300 hover:bg-white/5 hover:text-white'
               )}
               aria-current={isActive(item.href) ? 'page' : undefined}
             >
@@ -161,21 +161,9 @@ export const Navigation: React.FC<NavigationProps> = ({
           ))}
         </nav>
 
-        <div className="border-t border-gray-200 p-4 dark:border-gray-700">
-          <button
-            onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-            aria-expanded={isProfileDropdownOpen}
-            aria-haspopup="true"
-          >
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white" aria-hidden="true">
-              {userName?.charAt(0).toUpperCase() || 'U'}
-            </div>
-            <div className="flex-1 text-left">
-              <p className="font-medium">{userName || 'User'}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">{userEmail}</p>
-            </div>
-            {onNotificationOpenChange && (
+        <div className="border-t border-white/10 p-4">
+          {onNotificationOpenChange && (
+            <div className="mb-2 flex justify-end">
               <NotificationDropdown
                 notifications={notifications}
                 unreadCount={notificationCount}
@@ -184,14 +172,28 @@ export const Navigation: React.FC<NavigationProps> = ({
                 onMarkAsRead={onMarkAsRead || (() => {})}
                 onMarkAllAsRead={onMarkAllAsRead || (() => {})}
               />
-            )}
+            </div>
+          )}
+          <button
+            onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-white/5 hover:text-white text-left"
+            aria-expanded={isProfileDropdownOpen}
+            aria-haspopup="true"
+          >
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-red-600 text-white shadow-lg flex-shrink-0" aria-hidden="true">
+              {userName?.charAt(0).toUpperCase() || 'U'}
+            </div>
+            <div className="flex-1 overflow-hidden">
+              <p className="text-sm font-medium text-white truncate">{userName || 'User'}</p>
+              <p className="text-xs text-gray-400 truncate">{userEmail}</p>
+            </div>
           </button>
 
           {isProfileDropdownOpen && (
             <div className="mt-2 space-y-1" role="menu">
               <button
                 onClick={onLogout}
-                className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+                className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-red-400 transition-colors hover:bg-red-500/10"
                 role="menuitem"
               >
                 <LogOut className="h-5 w-5" />
@@ -203,9 +205,9 @@ export const Navigation: React.FC<NavigationProps> = ({
       </aside>
 
       {/* Mobile Header */}
-      <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4 dark:border-gray-700 dark:bg-gray-800 lg:hidden">
-        <Link href="/" className="text-xl font-bold text-gray-900 dark:text-gray-100">
-          AthleteShield
+      <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-white/10 bg-neutral-900/40 backdrop-blur-xl px-4 lg:hidden">
+        <Link href="/" className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-red-500 font-heading font-extrabold text-xl uppercase tracking-widest">
+          Khel Setu
         </Link>
 
         <div className="flex items-center gap-4">
@@ -222,7 +224,7 @@ export const Navigation: React.FC<NavigationProps> = ({
 
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="rounded-lg p-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+            className="rounded-lg p-2 text-gray-300 hover:bg-white/5"
             aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isMobileMenuOpen}
           >
@@ -234,7 +236,7 @@ export const Navigation: React.FC<NavigationProps> = ({
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div
-          className="fixed inset-0 top-16 z-40 bg-white dark:bg-gray-800 lg:hidden"
+          className="fixed inset-0 top-16 z-40 bg-black/95 backdrop-blur-xl lg:hidden"
           role="dialog"
           aria-label="Mobile navigation menu"
         >
@@ -245,10 +247,10 @@ export const Navigation: React.FC<NavigationProps> = ({
                 href={item.href}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={cn(
-                  'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+                  'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-300',
                   isActive(item.href)
-                    ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400'
-                    : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
+                    ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)]'
+                    : 'text-gray-300 hover:bg-white/5 hover:text-white'
                 )}
                 aria-current={isActive(item.href) ? 'page' : undefined}
               >

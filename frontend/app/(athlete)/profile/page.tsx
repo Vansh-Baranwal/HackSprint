@@ -10,6 +10,17 @@ import { apiClient } from '@/lib/api/client';
 import type { AthleteProfile } from '@/types';
 import type { AthleteProfileFormData } from '@/lib/validations/profile';
 
+const formatDateForInput = (dateString: any): string => {
+  if (!dateString) return '';
+  try {
+    const d = new Date(dateString);
+    if (isNaN(d.getTime())) return '';
+    return d.toISOString().split('T')[0];
+  } catch {
+    return '';
+  }
+};
+
 export default function ProfilePage() {
   const [profile, setProfile] = useState<AthleteProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -18,7 +29,7 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const data = await apiClient.get<AthleteProfile>('/athlete-profiles/me');
+        const data = await apiClient.get<AthleteProfile>('/athlete/profile');
         setProfile(data);
       } catch (err: any) {
         if (err.response?.status !== 404) {
@@ -34,15 +45,18 @@ export default function ProfilePage() {
 
   const handleSubmit = async (data: AthleteProfileFormData) => {
     try {
-      if (profile) {
-        const updated = await apiClient.patch<AthleteProfile>(`/athlete-profiles/${profile.id}`, data);
-        setProfile(updated);
-        success('Profile updated successfully');
-      } else {
-        const created = await apiClient.post<AthleteProfile>('/athlete-profiles', data);
-        setProfile(created);
-        success('Profile created successfully');
-      }
+      // Filter payload to only send non-null, non-empty, whitelisted fields expected by the backend
+      const payload: Record<string, string> = {};
+      
+      if (data.dateOfBirth) payload.dateOfBirth = data.dateOfBirth;
+      if (data.gender) payload.gender = data.gender;
+      if (data.nationality) payload.nationality = data.nationality;
+      if (data.primarySport) payload.primarySport = data.primarySport;
+      if (data.clubName) payload.clubName = data.clubName;
+
+      const updated = await apiClient.patch<AthleteProfile>('/athlete/profile', payload);
+      setProfile(updated);
+      success('Profile updated successfully');
     } catch (err: any) {
       error(err.response?.data?.message || 'Failed to save profile');
       throw err;
@@ -74,7 +88,7 @@ export default function ProfilePage() {
             <CardBody>
               <ProfileForm
                 initialData={profile ? {
-                  dateOfBirth: profile.dateOfBirth,
+                  dateOfBirth: formatDateForInput(profile.dateOfBirth),
                   gender: profile.gender,
                   nationality: profile.nationality,
                   primarySport: profile.primarySport,

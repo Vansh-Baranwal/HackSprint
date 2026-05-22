@@ -12,7 +12,7 @@ export class FederationController {
   constructor(private readonly federationService: FederationService) {}
 
   @Get()
-  @Roles(UserRole.ADMIN, UserRole.FEDERATION)
+  @Roles(UserRole.ADMIN, UserRole.FEDERATION, UserRole.ATHLETE, UserRole.COACH, UserRole.INVESTIGATOR)
   list() {
     return this.federationService.list();
   }

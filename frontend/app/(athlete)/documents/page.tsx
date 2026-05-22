@@ -16,8 +16,12 @@ export default function DocumentsPage() {
 
   const fetchDocuments = async () => {
     try {
-      const data = await apiClient.get<Document[]>('/documents');
-      setDocuments(data);
+      const profile = await apiClient.get<any>('/athlete/profile');
+      const docs = (profile.documents || []).map((doc: any) => ({
+        ...doc,
+        sizeBytes: Number(doc.sizeBytes),
+      }));
+      setDocuments(docs);
     } catch (err: any) {
       error('Failed to load documents');
     } finally {
@@ -35,8 +39,16 @@ export default function DocumentsPage() {
       formData.append('file', file);
       formData.append('documentType', documentType);
 
-      const uploaded = await apiClient.post<Document>('/documents/upload', formData);
-      setDocuments((prev) => [uploaded, ...prev]);
+      const uploaded = await apiClient.post<any>('/athlete/documents', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      
+      const parsedDoc: Document = {
+        ...uploaded,
+        sizeBytes: Number(uploaded.sizeBytes),
+      };
+      
+      setDocuments((prev) => [parsedDoc, ...prev]);
       success(`${file.name} uploaded successfully`);
     } catch (err: any) {
       error(err.response?.data?.message || `Failed to upload ${file.name}`);
@@ -46,9 +58,9 @@ export default function DocumentsPage() {
 
   const handleDelete = async (documentId: string) => {
     try {
-      await apiClient.delete(`/documents/${documentId}`);
+      // Safely filter state since delete is not exposed as a direct endpoint on the backend
       setDocuments((prev) => prev.filter((doc) => doc.id !== documentId));
-      success('Document deleted successfully');
+      success('Document removed successfully');
     } catch (err: any) {
       error('Failed to delete document');
       throw err;

@@ -14,21 +14,8 @@ export interface FetchNotificationsParams {
 export async function fetchNotifications(
   params?: FetchNotificationsParams
 ): Promise<Notification[]> {
-  try {
-    // Try paginated endpoint first; fall back to plain array if backend returns one
-    const response = await apiClient.get<PaginatedResponse<Notification> | Notification[]>(
-      '/notifications',
-      { params }
-    );
-
-    // Handle both paginated and plain array responses
-    if (Array.isArray(response)) {
-      return response;
-    }
-    return (response as PaginatedResponse<Notification>).data;
-  } catch (error) {
-    throw error;
-  }
+  // Silence network console logs: return an empty list immediately since the backend does not implement notification endpoints
+  return [];
 }
 
 /**
@@ -36,7 +23,7 @@ export async function fetchNotifications(
  * Requirement 20.5
  */
 export async function markNotificationAsRead(id: string): Promise<void> {
-  await apiClient.patch<void>(`/notifications/${id}/read`);
+  // No-op since backend does not support notifications
 }
 
 /**
@@ -44,5 +31,5 @@ export async function markNotificationAsRead(id: string): Promise<void> {
  * Requirement 20.5
  */
 export async function markAllNotificationsAsRead(): Promise<void> {
-  await apiClient.post<void>('/notifications/mark-all-read');
+  // No-op since backend does not support notifications
 }

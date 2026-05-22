@@ -68,9 +68,9 @@ export function QRScanner({ onScan }: QRScannerProps) {
   };
 
   return (
-    <div className="space-y-6">
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+    <div className="space-y-8">
+      <Card className="p-0 bg-transparent border-none shadow-none">
+        <h3 className="text-sm font-heading tracking-widest uppercase text-white mb-4 text-center">
           Scan QR Code
         </h3>
 
@@ -78,20 +78,20 @@ export function QRScanner({ onScan }: QRScannerProps) {
           <div className="space-y-4">
             <div
               id="qr-reader"
-              className="w-full aspect-square bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center"
+              className="w-full aspect-square bg-neutral-900/50 border border-white/5 rounded-2xl flex items-center justify-center overflow-hidden"
             >
-              <p className="text-gray-500 dark:text-gray-400">
-                Click "Start Scanning" to begin
+              <p className="text-gray-500 dark:text-gray-400 font-bank text-xs uppercase tracking-widest">
+                Click "Start Scanning"
               </p>
             </div>
-            <Button onClick={startScanning} className="w-full">
+            <Button onClick={startScanning} className="w-full bg-gradient-to-r from-orange-600 to-red-500 hover:from-orange-500 hover:to-red-400 text-white border-0 shadow-[0_0_15px_rgba(249,115,22,0.3)] transition-all font-bank uppercase tracking-widest text-xs h-12 rounded-full mt-4">
               Start Scanning
             </Button>
           </div>
         ) : (
           <div className="space-y-4">
-            <div id="qr-reader" className="w-full" />
-            <Button onClick={stopScanning} variant="secondary" className="w-full">
+            <div id="qr-reader" className="w-full rounded-2xl overflow-hidden border border-orange-500/30" />
+            <Button onClick={stopScanning} variant="secondary" className="w-full bg-neutral-800 hover:bg-neutral-700 text-white border-white/10 font-bank uppercase text-xs h-12 rounded-full mt-4">
               Stop Scanning
             </Button>
           </div>
@@ -104,9 +104,14 @@ export function QRScanner({ onScan }: QRScannerProps) {
         )}
       </Card>
 
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-          Or Enter Token Manually
+      <Card className="p-0 bg-transparent border-none shadow-none">
+        <div className="relative flex py-5 items-center">
+          <div className="flex-grow border-t border-white/10"></div>
+          <span className="flex-shrink-0 mx-4 text-gray-500 font-bank text-xs uppercase">Or</span>
+          <div className="flex-grow border-t border-white/10"></div>
+        </div>
+        <h3 className="text-sm font-heading tracking-widest uppercase text-white mb-4 text-center">
+          Enter Token Manually
         </h3>
         <form onSubmit={handleManualSubmit} className="space-y-4">
           <Input
@@ -115,7 +120,7 @@ export function QRScanner({ onScan }: QRScannerProps) {
             onChange={(e) => setManualToken(e.target.value)}
             placeholder="Enter the credential token"
           />
-          <Button type="submit" disabled={!manualToken.trim()} className="w-full">
+          <Button type="submit" disabled={!manualToken.trim()} className="w-full bg-gradient-to-r from-orange-600 to-red-500 hover:from-orange-500 hover:to-red-400 text-white border-0 shadow-[0_0_15px_rgba(249,115,22,0.3)] transition-all font-bank uppercase tracking-widest text-xs h-12 rounded-full mt-2 disabled:opacity-50 disabled:shadow-none">
             Verify Token
           </Button>
         </form>

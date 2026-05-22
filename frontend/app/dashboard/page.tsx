@@ -2,11 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AuthenticatedLayout } from '@/components/layouts/authenticated-layout';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { apiClient } from '@/lib/api/client';
-import type { User } from '@/types';
 import { UserRole } from '@/types';
+import type { User } from '@/types';
 
 import AthleteDashboardPage from '@/app/(athlete)/dashboard/athlete-dashboard';
 import AdminDashboardPage from '@/app/(admin)/dashboard/admin-dashboard';
@@ -18,65 +16,45 @@ export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userData = await apiClient.get<User>('/auth/me');
-        setUser(userData);
-      } catch (err) {
-        router.push('/login');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    // Read user directly from localStorage
+    try {
+      const storedUser = localStorage.getItem('user');
+      const accessToken = localStorage.getItem('accessToken');
 
-    fetchUser();
+      if (storedUser && accessToken) {
+        setUser(JSON.parse(storedUser));
+      } else {
+        router.push('/login');
+        return;
+      }
+    } catch {
+      router.push('/login');
+      return;
+    }
+    setIsLoading(false);
   }, [router]);
 
-  if (isLoading) {
+  if (isLoading || !user) {
     return (
-      <AuthenticatedLayout>
-        <div className="flex h-full items-center justify-center py-12">
-          <LoadingSpinner size="lg" />
-        </div>
-      </AuthenticatedLayout>
+      <div className="flex h-screen items-center justify-center bg-black">
+        <LoadingSpinner size="lg" />
+      </div>
     );
   }
 
-  if (!user) {
-    return null;
-  }
-
-  // The imported dashboard components already include their own AuthenticatedLayout.
-  if (user.roles.includes(UserRole.ADMIN)) {
+  // Render role-specific dashboard
+  if (user.roles?.includes(UserRole.ADMIN)) {
     return <AdminDashboardPage />;
   }
   
-  if (user.roles.includes(UserRole.FEDERATION)) {
+  if (user.roles?.includes(UserRole.FEDERATION)) {
     return <FederationDashboardPage />;
   }
 
-  if (user.roles.includes(UserRole.ATHLETE)) {
+  if (user.roles?.includes(UserRole.ATHLETE)) {
     return <AthleteDashboardPage />;
   }
 
-  // fallback for other roles
-  return (
-    <AuthenticatedLayout>
-      <div className="space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-            Welcome, {user.firstName || user.email}
-          </h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
-            Role: {user.roles.join(', ')}
-          </p>
-        </div>
-        <div className="text-center py-12">
-          <p className="text-gray-600 dark:text-gray-400">
-            Your dashboard is being set up. Check back soon for updates.
-          </p>
-        </div>
-      </div>
-    </AuthenticatedLayout>
-  );
+  // fallback
+  return <AthleteDashboardPage />;
 }

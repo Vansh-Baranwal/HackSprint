@@ -50,10 +50,10 @@ export default function FederationDashboardPage() {
     <AuthenticatedLayout>
       <div className="mx-auto max-w-6xl space-y-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+          <h1 className="text-3xl font-bold text-white font-heading uppercase tracking-tight">
             Federation Dashboard
           </h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
+          <p className="mt-2 text-xs text-orange-400 font-bank uppercase tracking-wider">
             Overview of your federation's verification activities
           </p>
         </div>
@@ -62,16 +62,16 @@ export default function FederationDashboardPage() {
           <Card className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-xs text-gray-400 font-bank uppercase tracking-wider">
                   Pending Requests
                 </p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-2">
+                <p className="text-3xl font-bold text-white font-heading mt-2">
                   {stats?.pendingRequests || 0}
                 </p>
               </div>
-              <div className="p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg">
+              <div className="p-3 bg-amber-500/20 shadow-[0_0_15px_rgba(251,191,36,0.15)] rounded-lg">
                 <svg
-                  className="w-8 h-8 text-yellow-600 dark:text-yellow-400"
+                  className="w-8 h-8 text-amber-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -90,16 +90,16 @@ export default function FederationDashboardPage() {
           <Card className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-xs text-gray-400 font-bank uppercase tracking-wider">
                   Approved Verifications
                 </p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-2">
+                <p className="text-3xl font-bold text-white font-heading mt-2">
                   {stats?.approvedVerifications || 0}
                 </p>
               </div>
-              <div className="p-3 bg-green-100 dark:bg-green-900/20 rounded-lg">
+              <div className="p-3 bg-green-500/20 shadow-[0_0_15px_rgba(34,197,94,0.15)] rounded-lg">
                 <svg
-                  className="w-8 h-8 text-green-600 dark:text-green-400"
+                  className="w-8 h-8 text-green-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -118,16 +118,16 @@ export default function FederationDashboardPage() {
           <Card className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-xs text-gray-400 font-bank uppercase tracking-wider">
                   Active Members
                 </p>
-                <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-2">
+                <p className="text-3xl font-bold text-white font-heading mt-2">
                   {stats?.activeMembers || 0}
                 </p>
               </div>
-              <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+              <div className="p-3 bg-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.15)] rounded-lg">
                 <svg
-                  className="w-8 h-8 text-blue-600 dark:text-blue-400"
+                  className="w-8 h-8 text-blue-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -146,7 +146,7 @@ export default function FederationDashboardPage() {
 
         <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+            <h2 className="text-xl font-bold tracking-tight text-white font-heading uppercase">
               Recent Verification Requests
             </h2>
             <Link href="/verification-requests">
@@ -161,13 +161,13 @@ export default function FederationDashboardPage() {
               {stats.recentRequests.slice(0, 5).map((request: any) => (
                 <div
                   key={request.id}
-                  className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg"
+                  className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg transition-colors hover:bg-white/10"
                 >
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-gray-100">
+                    <p className="font-medium text-white">
                       {request.athleteName || 'Athlete'}
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-xs text-gray-400 font-bank mt-1">
                       {new Date(request.createdAt).toLocaleDateString()}
                     </p>
                   </div>
@@ -186,7 +186,7 @@ export default function FederationDashboardPage() {
 
         <div className="grid gap-6 md:grid-cols-2">
           <Card className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+            <h3 className="text-lg font-bold tracking-tight text-white font-heading uppercase mb-4">
               Quick Actions
             </h3>
             <div className="space-y-3">
@@ -204,19 +204,19 @@ export default function FederationDashboardPage() {
           </Card>
 
           <Card className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+            <h3 className="text-lg font-bold tracking-tight text-white font-heading uppercase mb-4">
               Federation Info
             </h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">Status:</span>
-                <span className="text-green-600 dark:text-green-400 font-medium">
+                <span className="text-gray-400 font-bank tracking-wider">Status:</span>
+                <span className="text-green-400 font-medium">
                   Active
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">Member Since:</span>
-                <span className="text-gray-900 dark:text-gray-100">
+                <span className="text-gray-400 font-bank tracking-wider">Member Since:</span>
+                <span className="text-white">
                   {new Date().getFullYear()}
                 </span>
               </div>

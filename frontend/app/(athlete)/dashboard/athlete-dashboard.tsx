@@ -12,11 +12,11 @@ export default function AthleteDashboardPage() {
     <AuthenticatedLayout>
       <div className="space-y-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+          <h1 className="text-3xl font-bold text-white font-heading uppercase tracking-tight">
             Dashboard
           </h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
-            Welcome to your AthleteShield dashboard
+          <p className="mt-2 text-xs text-orange-400 font-bank uppercase tracking-wider">
+            Welcome to your Khel Setu dashboard
           </p>
         </div>
 
@@ -25,12 +25,12 @@ export default function AthleteDashboardPage() {
           <Card>
             <CardBody>
               <div className="flex items-center gap-4">
-                <div className="rounded-lg bg-blue-100 p-3 dark:bg-blue-900/30">
-                  <FileText className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                <div className="rounded-lg bg-orange-500/20 p-3 shadow-[0_0_15px_rgba(249,115,22,0.15)]">
+                  <FileText className="h-6 w-6 text-orange-400" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Documents</p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">0</p>
+                  <p className="text-xs text-gray-400 font-bank uppercase tracking-wider">Documents</p>
+                  <p className="text-2xl font-bold text-white font-heading">0</p>
                 </div>
               </div>
             </CardBody>
@@ -39,12 +39,12 @@ export default function AthleteDashboardPage() {
           <Card>
             <CardBody>
               <div className="flex items-center gap-4">
-                <div className="rounded-lg bg-yellow-100 p-3 dark:bg-yellow-900/30">
-                  <CheckCircle className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
+                <div className="rounded-lg bg-amber-500/20 p-3 shadow-[0_0_15px_rgba(251,191,36,0.15)]">
+                  <CheckCircle className="h-6 w-6 text-amber-400" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Pending Verifications</p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">0</p>
+                  <p className="text-xs text-gray-400 font-bank uppercase tracking-wider">Pending Verifications</p>
+                  <p className="text-2xl font-bold text-white font-heading">0</p>
                 </div>
               </div>
             </CardBody>
@@ -53,12 +53,12 @@ export default function AthleteDashboardPage() {
           <Card>
             <CardBody>
               <div className="flex items-center gap-4">
-                <div className="rounded-lg bg-green-100 p-3 dark:bg-green-900/30">
-                  <Award className="h-6 w-6 text-green-600 dark:text-green-400" />
+                <div className="rounded-lg bg-red-500/20 p-3 shadow-[0_0_15px_rgba(239,68,68,0.15)]">
+                  <Award className="h-6 w-6 text-red-400" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Active Credentials</p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">0</p>
+                  <p className="text-xs text-gray-400 font-bank uppercase tracking-wider">Active Credentials</p>
+                  <p className="text-2xl font-bold text-white font-heading">0</p>
                 </div>
               </div>
             </CardBody>

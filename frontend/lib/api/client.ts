@@ -8,7 +8,7 @@ class ApiClient {
 
   constructor() {
     this.axiosInstance = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1',
+      baseURL: process.env.NEXT_PUBLIC_API_URL || 'https://atheleai.onrender.com/api/v1',
       timeout: 30000,
       withCredentials: true, // Send cookies
       headers: {
@@ -23,7 +23,12 @@ class ApiClient {
     // Request interceptor
     this.axiosInstance.interceptors.request.use(
       (config) => {
-        // Access token is sent via httpOnly cookie automatically
+        if (typeof window !== 'undefined') {
+          const token = localStorage.getItem('accessToken');
+          if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+          }
+        }
         return config;
       },
       (error) => Promise.reject(error)
@@ -35,42 +40,19 @@ class ApiClient {
       async (error: AxiosError) => {
         const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean };
 
-        // Handle 401 Unauthorized
+        // Handle 401 Unauthorized — clear tokens and redirect
         if (error.response?.status === 401 && !originalRequest._retry) {
-          if (this.isRefreshing) {
-            // Queue request while refresh is in progress
-            return new Promise((resolve) => {
-              this.refreshQueue.push(() => {
-                resolve(this.axiosInstance(originalRequest));
-              });
-            });
-          }
-
           originalRequest._retry = true;
-          this.isRefreshing = true;
-
-          try {
-            // Attempt token refresh
-            await this.axiosInstance.post('/auth/refresh');
-
-            // Process queued requests
-            this.refreshQueue.forEach((callback) => callback('refreshed'));
-            this.refreshQueue = [];
-
-            // Retry original request
-            return this.axiosInstance(originalRequest);
-          } catch (refreshError) {
-            // Refresh failed, redirect to login
-            this.refreshQueue = [];
-            
-            // Clear auth state
+          
+          // Don't redirect if we're already on the login page or auth endpoints
+          const url = originalRequest.url || '';
+          if (!url.includes('/auth/login') && !url.includes('/auth/register')) {
             if (typeof window !== 'undefined') {
+              localStorage.removeItem('accessToken');
+              localStorage.removeItem('refreshToken');
+              localStorage.removeItem('user');
               window.location.href = '/login';
             }
-            
-            return Promise.reject(refreshError);
-          } finally {
-            this.isRefreshing = false;
           }
         }
 
@@ -81,28 +63,28 @@ class ApiClient {
 
   // HTTP methods
   async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.axiosInstance.get<ApiResponse<T>>(url, config);
-    return response.data.data;
+    const response = await this.axiosInstance.get<T>(url, config);
+    return response.data;
   }
 
   async post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.axiosInstance.post<ApiResponse<T>>(url, data, config);
-    return response.data.data;
+    const response = await this.axiosInstance.post<T>(url, data, config);
+    return response.data;
   }
 
   async put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.axiosInstance.put<ApiResponse<T>>(url, data, config);
-    return response.data.data;
+    const response = await this.axiosInstance.put<T>(url, data, config);
+    return response.data;
   }
 
   async patch<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.axiosInstance.patch<ApiResponse<T>>(url, data, config);
-    return response.data.data;
+    const response = await this.axiosInstance.patch<T>(url, data, config);
+    return response.data;
   }
 
   async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.axiosInstance.delete<ApiResponse<T>>(url, config);
-    return response.data.data;
+    const response = await this.axiosInstance.delete<T>(url, config);
+    return response.data;
   }
 
   async uploadFile<T>(
@@ -113,7 +95,7 @@ class ApiClient {
     const formData = new FormData();
     formData.append('file', file);
 
-    const response = await this.axiosInstance.post<ApiResponse<T>>(url, formData, {
+    const response = await this.axiosInstance.post<T>(url, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
       onUploadProgress: (progressEvent) => {
         if (onProgress && progressEvent.total) {
@@ -123,7 +105,7 @@ class ApiClient {
       },
     });
 
-    return response.data.data;
+    return response.data;
   }
 
   // Get raw axios instance for special cases
