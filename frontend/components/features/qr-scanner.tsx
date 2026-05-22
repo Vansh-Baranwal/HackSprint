@@ -17,9 +17,15 @@ export function QRScanner({ onScan }: QRScannerProps) {
   const scannerRef = useRef<Html5Qrcode | null>(null);
 
   useEffect(() => {
+    // Initialize once when the component mounts
+    scannerRef.current = new Html5Qrcode('qr-reader');
+
     return () => {
       if (scannerRef.current) {
-        scannerRef.current.stop().catch(() => {});
+        // If it's scanning, stop it during unmount
+        if (scannerRef.current.isScanning) {
+          scannerRef.current.stop().catch(() => {});
+        }
       }
     };
   }, []);
@@ -27,22 +33,33 @@ export function QRScanner({ onScan }: QRScannerProps) {
   const startScanning = async () => {
     try {
       setError('');
-      const scanner = new Html5Qrcode('qr-reader');
-      scannerRef.current = scanner;
+      if (!scannerRef.current) {
+        scannerRef.current = new Html5Qrcode('qr-reader');
+      }
 
-      await scanner.start(
+      await scannerRef.current.start(
         { facingMode: 'environment' },
         {
           fps: 10,
           qrbox: { width: 250, height: 250 },
         },
         (decodedText) => {
-          scanner.stop();
-          setIsScanning(false);
-          onScan(decodedText);
+          // Pause or stop scanning before notifying parent
+          if (scannerRef.current && scannerRef.current.isScanning) {
+            scannerRef.current.stop().then(() => {
+              setIsScanning(false);
+              onScan(decodedText);
+            }).catch(() => {
+              setIsScanning(false);
+              onScan(decodedText);
+            });
+          } else {
+            setIsScanning(false);
+            onScan(decodedText);
+          }
         },
         () => {
-          // Ignore scan errors
+          // Ignore scan errors (happens when no QR is in frame)
         }
       );
 
@@ -54,9 +71,12 @@ export function QRScanner({ onScan }: QRScannerProps) {
   };
 
   const stopScanning = () => {
-    if (scannerRef.current) {
-      scannerRef.current.stop();
-      setIsScanning(false);
+    if (scannerRef.current && scannerRef.current.isScanning) {
+      scannerRef.current.stop().then(() => {
+        setIsScanning(false);
+      }).catch(() => {
+        setIsScanning(false);
+      });
     }
   };
 
