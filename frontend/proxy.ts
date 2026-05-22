@@ -6,7 +6,7 @@ const publicRoutes = ['/', '/login', '/register', '/report', '/track', '/verify-
 
 // Route patterns for role-based access
 const roleRoutes = {
-  athlete: ['/profile', '/documents', '/verifications', '/credentials', '/diagnostics'],
+  athlete: ['/profile', '/documents', '/verifications', '/credentials', '/diagnostics', '/ai-trainer'],
   federation: ['/verification-requests', '/members'],
   admin: ['/audit-logs', '/metrics'],
   investigator: ['/audit-logs'],

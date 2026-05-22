@@ -21,6 +21,7 @@ import {
   Menu,
   X,
   Activity,
+  BrainCircuit,
 } from 'lucide-react';
 
 interface NavigationItem {
@@ -41,6 +42,12 @@ const navigationItems: NavigationItem[] = [
     label: 'Profile',
     href: '/profile',
     icon: <User className="h-5 w-5" />,
+    roles: [UserRole.ATHLETE],
+  },
+  {
+    label: 'AI Trainer',
+    href: '/ai-trainer',
+    icon: <BrainCircuit className="h-5 w-5" />,
     roles: [UserRole.ATHLETE],
   },
   {
