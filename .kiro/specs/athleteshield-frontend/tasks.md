@@ -610,7 +610,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add axis labels
     - _Requirements: 22.3_
   
-  - [-] 23.3 Create metrics dashboard at app/(admin)/metrics/page.tsx
+  - [x] 23.3 Create metrics dashboard at app/(admin)/metrics/page.tsx
     - Fetch system metrics from Backend_API
     - Display summary cards: total users by role, active verifications, issued credentials, pending reports
     - Display time-series charts: daily registrations, verification requests, report submissions
@@ -624,7 +624,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - **Validates: Requirements 22.4**
 
 - [ ] 24. Admin Portal - Dashboard
-  - [ ] 24.1 Create admin dashboard at app/(admin)/dashboard/page.tsx
+  - [x] 24.1 Create admin dashboard at app/(admin)/dashboard/page.tsx
     - Display summary cards: total reports, pending investigations, audit log entries
     - Display recent reports
     - Display system health status
@@ -640,7 +640,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
 
 
 - [ ] 26. Public Features - Abuse Report Submission
-  - [ ] 26.1 Create AbuseReportForm component
+  - [x] 26.1 Create AbuseReportForm component
     - Add incident description textarea
     - Add date picker
     - Add location input
@@ -651,7 +651,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Display privacy notice explaining anonymity guarantees
     - _Requirements: 10.1, 10.2, 10.4, 10.5, 18.4_
   
-  - [ ] 26.2 Create report submission page at app/(public)/report/page.tsx
+  - [x] 26.2 Create report submission page at app/(public)/report/page.tsx
     - Render AbuseReportForm component
     - Handle report submission without authentication
     - Display success message with public tracking ID
@@ -664,7 +664,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - **Validates: Requirements 10.2, 10.3**
 
 - [ ] 27. Public Features - Report Tracking
-  - [ ] 27.1 Create ReportTrackingForm component
+  - [x] 27.1 Create ReportTrackingForm component
     - Add public tracking ID input
     - Add submit button
     - Display report status
@@ -672,7 +672,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - No authentication required
     - _Requirements: 11.1, 11.6_
   
-  - [ ] 27.2 Create report tracking page at app/(public)/track/page.tsx
+  - [x] 27.2 Create report tracking page at app/(public)/track/page.tsx
     - Render ReportTrackingForm component
     - Fetch and display report status
     - Display status: SUBMITTED, UNDER_REVIEW, INVESTIGATING, RESOLVED, CLOSED
@@ -690,7 +690,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - **Validates: Requirements 11.1, 11.2, 11.3, 11.4, 11.5**
 
 - [ ] 28. Public Features - QR Code Verification
-  - [ ] 28.1 Create QRScanner component
+  - [x] 28.1 Create QRScanner component
     - Implement camera access for QR scanning using html5-qrcode
     - Add manual token entry option
     - Display scan result
@@ -698,7 +698,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Handle invalid codes with error messages
     - _Requirements: 9.1, 9.5_
   
-  - [ ] 28.2 Create CredentialVerificationDisplay component
+  - [x] 28.2 Create CredentialVerificationDisplay component
     - Display athlete name
     - Display issuing federation
     - Display issue date
@@ -706,7 +706,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Display trust indicators
     - _Requirements: 9.3_
   
-  - [ ] 28.3 Create QR verification page at app/(public)/verify-qr/page.tsx
+  - [x] 28.3 Create QR verification page at app/(public)/verify-qr/page.tsx
     - Render QRScanner component
     - Handle QR token verification without authentication
     - Render CredentialVerificationDisplay on success
