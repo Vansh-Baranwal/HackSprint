@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
@@ -8,7 +8,7 @@ import { LoginForm } from '@/components/forms/login-form';
 import { apiClient } from '@/lib/api/client';
 import type { LoginFormData } from '@/lib/validations/auth';
 
-export default function LoginPage() {
+function LoginPageContent() {
   const searchParams = useSearchParams();
   const [error, setError] = useState<string>('');
   const registered = searchParams.get('registered');
@@ -126,5 +126,17 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen items-center justify-center bg-black">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-orange-500 border-t-transparent" />
+      </div>
+    }>
+      <LoginPageContent />
+    </Suspense>
   );
 }
