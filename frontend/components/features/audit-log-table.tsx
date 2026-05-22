@@ -30,32 +30,32 @@ export function AuditLogTable({ logs, onViewDetails, onExport }: AuditLogTablePr
   const columns = [
     {
       key: 'timestamp',
-      label: 'Timestamp',
+      header: 'Timestamp',
       render: (log: AuditLog) => new Date(log.createdAt).toLocaleString(),
     },
     {
       key: 'user',
-      label: 'User',
+      header: 'User',
       render: (log: AuditLog) => log.actorUserId?.slice(0, 8) || 'System',
     },
     {
       key: 'action',
-      label: 'Action',
+      header: 'Action',
       render: (log: AuditLog) => log.action,
     },
     {
       key: 'resource',
-      label: 'Resource',
+      header: 'Resource',
       render: (log: AuditLog) => `${log.resourceType}${log.resourceId ? ` (${log.resourceId.slice(0, 8)})` : ''}`,
     },
     {
       key: 'ip',
-      label: 'IP Address',
+      header: 'IP Address',
       render: (log: AuditLog) => log.ipAddress || 'N/A',
     },
     {
       key: 'actions',
-      label: '',
+      header: '',
       render: (log: AuditLog) => (
         <Button size="sm" variant="secondary" onClick={() => onViewDetails(log)}>
           Details
@@ -92,6 +92,7 @@ export function AuditLogTable({ logs, onViewDetails, onExport }: AuditLogTablePr
       <Table
         data={filteredLogs}
         columns={columns}
+        keyExtractor={(log) => log.id}
         emptyMessage="No audit logs found"
       />
     </div>

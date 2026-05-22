@@ -129,7 +129,7 @@ export function AbuseReportForm({ onSubmit }: AbuseReportFormProps) {
 
         <FileUpload
           label="Evidence Files (Optional)"
-          accept=".pdf,.jpg,.jpeg,.png,.mp4,.mp3"
+          accept={{ "application/pdf": [".pdf"], "image/jpeg": [".jpg", ".jpeg"], "image/png": [".png"], "video/mp4": [".mp4"], "audio/mpeg": [".mp3"] }}
           multiple
           onFilesChange={setEvidenceFiles}
           maxSize={50 * 1024 * 1024} // 50MB
@@ -152,7 +152,7 @@ export function AbuseReportForm({ onSubmit }: AbuseReportFormProps) {
         </div>
 
         <div className="flex justify-end">
-          <Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting} isLoading={isSubmitting}>
             Submit Report
           </Button>
         </div>

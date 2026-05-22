@@ -6,7 +6,7 @@ export const athleteProfileSchema = z.object({
   nationality: z.string().optional().nullable(),
   primarySport: z.string().optional().nullable(),
   clubName: z.string().optional().nullable(),
-  metadata: z.record(z.any()).optional().nullable(),
+  metadata: z.record(z.string(), z.any()).optional().nullable(),
 });
 
 export type AthleteProfileFormData = z.infer<typeof athleteProfileSchema>;

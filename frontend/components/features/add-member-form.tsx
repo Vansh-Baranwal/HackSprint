@@ -77,8 +77,8 @@ export function AddMemberForm({ onSubmit }: AddMemberFormProps) {
         <Select
           label="Role"
           value={role}
-          onChange={(e) => {
-            setRole(e.target.value as FederationMemberRole);
+          onChange={(value) => {
+            setRole(value as FederationMemberRole);
             setErrors((prev) => ({ ...prev, role: '' }));
           }}
           options={[
@@ -100,7 +100,7 @@ export function AddMemberForm({ onSubmit }: AddMemberFormProps) {
         />
 
         <div className="flex justify-end">
-          <Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting} isLoading={isSubmitting}>
             Send Invitation
           </Button>
         </div>

@@ -16,7 +16,7 @@ export const registerSchema = z
     firstName: z.string().min(1, 'First name is required'),
     lastName: z.string().min(1, 'Last name is required'),
     role: z.nativeEnum(UserRole, {
-      errorMap: () => ({ message: 'Please select a role' }),
+      message: 'Please select a role',
     }),
   })
   .refine((data) => data.password === data.confirmPassword, {

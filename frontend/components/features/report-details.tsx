@@ -119,7 +119,7 @@ export function ReportDetails({ report, onUpdate }: ReportDetailsProps) {
           <Select
             label="Status"
             value={status}
-            onChange={(e) => setStatus(e.target.value as ReportStatus)}
+            onChange={(value) => setStatus(value as ReportStatus)}
             options={[
               { value: 'SUBMITTED', label: 'Submitted' },
               { value: 'TRIAGED', label: 'Triaged' },
@@ -135,7 +135,7 @@ export function ReportDetails({ report, onUpdate }: ReportDetailsProps) {
             <Button
               onClick={handleSave}
               disabled={!hasChanges || isSaving}
-              loading={isSaving}
+              isLoading={isSaving}
             >
               Save Changes
             </Button>

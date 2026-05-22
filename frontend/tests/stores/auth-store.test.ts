@@ -36,8 +36,10 @@ describe('Auth Store', () => {
       const mockUser: User = {
         id: '1',
         email: 'test@example.com',
-        name: 'Test User',
-        role: 'ATHLETE',
+        firstName: 'Test',
+        lastName: 'User',
+        roles: ['ATHLETE' as any],
+        status: 'ACTIVE' as any,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -83,8 +85,10 @@ describe('Auth Store', () => {
       const mockUser: User = {
         id: '1',
         email: 'test@example.com',
-        name: 'Test User',
-        role: 'ATHLETE',
+        firstName: 'Test',
+        lastName: 'User',
+        roles: ['ATHLETE' as any],
+        status: 'ACTIVE' as any,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -122,8 +126,10 @@ describe('Auth Store', () => {
         user: {
           id: '1',
           email: 'test@example.com',
-          name: 'Test User',
-          role: 'ATHLETE',
+          firstName: 'Test',
+          lastName: 'User',
+          roles: ['ATHLETE' as any],
+          status: 'ACTIVE' as any,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         },
@@ -145,8 +151,10 @@ describe('Auth Store', () => {
         user: {
           id: '1',
           email: 'test@example.com',
-          name: 'Test User',
-          role: 'ATHLETE',
+          firstName: 'Test',
+          lastName: 'User',
+          roles: ['ATHLETE' as any],
+          status: 'ACTIVE' as any,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         },
@@ -168,8 +176,10 @@ describe('Auth Store', () => {
       const mockUser: User = {
         id: '1',
         email: 'test@example.com',
-        name: 'Test User',
-        role: 'ATHLETE',
+        firstName: 'Test',
+        lastName: 'User',
+        roles: ['ATHLETE' as any],
+        status: 'ACTIVE' as any,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -203,8 +213,10 @@ describe('Auth Store', () => {
         user: {
           id: '1',
           email: 'test@example.com',
-          name: 'Test User',
-          role: 'ATHLETE',
+          firstName: 'Test',
+          lastName: 'User',
+          roles: ['ATHLETE' as any],
+          status: 'ACTIVE' as any,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         },

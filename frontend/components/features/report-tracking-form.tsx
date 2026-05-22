@@ -54,7 +54,7 @@ export function ReportTrackingForm({ onSubmit, reportData, error }: ReportTracki
             placeholder="Enter your report tracking ID"
             required
           />
-          <Button type="submit" disabled={isSubmitting} loading={isSubmitting} className="w-full">
+          <Button type="submit" disabled={isSubmitting} isLoading={isSubmitting} className="w-full">
             Track Report
           </Button>
         </form>

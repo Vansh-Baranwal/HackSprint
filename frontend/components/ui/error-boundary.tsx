@@ -88,7 +88,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 }
 
-ErrorBoundary.displayName = 'ErrorBoundary';
+
 
 // ─── Default fallback UI ──────────────────────────────────────────────────────
 

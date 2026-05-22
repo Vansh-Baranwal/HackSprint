@@ -29,36 +29,36 @@ export function MemberList({ members, onRemove, onAddMember }: MemberListProps) 
   const columns = [
     {
       key: 'name',
-      label: 'Name',
+      header: 'Name',
       render: (member: FederationMember) =>
         member.user ? `${member.user.firstName} ${member.user.lastName}` : 'N/A',
     },
     {
       key: 'email',
-      label: 'Email',
+      header: 'Email',
       render: (member: FederationMember) => member.user?.email || 'N/A',
     },
     {
       key: 'role',
-      label: 'Role',
+      header: 'Role',
       render: (member: FederationMember) => member.role.replace(/_/g, ' '),
     },
     {
       key: 'status',
-      label: 'Status',
+      header: 'Status',
       render: (member: FederationMember) => (
         <Badge variant={statusColors[member.status]}>{member.status}</Badge>
       ),
     },
     {
       key: 'joinDate',
-      label: 'Join Date',
+      header: 'Join Date',
       render: (member: FederationMember) =>
         new Date(member.createdAt).toLocaleDateString(),
     },
     {
       key: 'actions',
-      label: 'Actions',
+      header: 'Actions',
       render: (member: FederationMember) => (
         <Button
           variant="danger"
@@ -79,7 +79,7 @@ export function MemberList({ members, onRemove, onAddMember }: MemberListProps) 
           <Select
             label="Filter by Status"
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={(value) => setStatusFilter(value)}
             options={[
               { value: 'all', label: 'All Statuses' },
               { value: 'ACTIVE', label: 'Active' },
@@ -94,6 +94,7 @@ export function MemberList({ members, onRemove, onAddMember }: MemberListProps) 
       <Table
         data={filteredMembers}
         columns={columns}
+        keyExtractor={(member) => member.id}
         emptyMessage="No members found"
       />
     </div>

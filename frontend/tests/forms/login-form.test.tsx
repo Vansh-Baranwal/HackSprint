@@ -79,7 +79,7 @@ describe('LoginForm Component', () => {
   });
 
   it('shows loading state during submission', async () => {
-    const mockSubmit = vi.fn(() => new Promise(resolve => setTimeout(resolve, 100)));
+    const mockSubmit = vi.fn(() => new Promise<void>(resolve => setTimeout(resolve, 100)));
     const user = userEvent.setup();
     render(<LoginForm onSubmit={mockSubmit} />);
 

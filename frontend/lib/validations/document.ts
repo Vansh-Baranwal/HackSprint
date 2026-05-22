@@ -13,7 +13,7 @@ export const documentUploadSchema = z.object({
       'Only PDF, JPG, and PNG files are accepted'
     ),
   documentType: z.nativeEnum(DocumentType, {
-    errorMap: () => ({ message: 'Please select a document type' }),
+    message: 'Please select a document type',
   }),
 });
 

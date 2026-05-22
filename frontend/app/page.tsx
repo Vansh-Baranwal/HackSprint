@@ -57,13 +57,13 @@ export default function HomePage() {
       opacity: 1,
       y: 0,
       rotateX: 0,
-      transition: { duration: 0.8, type: 'spring', bounce: 0.4 },
+      transition: { duration: 0.8, type: 'spring' as const, bounce: 0.4 },
     },
   };
 
   const navItemVariants = {
     hidden: { opacity: 0, y: -20 },
-    visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300 } },
+    visible: { opacity: 1, y: 0, transition: { type: 'spring' as const, stiffness: 300 } },
   };
 
   const cardVariants = {
@@ -72,7 +72,7 @@ export default function HomePage() {
       opacity: 1, 
       scale: 1, 
       y: 0,
-      transition: { type: "spring", bounce: 0.4, duration: 1 }
+      transition: { type: "spring" as const, bounce: 0.4, duration: 1 }
     }
   };
 
@@ -219,7 +219,7 @@ export default function HomePage() {
               </Link>
               <Link href="/verify-qr" className="w-full sm:w-auto">
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Button variant="outline" className="h-12 w-full rounded-full border-white/20 bg-white/5 px-8 text-sm text-white backdrop-blur-sm transition-colors hover:bg-white/20 sm:w-auto text-gray-200 z-20 relative font-bank uppercase tracking-widest hover:border-orange-400/50">
+                  <Button variant="secondary" className="h-12 w-full rounded-full border-white/20 bg-white/5 px-8 text-sm text-white backdrop-blur-sm transition-colors hover:bg-white/20 sm:w-auto text-gray-200 z-20 relative font-bank uppercase tracking-widest hover:border-orange-400/50">
                     <QrCode className="mr-2 h-4 w-4" />
                     Verify Credential
                   </Button>

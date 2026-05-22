@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const verificationRequestSchema = z.object({
   purpose: z.string().min(10, 'Purpose must be at least 10 characters'),
-  requestedClaims: z.record(z.any()),
+  requestedClaims: z.record(z.string(), z.any()),
   documentIds: z.array(z.string()).min(1, 'Please attach at least one document'),
 });
 

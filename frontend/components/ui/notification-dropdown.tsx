@@ -52,9 +52,9 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
   }, [isOpen, onOpenChange]);
 
   const getNotificationLink = (notification: Notification): string => {
-    if (notification.type === 'VERIFICATION_STATUS') return '/verifications';
-    if (notification.type === 'VERIFICATION_REQUEST') return '/verification-requests';
-    if (notification.type === 'REPORT_ASSIGNMENT') return '/reports';
+    if (notification.metadata && typeof notification.metadata.link === 'string') {
+      return notification.metadata.link;
+    }
     return '/dashboard';
   };
 
@@ -136,10 +136,10 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
                             notification.status !== 'READ' ? 'font-medium' : ''
                           )}
                         >
-                          {notification.title}
+                          {notification.subject}
                         </p>
                         <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400 line-clamp-2">
-                          {notification.message}
+                          {notification.body}
                         </p>
                         <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
                           {formatRelativeTime(notification.createdAt)}

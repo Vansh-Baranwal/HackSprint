@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { Notification } from '@/types';
+import { NotificationStatus } from '@/types';
 import {
   fetchNotifications as apiFetchNotifications,
   markNotificationAsRead,
@@ -24,20 +25,20 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
   addNotification: (notification) => {
     set((state) => ({
       notifications: [notification, ...state.notifications],
-      unreadCount: notification.status !== 'READ' ? state.unreadCount + 1 : state.unreadCount,
+      unreadCount: notification.status !== NotificationStatus.READ ? state.unreadCount + 1 : state.unreadCount,
     }));
   },
 
   markAsRead: (id) => {
     set((state) => {
       const notification = state.notifications.find((n) => n.id === id);
-      if (!notification || notification.status === 'READ') {
+      if (!notification || notification.status === NotificationStatus.READ) {
         return state;
       }
 
       return {
         notifications: state.notifications.map((n) =>
-          n.id === id ? { ...n, status: 'READ' as const, readAt: new Date().toISOString() } : n
+          n.id === id ? { ...n, status: NotificationStatus.READ, readAt: new Date().toISOString() } : n
         ),
         unreadCount: Math.max(0, state.unreadCount - 1),
       };
@@ -51,7 +52,7 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
     set((state) => ({
       notifications: state.notifications.map((n) => ({
         ...n,
-        status: 'READ' as const,
+        status: NotificationStatus.READ,
         readAt: n.readAt || new Date().toISOString(),
       })),
       unreadCount: 0,
@@ -67,7 +68,7 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
       return {
         notifications: state.notifications.filter((n) => n.id !== id),
         unreadCount:
-          notification && notification.status !== 'READ'
+          notification && notification.status !== NotificationStatus.READ
             ? Math.max(0, state.unreadCount - 1)
             : state.unreadCount,
       };
@@ -79,7 +80,7 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
       const notifications = await apiFetchNotifications();
       set({
         notifications,
-        unreadCount: notifications.filter((n) => n.status !== 'READ').length,
+        unreadCount: notifications.filter((n) => n.status !== NotificationStatus.READ).length,
       });
     } catch {
       // Notifications endpoint may not exist on this backend — silently ignore
@@ -89,7 +90,7 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
   setNotifications: (notifications) => {
     set({
       notifications,
-      unreadCount: notifications.filter((n) => n.status !== 'READ').length,
+      unreadCount: notifications.filter((n) => n.status !== NotificationStatus.READ).length,
     });
   },
 }));

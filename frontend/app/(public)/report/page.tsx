@@ -29,7 +29,9 @@ export default function ReportSubmissionPage() {
         formData.append('file', file);
         formData.append('type', 'EVIDENCE');
 
-        const uploadResponse = await apiClient.uploadFile('/public/evidence/upload', formData);
+        const uploadResponse = await apiClient.post<{ id: string }>('/public/evidence/upload', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
         evidenceIds.push(uploadResponse.id);
       }
 
