@@ -319,7 +319,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add delete button with confirmation
     - _Requirements: 5.1, 5.7, 5.8_
   
-  - [ ] 11.3 Create DocumentPreview modal component
+  - [x] 11.3 Create DocumentPreview modal component
     - Implement PDF viewer for PDF files
     - Implement image viewer for JPG/PNG
     - Add download button
@@ -360,7 +360,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add sort by date
     - _Requirements: 6.4, 6.6_
   
-  - [ ] 12.3 Create verifications page at app/(athlete)/verifications/page.tsx
+  - [x] 12.3 Create verifications page at app/(athlete)/verifications/page.tsx
     - Render VerificationRequestForm component
     - Render VerificationRequestList component
     - Handle verification request submission
@@ -375,7 +375,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - **Validates: Requirements 6.2, 6.3, 6.4, 6.6**
 
 - [ ] 13. Athlete Portal - Credentials
-  - [ ] 13.1 Create CredentialCard component
+  - [x] 13.1 Create CredentialCard component
     - Display credential details
     - Show status badge: ACTIVE, EXPIRED, REVOKED
     - Display issuer information
@@ -384,7 +384,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add download as PDF button
     - _Requirements: 8.2, 8.3, 8.4, 8.6_
   
-  - [ ] 13.2 Create QRCodeDisplay component
+  - [x] 13.2 Create QRCodeDisplay component
     - Generate QR code from credential token using qrcode.react
     - Display QR code image
     - Add share button
@@ -392,14 +392,14 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add instructions for scanning
     - _Requirements: 8.5_
   
-  - [ ] 13.3 Create credentials page at app/(athlete)/credentials/page.tsx
+  - [x] 13.3 Create credentials page at app/(athlete)/credentials/page.tsx
     - Fetch and display all issued credentials
     - Render CredentialCard for each credential
     - Handle QR code generation
     - Separate active, expired, and revoked credentials
     - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5, 8.6_
   
-  - [ ] 13.4 Implement revoked credential display
+  - [x] 13.4 Implement revoked credential display
     - Add visual distinction for revoked credentials
     - Display revocation reason and date
     - Display revoked credentials separately
@@ -420,7 +420,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - **Validates: Requirements 8.2, 8.3, 8.4, 8.5, 8.6, 24.1, 24.2, 24.5**
 
 - [ ] 14. Athlete Portal - Abuse Reports
-  - [ ] 14.1 Create athlete reports page at app/(athlete)/reports/page.tsx
+  - [x] 14.1 Create athlete reports page at app/(athlete)/reports/page.tsx
     - Fetch reports where athlete is subject
     - Display report details: incident date, status, investigation stage
     - Hide reporter identity and sensitive investigation details
@@ -453,7 +453,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
 
 
 - [ ] 17. Federation Portal - Verification Review
-  - [ ] 17.1 Create VerificationRequestCard component
+  - [-] 17.1 Create VerificationRequestCard component
     - Display athlete name and profile summary
     - Display request date and status
     - Display attached documents list
