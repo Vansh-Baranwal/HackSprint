@@ -214,7 +214,9 @@ export function CameraHRV() {
           <Heart className="w-5 h-5 text-red-500" />
           Camera HRV
         </CardTitle>
-        <Badge variant="outline" className="border-red-500/30 text-red-400 font-bank">PPG Tech</Badge>
+        <span className="inline-flex items-center justify-center rounded-full border border-red-500/30 text-red-400 font-bank text-xs px-2 py-0.5">
+          PPG Tech
+        </span>
       </CardHeader>
       
       <CardBody className="p-6 md:p-8 space-y-8">
