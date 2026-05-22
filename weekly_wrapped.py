@@ -19,7 +19,7 @@ from typing import Any, Dict, List, Optional
 
 class BodyWrappedEngine:
     """
-    Parses chronological history blocks to build unique user archetypes,
+    Pars chronological history blocks to build unique user archetypes,
     strain totals, and recovery metrics based on the last 7 days of records.
 
     All methods are static — the engine holds no mutable state and is safe
@@ -174,7 +174,7 @@ class BodyWrappedEngine:
                         weekly_slice.loc[peak_loc, "timestamp"]
                     ).strftime("%A")
                 except Exception:
-                    pass   # if timestamp parsing fails, fallback is already set
+                    pass
 
         # Recovery trend: compare avg HRV this week vs prior week
         prev_hrv = float(
@@ -239,7 +239,7 @@ class BodyWrappedEngine:
                 },
             ],
             "shareable_summary_card": {
-                "title": "ScreenSense Body Wrapped",
+                "title": "HackSprint Body Wrapped",  # <--- FIXED REFERENCE BRANDING
                 "total_minutes_active": total_minutes_moving,
                 "total_calories_burned": total_active_burn,
                 "archetype": archetype["vibe_title"],
