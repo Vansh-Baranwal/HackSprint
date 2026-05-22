@@ -209,20 +209,20 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - **Property 8: API Validation Error Mapping**
     - **Validates: Requirements 2.4, 15.1, 15.2, 15.4**
   
-  - [-] 6.4 Create login page at app/(auth)/login/page.tsx
+  - [x] 6.4 Create login page at app/(auth)/login/page.tsx
     - Render LoginForm component
     - Add privacy policy and terms of service links
     - Implement responsive layout
     - _Requirements: 1.1, 18.5_
   
-  - [ ] 6.5 Create register page at app/(auth)/register/page.tsx
+  - [x] 6.5 Create register page at app/(auth)/register/page.tsx
     - Render RegisterForm component
     - Add privacy policy and terms of service links
     - Implement responsive layout
     - _Requirements: 2.1, 18.5_
 
 - [ ] 7. Route Protection and Middleware
-  - [ ] 7.1 Create Next.js middleware for route protection
+  - [-] 7.1 Create Next.js middleware for route protection
     - Implement middleware.ts in src root
     - Check authentication status for protected routes
     - Verify Access_Token on every request

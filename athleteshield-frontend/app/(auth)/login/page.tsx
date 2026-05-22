@@ -7,6 +7,7 @@ import { LoginForm } from '@/components/forms/login-form';
 import { apiClient } from '@/lib/api/client';
 import type { LoginFormData } from '@/lib/validations/auth';
 import type { User } from '@/types';
+import { UserRole } from '@/types';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -20,11 +21,11 @@ export default function LoginPage() {
       const user = await apiClient.post<User>('/auth/login', data);
       
       // Redirect based on user role
-      if (user.roles.includes('ATHLETE')) {
+      if (user.roles.includes(UserRole.ATHLETE)) {
         router.push('/dashboard');
-      } else if (user.roles.includes('FEDERATION')) {
+      } else if (user.roles.includes(UserRole.FEDERATION)) {
         router.push('/dashboard');
-      } else if (user.roles.includes('ADMIN') || user.roles.includes('INVESTIGATOR')) {
+      } else if (user.roles.includes(UserRole.ADMIN) || user.roles.includes(UserRole.INVESTIGATOR)) {
         router.push('/dashboard');
       } else {
         router.push('/dashboard');
