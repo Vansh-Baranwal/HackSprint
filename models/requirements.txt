@@ -1,0 +1,15 @@
+# ─── Core Scientific Stack ───────────────────────────────────────────────────
+numpy>=1.26.0
+pandas>=2.2.0
+scikit-learn>=1.4.0        # IsolationForest, Ridge, preprocessing utilities
+
+# ─── Gradient Boosted Tree Backends (optional, swap per deployment) ──────────
+xgboost>=2.0.0             # Model 1: AcuteInjuryRiskEngine (preferred backend)
+lightgbm>=4.3.0            # Model 1: alternative GBT backend
+
+# ─── API / Async Layer ───────────────────────────────────────────────────────
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+
+# ─── Type & Data Validation ──────────────────────────────────────────────────
+pydantic>=2.7.0

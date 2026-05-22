@@ -1,0 +1,58 @@
+# render.yaml — Render.com Infrastructure-as-Code Deployment Manifest
+# =====================================================================
+# Deploys the ScreenSense athlete performance engine as a Render Web Service.
+#
+# Deploy steps:
+#   1. Push this repo to GitHub.
+#   2. Go to https://dashboard.render.com → New → Blueprint.
+#   3. Point Render at this repo — it will auto-detect render.yaml.
+#   4. Set the secret env vars listed below in the Render dashboard
+#      (Environment tab of your service) or via the Render CLI:
+#         render env set WEARABLE_DATA_URL="https://your-direct-link.com/wearable_data.csv"
+#
+# Free-tier constraints addressed:
+#   • 512 MB RAM   → chunked CSV streaming (CHUNK_SIZE=10000 rows ≈ 1.7 MB/batch)
+#   • Ephemeral disk → WEARABLE_DATA_URL triggers a fresh download on every cold boot
+#   • 0.1 CPU      -> asyncio.to_thread() offloads numpy/pandas work off the event loop
+
+services:
+  - type: web
+    name: screensense-engine
+    runtime: python
+    region: oregon               # closest to most users; change to frankfurt for EU
+    plan: free                   # upgrade to starter ($7/mo) for persistent disk
+
+    buildCommand: pip install -r models/requirements.txt
+
+    startCommand: >
+      uvicorn api:app
+      --host 0.0.0.0
+      --port $PORT
+      --workers 1
+      --loop uvloop
+      --http httptools
+      --log-level info
+
+    healthCheckPath: /health     # Render polls this every 30s to confirm liveness
+
+    envVars:
+      # ── Runtime configuration ────────────────────────────────────────
+      - key: PYTHONUNBUFFERED
+        value: "1"               # force stdout/stderr flush for live log streaming
+
+      - key: CSV_CHUNK_SIZE
+        value: "10000"           # rows per streaming batch; lower if OOM occurs
+
+      - key: WEARABLE_DATA_PATH
+        value: "data/wearable_data.csv"
+
+      # ── Secret values — set these in the Render dashboard, NOT here ──
+      # Never commit real URLs or keys to Git.
+      - key: WEARABLE_DATA_URL
+        sync: false              # "sync: false" = Render prompts you to set it manually
+
+    autoDeploy: true             # redeploy automatically on every push to main branch
+
+    scaling:
+      minInstances: 1
+      maxInstances: 1            # keep at 1 on free tier to avoid split state
