@@ -35,10 +35,23 @@ export default function QRVerificationPage() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [mouseX, mouseY]);
 
-  const handleScan = async (token: string) => {
+  const handleScan = async (scannedText: string) => {
     setIsVerifying(true);
     setError('');
     setVerificationData(null);
+
+    let token = scannedText.trim();
+    try {
+      // If the QR code contains a full URL like https://athleteshield.com/verify/{token}
+      const url = new URL(token);
+      if (url.pathname.includes('/verify/')) {
+        token = url.pathname.split('/verify/').pop() || token;
+      } else if (url.searchParams.has('token')) {
+        token = url.searchParams.get('token')!;
+      }
+    } catch (e) {
+      // Not a valid URL, assume the raw text is the token
+    }
 
     try {
       const response = await apiClient.post<any>('/public/credentials/verify', { token });
