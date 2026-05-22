@@ -19,20 +19,20 @@ export default function FederationMembersPage() {
   const [showRemoveConfirm, setShowRemoveConfirm] = useState(false);
   const { success, error } = useToast();
 
-  useEffect(() => {
-    fetchMembers();
-  }, []);
-
-  const fetchMembers = async () => {
+  async function fetchMembers() {
     try {
       const data = await apiClient.get<FederationMember[]>('/federation/members');
       setMembers(data);
-    } catch (err: any) {
+    } catch {
       error('Failed to load members');
     } finally {
       setIsLoading(false);
     }
-  };
+  }
+
+  useEffect(() => {
+    fetchMembers();
+  }, []);
 
   const handleAddMember = async (data: {
     email: string;

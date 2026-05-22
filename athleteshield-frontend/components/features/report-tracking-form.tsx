@@ -47,6 +47,7 @@ export function ReportTrackingForm({ onSubmit, reportData, error }: ReportTracki
       <Card className="p-6">
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
+            id="tracking-id"
             label="Tracking ID"
             value={trackingId}
             onChange={(e) => setTrackingId(e.target.value)}

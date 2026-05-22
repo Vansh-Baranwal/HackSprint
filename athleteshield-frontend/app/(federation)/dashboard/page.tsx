@@ -21,20 +21,20 @@ export default function FederationDashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
   const { error } = useToast();
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
-
-  const fetchDashboardData = async () => {
+  async function fetchDashboardData() {
     try {
       const data = await apiClient.get<DashboardStats>('/federation/dashboard');
       setStats(data);
-    } catch (err: any) {
+    } catch {
       error('Failed to load dashboard data');
     } finally {
       setIsLoading(false);
     }
-  };
+  }
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
 
   if (isLoading) {
     return (

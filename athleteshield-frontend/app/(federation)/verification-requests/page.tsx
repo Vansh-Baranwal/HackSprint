@@ -28,20 +28,20 @@ export default function FederationVerificationRequestsPage() {
   const [showDocumentPreview, setShowDocumentPreview] = useState(false);
   const { success, error } = useToast();
 
-  useEffect(() => {
-    fetchRequests();
-  }, []);
-
-  const fetchRequests = async () => {
+  async function fetchRequests() {
     try {
       const data = await apiClient.get<RequestWithDetails[]>('/verification-requests/pending');
       setRequests(data);
-    } catch (err: any) {
+    } catch {
       error('Failed to load verification requests');
     } finally {
       setIsLoading(false);
     }
-  };
+  }
+
+  useEffect(() => {
+    fetchRequests();
+  }, []);
 
   const handleApprove = async (request: VerificationRequest) => {
     try {

@@ -4,7 +4,9 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils/cn';
+import { NotificationDropdown } from '@/components/ui/notification-dropdown';
 import { UserRole } from '@/types';
+import type { Notification } from '@/types';
 import {
   Home,
   User,
@@ -16,11 +18,9 @@ import {
   FileSearch,
   BarChart3,
   LogOut,
-  Bell,
   Menu,
   X,
 } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 
 interface NavigationItem {
   label: string;
@@ -97,6 +97,11 @@ export interface NavigationProps {
   userName?: string;
   userEmail?: string;
   notificationCount?: number;
+  isNotificationOpen?: boolean;
+  onNotificationOpenChange?: (open: boolean) => void;
+  notifications?: Notification[];
+  onMarkAsRead?: (id: string) => void;
+  onMarkAllAsRead?: () => void;
   onLogout: () => void;
 }
 
@@ -105,6 +110,11 @@ export const Navigation: React.FC<NavigationProps> = ({
   userName,
   userEmail,
   notificationCount = 0,
+  isNotificationOpen = false,
+  onNotificationOpenChange,
+  notifications = [],
+  onMarkAsRead,
+  onMarkAllAsRead,
   onLogout,
 }) => {
   const pathname = usePathname();
@@ -132,7 +142,7 @@ export const Navigation: React.FC<NavigationProps> = ({
           </Link>
         </div>
 
-        <nav className="flex-1 space-y-1 overflow-y-auto p-4">
+        <nav className="flex-1 space-y-1 overflow-y-auto p-4" aria-label="Main navigation">
           {filteredItems.map((item) => (
             <Link
               key={item.href}
@@ -143,6 +153,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                   ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400'
                   : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
               )}
+              aria-current={isActive(item.href) ? 'page' : undefined}
             >
               {item.icon}
               {item.label}
@@ -154,27 +165,34 @@ export const Navigation: React.FC<NavigationProps> = ({
           <button
             onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+            aria-expanded={isProfileDropdownOpen}
+            aria-haspopup="true"
           >
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white" aria-hidden="true">
               {userName?.charAt(0).toUpperCase() || 'U'}
             </div>
             <div className="flex-1 text-left">
               <p className="font-medium">{userName || 'User'}</p>
               <p className="text-xs text-gray-500 dark:text-gray-400">{userEmail}</p>
             </div>
-            <Bell className="h-5 w-5" />
-            {notificationCount > 0 && (
-              <Badge variant="error" size="sm">
-                {notificationCount}
-              </Badge>
+            {onNotificationOpenChange && (
+              <NotificationDropdown
+                notifications={notifications}
+                unreadCount={notificationCount}
+                isOpen={isNotificationOpen}
+                onOpenChange={onNotificationOpenChange}
+                onMarkAsRead={onMarkAsRead || (() => {})}
+                onMarkAllAsRead={onMarkAllAsRead || (() => {})}
+              />
             )}
           </button>
 
           {isProfileDropdownOpen && (
-            <div className="mt-2 space-y-1">
+            <div className="mt-2 space-y-1" role="menu">
               <button
                 onClick={onLogout}
                 className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+                role="menuitem"
               >
                 <LogOut className="h-5 w-5" />
                 Logout
@@ -191,18 +209,22 @@ export const Navigation: React.FC<NavigationProps> = ({
         </Link>
 
         <div className="flex items-center gap-4">
-          <button className="relative">
-            <Bell className="h-6 w-6 text-gray-700 dark:text-gray-300" />
-            {notificationCount > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs text-white">
-                {notificationCount}
-              </span>
-            )}
-          </button>
+          {onNotificationOpenChange && (
+            <NotificationDropdown
+              notifications={notifications}
+              unreadCount={notificationCount}
+              isOpen={isNotificationOpen}
+              onOpenChange={onNotificationOpenChange}
+              onMarkAsRead={onMarkAsRead || (() => {})}
+              onMarkAllAsRead={onMarkAllAsRead || (() => {})}
+            />
+          )}
 
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="text-gray-700 dark:text-gray-300"
+            className="rounded-lg p-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isMobileMenuOpen}
           >
             {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
@@ -211,8 +233,12 @@ export const Navigation: React.FC<NavigationProps> = ({
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 top-16 z-40 bg-white dark:bg-gray-800 lg:hidden">
-          <nav className="space-y-1 p-4">
+        <div
+          className="fixed inset-0 top-16 z-40 bg-white dark:bg-gray-800 lg:hidden"
+          role="dialog"
+          aria-label="Mobile navigation menu"
+        >
+          <nav className="space-y-1 p-4" aria-label="Mobile navigation">
             {filteredItems.map((item) => (
               <Link
                 key={item.href}
@@ -224,6 +250,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                     ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400'
                     : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
                 )}
+                aria-current={isActive(item.href) ? 'page' : undefined}
               >
                 {item.icon}
                 {item.label}
