@@ -74,28 +74,28 @@ export function QRScanner({ onScan }: QRScannerProps) {
           Scan QR Code
         </h3>
 
-        {!isScanning ? (
-          <div className="space-y-4">
-            <div
-              id="qr-reader"
-              className="w-full aspect-square bg-neutral-900/50 border border-white/5 rounded-2xl flex items-center justify-center overflow-hidden"
-            >
+        <div className="space-y-4">
+          <div
+            id="qr-reader"
+            className={`w-full overflow-hidden ${isScanning ? 'rounded-2xl border border-orange-500/30' : 'aspect-square bg-neutral-900/50 border border-white/5 rounded-2xl flex items-center justify-center'}`}
+          >
+            {!isScanning && (
               <p className="text-gray-500 dark:text-gray-400 font-bank text-xs uppercase tracking-widest">
                 Click "Start Scanning"
               </p>
-            </div>
+            )}
+          </div>
+          
+          {!isScanning ? (
             <Button onClick={startScanning} className="w-full bg-gradient-to-r from-orange-600 to-red-500 hover:from-orange-500 hover:to-red-400 text-white border-0 shadow-[0_0_15px_rgba(249,115,22,0.3)] transition-all font-bank uppercase tracking-widest text-xs h-12 rounded-full mt-4">
               Start Scanning
             </Button>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            <div id="qr-reader" className="w-full rounded-2xl overflow-hidden border border-orange-500/30" />
+          ) : (
             <Button onClick={stopScanning} variant="secondary" className="w-full bg-neutral-800 hover:bg-neutral-700 text-white border-white/10 font-bank uppercase text-xs h-12 rounded-full mt-4">
               Stop Scanning
             </Button>
-          </div>
-        )}
+          )}
+        </div>
 
         {error && (
           <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
