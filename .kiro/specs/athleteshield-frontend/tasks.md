@@ -133,7 +133,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Implement focus trap
     - _Requirements: 7.4, 19.1_
   
-  - [-] 5.7 Create Toast notification component
+  - [x] 5.7 Create Toast notification component
     - Implement variants: success, error, warning, info
     - Add auto-dismiss after timeout
     - Add manual dismiss button
@@ -141,18 +141,18 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Position at top-right
     - _Requirements: 16.3, 16.4_
   
-  - [ ] 5.8 Create LoadingSpinner component
+  - [x] 5.8 Create LoadingSpinner component
     - Implement sizes: sm, md, lg
     - Add color variants
     - Support centered or inline positioning
     - _Requirements: 16.1_
   
-  - [ ] 5.9 Create SkeletonLoader component
+  - [x] 5.9 Create SkeletonLoader component
     - Implement variants for text, image, card
     - Add animated shimmer effect
     - _Requirements: 16.5_
   
-  - [ ] 5.10 Create Badge component
+  - [-] 5.10 Create Badge component
     - Implement status indicators
     - Add color variants for different statuses
     - Implement sizes: sm, md, lg
