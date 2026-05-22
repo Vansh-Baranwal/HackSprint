@@ -7,8 +7,12 @@ class ApiClient {
   private refreshQueue: Array<(token: string) => void> = [];
 
   constructor() {
+    const rawUrl = process.env.NEXT_PUBLIC_API_URL || 'https://atheleai.onrender.com';
+    const cleanUrl = rawUrl.endsWith('/') ? rawUrl.slice(0, -1) : rawUrl;
+    const finalBaseUrl = cleanUrl.endsWith('/api/v1') ? cleanUrl : `${cleanUrl}/api/v1`;
+
     this.axiosInstance = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_API_URL || 'https://atheleai.onrender.com/api/v1',
+      baseURL: finalBaseUrl,
       timeout: 30000,
       withCredentials: true, // Send cookies
       headers: {
