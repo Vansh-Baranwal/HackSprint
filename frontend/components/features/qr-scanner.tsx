@@ -75,12 +75,16 @@ export function QRScanner({ onScan }: QRScannerProps) {
         </h3>
 
         <div className="space-y-4">
-          <div
-            id="qr-reader"
-            className={`w-full overflow-hidden ${isScanning ? 'rounded-2xl border border-orange-500/30' : 'aspect-square bg-neutral-900/50 border border-white/5 rounded-2xl flex items-center justify-center'}`}
-          >
+          <div className="relative w-full aspect-square bg-neutral-900/50 border border-white/5 rounded-2xl overflow-hidden flex items-center justify-center">
+            {/* The actual scanner container must have NO React children! */}
+            <div
+              id="qr-reader"
+              className="absolute inset-0 w-full h-full"
+            />
+            
+            {/* Placeholder text overlays the scanner container when not scanning */}
             {!isScanning && (
-              <p className="text-gray-500 dark:text-gray-400 font-bank text-xs uppercase tracking-widest">
+              <p className="z-10 pointer-events-none text-gray-500 dark:text-gray-400 font-bank text-xs uppercase tracking-widest bg-neutral-900/80 px-4 py-2 rounded-lg">
                 Click "Start Scanning"
               </p>
             )}
