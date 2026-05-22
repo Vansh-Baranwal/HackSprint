@@ -71,7 +71,7 @@ export const QRVerificationPanel: React.FC<QRVerificationPanelProps> = ({ qrToke
               <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 overflow-hidden">
                 <div 
                   className="bg-yellow-400 h-2.5 rounded-full transition-all duration-1000 ease-linear" 
-                  style={{ width: \`\${((30 - timeLeft) / 30) * 100}%\` }}
+                  style={{ width: `${((30 - timeLeft) / 30) * 100}%` }}
                 ></div>
               </div>
             </div>

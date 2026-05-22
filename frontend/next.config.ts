@@ -7,8 +7,7 @@ const nextConfig: NextConfig = {
   // Enable standalone output for Docker deployments
   output: "standalone",
 
-  // Enable SWC minification for faster builds
-  swcMinify: true,
+
 
   // Compress responses using gzip
   compress: true,
