@@ -119,7 +119,7 @@ export default function AdminReportsPage() {
             <Select
               label="Status"
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
+              onChange={(value) => setStatusFilter(value)}
               options={[
                 { value: 'all', label: 'All Statuses' },
                 { value: 'SUBMITTED', label: 'Submitted' },
@@ -134,7 +134,7 @@ export default function AdminReportsPage() {
             <Select
               label="Severity"
               value={severityFilter}
-              onChange={(e) => setSeverityFilter(e.target.value)}
+              onChange={(value) => setSeverityFilter(value)}
               options={[
                 { value: 'all', label: 'All Severities' },
                 { value: 'LOW', label: 'Low' },
