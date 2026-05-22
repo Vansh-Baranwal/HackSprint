@@ -20,6 +20,7 @@ import {
   LogOut,
   Menu,
   X,
+  Activity,
 } from 'lucide-react';
 
 interface NavigationItem {
@@ -40,6 +41,12 @@ const navigationItems: NavigationItem[] = [
     label: 'Profile',
     href: '/profile',
     icon: <User className="h-5 w-5" />,
+    roles: [UserRole.ATHLETE],
+  },
+  {
+    label: 'Diagnostics',
+    href: '/diagnostics',
+    icon: <Activity className="h-5 w-5" />,
     roles: [UserRole.ATHLETE],
   },
   {
