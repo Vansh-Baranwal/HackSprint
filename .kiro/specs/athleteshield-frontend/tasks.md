@@ -279,7 +279,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
 
 
 - [ ] 10. Athlete Portal - Profile Management
-  - [-] 10.1 Create ProfileForm component
+  - [x] 10.1 Create ProfileForm component
     - Implement personal info section: name, DOB, nationality, contact
     - Implement sport details section: sport, discipline, level, achievements
     - Add editable fields with save button
@@ -288,7 +288,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add validation for required fields
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
   
-  - [ ] 10.2 Create profile page at app/(athlete)/profile/page.tsx
+  - [x] 10.2 Create profile page at app/(athlete)/profile/page.tsx
     - Fetch athlete profile data on page load
     - Render ProfileForm component
     - Handle profile update submissions
@@ -436,7 +436,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - **Validates: Requirements 23.2, 23.4, 23.6**
 
 - [ ] 15. Athlete Portal - Dashboard
-  - [ ] 15.1 Create athlete dashboard page at app/(athlete)/dashboard/page.tsx
+  - [x] 15.1 Create athlete dashboard page at app/(athlete)/dashboard/page.tsx
     - Display summary cards: pending verifications, active credentials, documents uploaded
     - Display recent activity feed
     - Display quick actions: upload document, request verification
@@ -719,7 +719,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - **Validates: Requirements 9.2, 9.3, 9.4**
 
 - [ ] 29. Public Features - Home Page
-  - [ ] 29.1 Create home page at app/page.tsx
+  - [-] 29.1 Create home page at app/page.tsx
     - Display platform overview and value proposition
     - Add call-to-action buttons: Register, Login, Report Abuse, Verify QR
     - Display trust indicators and security messaging
