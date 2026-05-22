@@ -222,7 +222,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - _Requirements: 2.1, 18.5_
 
 - [ ] 7. Route Protection and Middleware
-  - [-] 7.1 Create Next.js middleware for route protection
+  - [x] 7.1 Create Next.js middleware for route protection
     - Implement middleware.ts in src root
     - Check authentication status for protected routes
     - Verify Access_Token on every request
@@ -230,7 +230,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Allow public routes without authentication
     - _Requirements: 3.1, 3.6_
   
-  - [ ] 7.2 Implement role-based authorization in middleware
+  - [x] 7.2 Implement role-based authorization in middleware
     - Check user role against route permissions
     - Redirect unauthorized users to role-appropriate home
     - Display access denied message
@@ -242,7 +242,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - **Validates: Requirements 3.1, 3.2, 3.6**
 
 - [ ] 8. Layout and Navigation Components
-  - [ ] 8.1 Create Navigation component
+  - [x] 8.1 Create Navigation component
     - Implement responsive design (mobile hamburger, desktop sidebar)
     - Add role-based menu items
     - Add active route highlighting
@@ -251,14 +251,14 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add notification badge with count
     - _Requirements: 14.3, 14.4, 14.5, 14.6, 14.7, 14.8, 20.4_
   
-  - [ ] 8.2 Create MobileNav component
+  - [x] 8.2 Create MobileNav component
     - Implement hamburger menu icon
     - Create slide-out drawer
     - Add touch-optimized menu items
     - Close drawer on route navigation
     - _Requirements: 14.1_
   
-  - [ ] 8.3 Create RootLayout component
+  - [x] 8.3 Create RootLayout component
     - Provide global context providers (auth, notifications, UI)
     - Include Navigation component
     - Render role-specific navigation
@@ -279,7 +279,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
 
 
 - [ ] 10. Athlete Portal - Profile Management
-  - [ ] 10.1 Create ProfileForm component
+  - [-] 10.1 Create ProfileForm component
     - Implement personal info section: name, DOB, nationality, contact
     - Implement sport details section: sport, discipline, level, achievements
     - Add editable fields with save button
