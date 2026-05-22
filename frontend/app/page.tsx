@@ -27,6 +27,7 @@ export default function HomePage() {
   const smoothMouseY = useSpring(mouseY, springConfig);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
     const handleMouseMove = (e: MouseEvent) => {
       const x = e.clientX - window.innerWidth / 2;
