@@ -301,7 +301,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - **Validates: Requirements 4.2, 4.6**
 
 - [ ] 11. Athlete Portal - Document Management
-  - [ ] 11.1 Create DocumentUpload component
+  - [x] 11.1 Create DocumentUpload component
     - Implement drag-and-drop file upload zone
     - Add file type validation (PDF, JPG, PNG)
     - Add file size validation (max 10MB)
@@ -310,7 +310,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Display encryption indicator message
     - _Requirements: 5.2, 5.3, 5.6, 18.1_
   
-  - [ ] 11.2 Create DocumentList component
+  - [x] 11.2 Create DocumentList component
     - Implement table/grid view of uploaded documents
     - Display columns: filename, type, upload date, status
     - Add click to preview/download functionality
@@ -326,7 +326,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add close button
     - _Requirements: 5.8, 7.5_
   
-  - [ ] 11.4 Create documents page at app/(athlete)/documents/page.tsx
+  - [x] 11.4 Create documents page at app/(athlete)/documents/page.tsx
     - Fetch and display document list
     - Render DocumentUpload component
     - Render DocumentList component
@@ -344,7 +344,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - **Validates: Requirements 5.2, 5.3, 5.4, 5.5, 5.7, 5.8**
 
 - [ ] 12. Athlete Portal - Verification Requests
-  - [ ] 12.1 Create VerificationRequestForm component
+  - [x] 12.1 Create VerificationRequestForm component
     - Add federation selection dropdown
     - Add document attachment checklist
     - Add verification claims textarea
@@ -352,7 +352,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Display success message with tracking ID
     - _Requirements: 6.1, 6.2, 6.3, 6.5_
   
-  - [ ] 12.2 Create VerificationRequestList component
+  - [x] 12.2 Create VerificationRequestList component
     - Display list of athlete's verification requests
     - Show status badges: PENDING, APPROVED, REJECTED
     - Add click to view details
@@ -719,7 +719,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - **Validates: Requirements 9.2, 9.3, 9.4**
 
 - [ ] 29. Public Features - Home Page
-  - [-] 29.1 Create home page at app/page.tsx
+  - [x] 29.1 Create home page at app/page.tsx
     - Display platform overview and value proposition
     - Add call-to-action buttons: Register, Login, Report Abuse, Verify QR
     - Display trust indicators and security messaging
