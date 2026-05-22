@@ -19,7 +19,7 @@ export default function ReportsPage() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const userData = await apiClient.get<User>('/auth/me');
+        const userData = await apiClient.get<User>('/users/me');
         setUser(userData);
       } catch (err) {
         router.push('/login');
