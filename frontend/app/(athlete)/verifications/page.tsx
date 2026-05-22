@@ -8,6 +8,7 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { useToast } from '@/components/ui/toast';
 import { apiClient } from '@/lib/api/client';
 import type { VerificationRequest, Document } from '@/types';
+import { VerificationRequestStatus } from '@/types';
 
 export default function VerificationsPage() {
   const [requests, setRequests] = useState<VerificationRequest[]>([]);
@@ -64,7 +65,7 @@ export default function VerificationsPage() {
             athleteProfileId: 'mock_profile',
             federationId: 'mock_fed',
             requestedByUserId: 'mock_user',
-            status: 'REQUESTED',
+            status: VerificationRequestStatus.REQUESTED,
             purpose: data.purpose,
             requestedClaims: { documentIds: data.documentIds },
             reviewerNotes: null,
