@@ -85,7 +85,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
   - **Property 7: Input Validation Rules**
   - **Validates: Requirements 2.5, 5.6, 15.3**
 
-- [-] 5. Base UI Components
+- [x] 5. Base UI Components
   - [x] 5.1 Create Button component
     - Implement variants: primary, secondary, danger, ghost
     - Implement sizes: sm, md, lg
@@ -164,7 +164,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add hover effects
     - _Requirements: 8.2, 12.2_
   
-  - [-] 5.12 Create Table component
+  - [x] 5.12 Create Table component
     - Implement responsive table
     - Add sortable columns
     - Add pagination
@@ -172,7 +172,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add empty state
     - _Requirements: 5.7, 13.2, 21.4_
   
-  - [ ] 5.13 Create Pagination component
+  - [x] 5.13 Create Pagination component
     - Implement page number buttons
     - Add previous/next buttons
     - Add page size selector
@@ -185,7 +185,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
   - **Validates: Requirements 19.1, 19.6**
 
 - [ ] 6. Authentication Pages and Components
-  - [ ] 6.1 Create LoginForm component
+  - [x] 6.1 Create LoginForm component
     - Implement email and password input fields
     - Add client-side validation with Zod
     - Implement submit handler calling API client
@@ -195,7 +195,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add link to registration page
     - _Requirements: 1.1_
   
-  - [ ] 6.2 Create RegisterForm component
+  - [-] 6.2 Create RegisterForm component
     - Implement input fields: email, password, confirmPassword, name
     - Add role selection dropdown with descriptions
     - Add password strength indicator
