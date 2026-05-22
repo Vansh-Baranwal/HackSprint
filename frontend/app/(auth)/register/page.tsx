@@ -89,6 +89,7 @@ export default function RegisterPage() {
             By creating an account, you agree to our{' '}
             <Link
               href="/terms"
+              prefetch={false}
               className="font-medium text-orange-400 hover:text-orange-300 transition-colors"
             >
               Terms of Service
@@ -96,6 +97,7 @@ export default function RegisterPage() {
             and{' '}
             <Link
               href="/privacy"
+              prefetch={false}
               className="font-medium text-orange-400 hover:text-orange-300 transition-colors"
             >
               Privacy Policy

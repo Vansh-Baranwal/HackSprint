@@ -15,7 +15,7 @@ class ApiClient {
 
     this.axiosInstance = axios.create({
       baseURL: finalBaseUrl,
-      timeout: 60000,
+      timeout: 120000, // 2 minutes for cold-start Render backends
       withCredentials: true, // Send cookies
       headers: {
         'Content-Type': 'application/json',

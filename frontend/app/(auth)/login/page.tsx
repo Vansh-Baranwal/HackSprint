@@ -111,6 +111,7 @@ function LoginPageContent() {
             By signing in, you agree to our{' '}
             <Link
               href="/terms"
+              prefetch={false}
               className="font-medium text-orange-400 hover:text-orange-300 transition-colors"
             >
               Terms of Service
@@ -118,6 +119,7 @@ function LoginPageContent() {
             and{' '}
             <Link
               href="/privacy"
+              prefetch={false}
               className="font-medium text-orange-400 hover:text-orange-300 transition-colors"
             >
               Privacy Policy
