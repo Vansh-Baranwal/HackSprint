@@ -86,7 +86,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
   - **Validates: Requirements 2.5, 5.6, 15.3**
 
 - [-] 5. Base UI Components
-  - [ ] 5.1 Create Button component
+  - [x] 5.1 Create Button component
     - Implement variants: primary, secondary, danger, ghost
     - Implement sizes: sm, md, lg
     - Add loading state with spinner
@@ -94,7 +94,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add icon support
     - _Requirements: 15.5, 16.2_
   
-  - [ ] 5.2 Create Input component
+  - [x] 5.2 Create Input component
     - Support types: text, email, password, number
     - Add label and error message display
     - Add required indicator
@@ -102,7 +102,7 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add icon support
     - _Requirements: 15.1, 15.2_
   
-  - [ ] 5.3 Create Select component
+  - [x] 5.3 Create Select component
     - Implement dropdown with options
     - Add label and error message
     - Add required indicator
@@ -110,14 +110,14 @@ This implementation plan breaks down the AthleteShield frontend into discrete, i
     - Add search functionality for long lists
     - _Requirements: 2.6, 6.1_
   
-  - [ ] 5.4 Create Textarea component
+  - [x] 5.4 Create Textarea component
     - Implement multi-line text input
     - Add label and error message
     - Add character count
     - Add resize control
     - _Requirements: 10.4_
   
-  - [ ] 5.5 Create FileUpload component
+  - [-] 5.5 Create FileUpload component
     - Implement drag-and-drop zone with react-dropzone
     - Add file type and size validation
     - Add preview for images
