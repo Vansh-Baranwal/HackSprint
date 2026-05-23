@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Navigation } from './navigation';
 import { useToast } from '@/components/ui/toast';
 import { useNotificationStore } from '@/lib/stores/notification-store';
+import { AICoachChat } from '@/components/features/ai-coach-chat';
 import type { User } from '@/types';
 
 export interface AuthenticatedLayoutProps {
@@ -110,6 +111,11 @@ export const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({ childr
           </div>
         </main>
       </div>
+
+      {/* Conditionally render AI Coach Chat for Athletes */}
+      {user.roles?.includes('ATHLETE') && (
+        <AICoachChat sport={(user as any).primarySport || 'Athletics'} />
+      )}
 
       <ToastContainer />
     </div>
