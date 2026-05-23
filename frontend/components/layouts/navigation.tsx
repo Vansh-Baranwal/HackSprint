@@ -151,7 +151,7 @@ export const Navigation: React.FC<NavigationProps> = ({
       {/* Desktop Sidebar */}
       <aside className="hidden h-screen w-64 flex-col border-r border-white/10 bg-neutral-900/40 backdrop-blur-xl lg:flex">
         <div className="flex h-16 items-center border-b border-white/10 px-6">
-          <Link href="/" className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-red-500 font-heading font-extrabold text-2xl uppercase tracking-widest drop-shadow-[0_0_15px_rgba(249,115,22,0.3)]">
+          <Link href="/dashboard" className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-red-500 font-heading font-extrabold text-2xl uppercase tracking-widest drop-shadow-[0_0_15px_rgba(249,115,22,0.3)]">
             Khel Setu
           </Link>
         </div>
@@ -220,7 +220,7 @@ export const Navigation: React.FC<NavigationProps> = ({
 
       {/* Mobile Header */}
       <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-white/10 bg-neutral-900/40 backdrop-blur-xl px-4 lg:hidden">
-        <Link href="/" className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-red-500 font-heading font-extrabold text-xl uppercase tracking-widest">
+        <Link href="/dashboard" className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-red-500 font-heading font-extrabold text-xl uppercase tracking-widest">
           Khel Setu
         </Link>
 
