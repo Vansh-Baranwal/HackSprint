@@ -11,7 +11,8 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { useToast } from '@/components/ui/toast';
 import { apiClient } from '@/lib/api/client';
 import { AbuseReportForm } from '@/components/features/abuse-report-form';
-import type { AbuseReport, ReportStatus } from '@/types';
+import type { AbuseReport } from '@/types';
+import { ReportStatus, ReportSeverity } from '@/types';
 
 const statusColors: Record<ReportStatus, 'default' | 'warning' | 'error' | 'success'> = {
   SUBMITTED: 'default',
@@ -52,14 +53,14 @@ export default function AthleteReportsPage() {
           id: 'mock_1',
           publicTrackingId: 'TRK-2026-X7Y9',
           title: 'Suspicious Competition Results',
-          status: 'INVESTIGATING',
+          status: ReportStatus.INVESTIGATING,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           aiSummary: 'A routine check was filed regarding abnormal performance metrics during the regional qualifiers. An investigator is currently reviewing the telemetry data.',
           description: 'Mock report fallback',
           category: 'PERFORMANCE_ANOMALY',
           urgency: 'MEDIUM',
-          severity: 'HIGH',
+          severity: ReportSeverity.HIGH,
           subjectAthleteId: 'athlete_1',
           assignedToUserId: 'inv_1',
           toxicityScore: 0,
@@ -111,14 +112,14 @@ export default function AthleteReportsPage() {
         id: `mock_new_${Date.now()}`,
         publicTrackingId: `TRK-2026-${Math.floor(Math.random() * 9000) + 1000}`,
         title: 'Athlete Submitted Incident',
-        status: 'SUBMITTED',
+        status: ReportStatus.SUBMITTED,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         aiSummary: data.description,
         description: data.description,
         category: 'HARASSMENT',
         urgency: 'MEDIUM',
-        severity: 'MEDIUM',
+        severity: ReportSeverity.MEDIUM,
         subjectAthleteId: 'athlete_1',
         assignedToUserId: 'inv_1',
         toxicityScore: 0,
