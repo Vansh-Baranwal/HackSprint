@@ -118,7 +118,7 @@ const Modal: React.FC<ModalProps> = ({
         tabIndex={-1}
         className={cn(
           'relative z-50 w-full rounded-lg bg-white shadow-xl dark:bg-gray-800',
-          'max-h-[90vh] overflow-hidden',
+          'max-h-[90vh] flex flex-col overflow-hidden',
           sizeClasses[size]
         )}
       >
@@ -147,7 +147,7 @@ const Modal: React.FC<ModalProps> = ({
         )}
 
         {/* Body */}
-        <div className="overflow-y-auto px-6 py-4">
+        <div className="overflow-y-auto flex-1 px-6 py-4">
           {children}
         </div>
 
