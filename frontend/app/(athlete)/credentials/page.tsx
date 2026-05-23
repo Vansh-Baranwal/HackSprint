@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { AuthenticatedLayout } from '@/components/layouts/authenticated-layout';
 import { CredentialCard } from '@/components/features/credential-card';
 import { QRCodeDisplay } from '@/components/features/qr-code-display';
+import { QRVerificationPanel } from '@/components/features/qr-verification-panel';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { useToast } from '@/components/ui/toast';
 import { apiClient } from '@/lib/api/client';
@@ -15,10 +16,13 @@ export default function CredentialsPage() {
   const [selectedCredential, setSelectedCredential] = useState<Credential | null>(null);
   const [qrToken, setQrToken] = useState<string>('');
   const [showQR, setShowQR] = useState(false);
+  const [cachedQrToken, setCachedQrToken] = useState<string | null>(null);
   const { success, error } = useToast();
 
   useEffect(() => {
     fetchCredentials();
+    const token = localStorage.getItem('athlete_upload_qr_token');
+    if (token) setCachedQrToken(token);
   }, []);
 
   const fetchCredentials = async () => {
@@ -80,6 +84,16 @@ export default function CredentialsPage() {
             View and manage your verified credentials
           </p>
         </div>
+
+        {cachedQrToken && (
+          <div className="mb-8 border border-white/10 p-6 rounded-2xl bg-black/40 backdrop-blur-xl shadow-2xl">
+            <h2 className="text-xl font-heading uppercase tracking-widest text-white mb-6 flex items-center gap-3">
+              <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-[pulse_2s_ease-in-out_infinite] shadow-[0_0_10px_rgba(34,197,94,0.6)]"></span>
+              Latest Document Verification QR
+            </h2>
+            <QRVerificationPanel qrToken={cachedQrToken} />
+          </div>
+        )}
 
         {isLoading ? (
           <div className="flex items-center justify-center py-12">

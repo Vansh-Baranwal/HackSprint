@@ -54,6 +54,7 @@ export default function DocumentsPage() {
       
       if (uploaded.qr && uploaded.qr.token) {
         setQrToken(uploaded.qr.token);
+        localStorage.setItem('athlete_upload_qr_token', uploaded.qr.token);
       }
       
       success(`${file.name} uploaded successfully`);
