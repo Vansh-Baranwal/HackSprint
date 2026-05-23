@@ -176,18 +176,7 @@ export const Navigation: React.FC<NavigationProps> = ({
         </nav>
 
         <div className="border-t border-white/10 p-4">
-          {onNotificationOpenChange && (
-            <div className="mb-2 flex justify-end">
-              <NotificationDropdown
-                notifications={notifications}
-                unreadCount={notificationCount}
-                isOpen={isNotificationOpen}
-                onOpenChange={onNotificationOpenChange}
-                onMarkAsRead={onMarkAsRead || (() => {})}
-                onMarkAllAsRead={onMarkAllAsRead || (() => {})}
-              />
-            </div>
-          )}
+
           <button
             onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-white/5 hover:text-white text-left"
@@ -225,16 +214,7 @@ export const Navigation: React.FC<NavigationProps> = ({
         </Link>
 
         <div className="flex items-center gap-4">
-          {onNotificationOpenChange && (
-            <NotificationDropdown
-              notifications={notifications}
-              unreadCount={notificationCount}
-              isOpen={isNotificationOpen}
-              onOpenChange={onNotificationOpenChange}
-              onMarkAsRead={onMarkAsRead || (() => {})}
-              onMarkAllAsRead={onMarkAllAsRead || (() => {})}
-            />
-          )}
+
 
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
