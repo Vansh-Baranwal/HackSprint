@@ -54,6 +54,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
                 'focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2',
                 'disabled:cursor-not-allowed disabled:opacity-50',
                 'dark:border-white/10 dark:bg-neutral-900/40 dark:text-gray-100 backdrop-blur-sm',
+                'max-sm:text-black dark:max-sm:text-black max-sm:bg-white dark:max-sm:bg-white',
                 error && 'border-red-500 focus:border-red-500 focus:ring-red-500',
                 className
               )}
@@ -146,6 +147,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
               'focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2',
               'disabled:cursor-not-allowed disabled:opacity-50',
               'dark:border-white/10 dark:bg-neutral-900/40 dark:text-gray-100 backdrop-blur-sm',
+              'max-sm:text-black dark:max-sm:text-black max-sm:bg-white dark:max-sm:bg-white',
               error && 'border-red-500 focus:border-red-500 focus:ring-red-500',
               className
             )}
