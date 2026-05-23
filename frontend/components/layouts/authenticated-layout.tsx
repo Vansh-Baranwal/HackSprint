@@ -86,6 +86,14 @@ export const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({ childr
 
   return (
     <div className="relative flex h-screen overflow-hidden bg-black text-white selection:bg-orange-500/30">
+      {/* Athlete Dashboard Background Image */}
+      {user.roles?.includes(UserRole.ATHLETE) && (
+        <div 
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-25" 
+          style={{ backgroundImage: "url('/dashboard.jpg')" }} 
+        />
+      )}
+
       {/* Background Gradient Mesh */}
       <div className="pointer-events-none absolute inset-0 z-0">
         <div className="absolute top-[-10%] left-[-10%] h-[500px] w-[500px] rounded-full bg-orange-600/10 mix-blend-screen blur-[100px]" />
