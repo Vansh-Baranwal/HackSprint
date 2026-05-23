@@ -57,14 +57,15 @@ export default function AthleteReportsPage() {
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           aiSummary: 'A routine check was filed regarding abnormal performance metrics during the regional qualifiers. An investigator is currently reviewing the telemetry data.',
-          description: 'Mock report fallback',
-          category: 'PERFORMANCE_ANOMALY',
-          urgency: 'MEDIUM',
           severity: ReportSeverity.HIGH,
           subjectAthleteId: 'athlete_1',
           assignedToUserId: 'inv_1',
           toxicityScore: 0,
-          metadata: {}
+          metadata: {
+            description: 'Mock report fallback',
+            category: 'PERFORMANCE_ANOMALY',
+            urgency: 'MEDIUM'
+          }
         } as AbuseReport];
         setReports(defaultMock);
         localStorage.setItem('hackathon_mock_reports', JSON.stringify(defaultMock));
@@ -116,14 +117,15 @@ export default function AthleteReportsPage() {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         aiSummary: data.description,
-        description: data.description,
-        category: 'HARASSMENT',
-        urgency: 'MEDIUM',
         severity: ReportSeverity.MEDIUM,
         subjectAthleteId: 'athlete_1',
         assignedToUserId: 'inv_1',
         toxicityScore: 0,
-        metadata: {}
+        metadata: {
+          description: data.description,
+          category: 'HARASSMENT',
+          urgency: 'MEDIUM'
+        }
       };
       const updated = [newReport, ...reports];
       setReports(updated);

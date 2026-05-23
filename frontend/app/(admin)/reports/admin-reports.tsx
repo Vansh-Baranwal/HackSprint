@@ -54,14 +54,15 @@ export default function AdminReportsPage() {
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           aiSummary: 'A routine check was filed regarding abnormal performance metrics during the regional qualifiers. An investigator is currently reviewing the telemetry data.',
-          description: 'Mock report fallback for Investigator Dashboard',
-          category: 'PERFORMANCE_ANOMALY',
-          urgency: 'MEDIUM',
           severity: ReportSeverity.HIGH,
           subjectAthleteId: 'athlete_1',
           assignedToUserId: 'inv_1',
           toxicityScore: 0,
-          metadata: {}
+          metadata: {
+            description: 'Mock report fallback for Investigator Dashboard',
+            category: 'PERFORMANCE_ANOMALY',
+            urgency: 'MEDIUM'
+          }
         } as AbuseReport];
         setReports(defaultMock);
         localStorage.setItem('hackathon_mock_reports', JSON.stringify(defaultMock));
