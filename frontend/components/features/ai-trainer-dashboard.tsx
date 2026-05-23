@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { BrainCircuit, Activity, Heart, Flame, Moon, ArrowRight, Share2, AlertTriangle, Play, Pause } from 'lucide-react';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { cn } from '@/lib/utils/cn';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 interface Slide {
   slide_id: string;
@@ -118,15 +119,17 @@ const generateHistoryLogs = () => {
 
 export function AITrainerDashboard() {
   const [data, setData] = useState<WrappedResponse | null>(null);
+  const [modelData, setModelData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
   useEffect(() => {
     async function fetchAnalytics() {
+      const logs = generateHistoryLogs();
       try {
         const payload = {
           athlete_id: "athlete_1",
-          history: generateHistoryLogs()
+          history: logs
         };
 
         const response = await fetch('https://hacksprint-mtyl.onrender.com/api/v1/analytics/wrapped', {
@@ -149,10 +152,18 @@ export function AITrainerDashboard() {
           throw new Error('Invalid data structure');
         }
       } catch (error) {
-        console.error('Failed to fetch AI Trainer data, falling back to mock data:', error);
-        // Fallback to mock data
+        console.warn('Failed to fetch AI Trainer data, falling back to mock data:', error);
         setData(MOCK_DATA);
       } finally {
+        // Generate chronological model prediction mock data for the graph
+        const chronologicalLogs = [...logs].reverse();
+        const predictions = chronologicalLogs.map(log => ({
+          date: new Date(log.date).toLocaleDateString('en-US', { weekday: 'short' }),
+          injury_risk: Math.round(Math.random() * 30 + 10),
+          cns_fatigue: Math.round(Math.random() * 40 + 20),
+          metabolic_load: Math.round(Math.random() * 50 + 40),
+        }));
+        setModelData(predictions);
         setIsLoading(false);
       }
     }
@@ -193,6 +204,7 @@ export function AITrainerDashboard() {
   const isSummaryView = activeSlideIndex === slides.length;
 
   return (
+    <>
     <div className="relative rounded-3xl overflow-hidden transition-all duration-1000 shadow-2xl min-h-[600px] flex flex-col" style={gradientStyle}>
       {/* Decorative Overlays */}
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm z-0" />
@@ -331,5 +343,72 @@ export function AITrainerDashboard() {
         )}
       </div>
     </div>
+
+    {/* Prediction Models Graph Section */}
+    <Card className="mt-8 bg-neutral-900 border-white/10 shadow-2xl overflow-hidden">
+      <CardHeader className="border-b border-white/5 bg-black/40 p-6">
+        <CardTitle className="flex items-center gap-2 text-white font-heading text-2xl">
+          <Activity className="w-6 h-6 text-emerald-400" />
+          Physiological Model Predictions
+        </CardTitle>
+        <p className="text-gray-400 font-bank text-sm uppercase tracking-widest">7-Day Analysis (Injury Risk, CNS Fatigue, Metabolic Load)</p>
+      </CardHeader>
+      <CardBody className="p-6">
+        <ResponsiveContainer width="100%" height={350}>
+          <LineChart data={modelData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
+            <XAxis 
+              dataKey="date" 
+              stroke="#ffffff50"
+              tick={{ fill: '#ffffff80', fontSize: 12, fontFamily: 'var(--font-bank)' }}
+            />
+            <YAxis 
+              stroke="#ffffff50"
+              tick={{ fill: '#ffffff80', fontSize: 12, fontFamily: 'var(--font-bank)' }}
+              tickFormatter={(value) => `${value}%`}
+            />
+            <Tooltip 
+              contentStyle={{ 
+                backgroundColor: '#111111', 
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '8px',
+                fontFamily: 'var(--font-bank)',
+                color: '#fff'
+              }}
+              itemStyle={{ fontFamily: 'var(--font-bank)' }}
+            />
+            <Legend wrapperStyle={{ paddingTop: '20px', fontFamily: 'var(--font-bank)' }} />
+            <Line 
+              type="monotone" 
+              dataKey="injury_risk" 
+              name="Injury Risk (%)" 
+              stroke="#EF4444" 
+              strokeWidth={3}
+              dot={{ r: 4, strokeWidth: 2 }}
+              activeDot={{ r: 6, stroke: '#EF4444', strokeWidth: 2, fill: '#000' }}
+            />
+            <Line 
+              type="monotone" 
+              dataKey="cns_fatigue" 
+              name="CNS Fatigue (%)" 
+              stroke="#F59E0B" 
+              strokeWidth={3}
+              dot={{ r: 4, strokeWidth: 2 }}
+              activeDot={{ r: 6, stroke: '#F59E0B', strokeWidth: 2, fill: '#000' }}
+            />
+            <Line 
+              type="monotone" 
+              dataKey="metabolic_load" 
+              name="Metabolic Load (%)" 
+              stroke="#3B82F6" 
+              strokeWidth={3}
+              dot={{ r: 4, strokeWidth: 2 }}
+              activeDot={{ r: 6, stroke: '#3B82F6', strokeWidth: 2, fill: '#000' }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </CardBody>
+    </Card>
+    </>
   );
 }
