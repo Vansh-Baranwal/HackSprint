@@ -1,13 +1,51 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { AuthenticatedLayout } from '@/components/layouts/authenticated-layout';
 import { Card, CardHeader, CardTitle, CardBody } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { FileText, CheckCircle, Award, Upload, Send } from 'lucide-react';
+import { apiClient } from '@/lib/api/client';
 
 export default function AthleteDashboardPage() {
+  const [metrics, setMetrics] = useState({
+    documents: 0,
+    pendingVerifications: 0,
+    activeCredentials: 0
+  });
+
+  useEffect(() => {
+    const fetchMetrics = async () => {
+      try {
+        const [profile, verifications, credentials] = await Promise.all([
+          apiClient.get<any>('/athlete/profile').catch(() => null),
+          apiClient.get<any[]>('/verifications/my-requests').catch(() => []),
+          apiClient.get<any[]>('/credentials/my-credentials').catch(() => [])
+        ]);
+
+        let docsCount = 0;
+        if (profile?.documents) docsCount = profile.documents.length;
+        // Check local storage if API failed but they uploaded something locally
+        if (docsCount === 0 && localStorage.getItem('athlete_upload_qr_token')) {
+          docsCount = 1;
+        }
+
+        const pendingCount = (verifications || []).filter(v => v.status === 'PENDING').length;
+        const activeCredCount = (credentials || []).filter(c => c.status === 'ISSUED' || c.status === 'SIGNED').length;
+
+        setMetrics({
+          documents: docsCount,
+          pendingVerifications: pendingCount,
+          activeCredentials: activeCredCount
+        });
+      } catch (err) {
+        // Silently fail
+      }
+    };
+    fetchMetrics();
+  }, []);
+
   return (
     <AuthenticatedLayout>
       <div className="space-y-8">
@@ -30,7 +68,7 @@ export default function AthleteDashboardPage() {
                 </div>
                 <div>
                   <p className="text-xs text-gray-400 font-bank uppercase tracking-wider">Documents</p>
-                  <p className="text-2xl font-bold text-white font-heading">0</p>
+                  <p className="text-2xl font-bold text-white font-heading">{metrics.documents}</p>
                 </div>
               </div>
             </CardBody>
@@ -44,7 +82,7 @@ export default function AthleteDashboardPage() {
                 </div>
                 <div>
                   <p className="text-xs text-gray-400 font-bank uppercase tracking-wider">Pending Verifications</p>
-                  <p className="text-2xl font-bold text-white font-heading">0</p>
+                  <p className="text-2xl font-bold text-white font-heading">{metrics.pendingVerifications}</p>
                 </div>
               </div>
             </CardBody>
@@ -58,7 +96,7 @@ export default function AthleteDashboardPage() {
                 </div>
                 <div>
                   <p className="text-xs text-gray-400 font-bank uppercase tracking-wider">Active Credentials</p>
-                  <p className="text-2xl font-bold text-white font-heading">0</p>
+                  <p className="text-2xl font-bold text-white font-heading">{metrics.activeCredentials}</p>
                 </div>
               </div>
             </CardBody>
