@@ -40,36 +40,36 @@ export default function AthleteReportsPage() {
 
   const fetchReports = async () => {
     try {
-      const data = await apiClient.get<AbuseReport[]>('/reports/my-reports');
-      setReports(data);
-    } catch (err: any) {
-      console.warn('Failed to load reports from API, falling back to mock data');
-      
+      // Hackathon Demo Mode: Force load from localStorage to guarantee cross-role syncing
       const cached = localStorage.getItem('hackathon_mock_reports');
       if (cached) {
         setReports(JSON.parse(cached));
-      } else {
-        const defaultMock = [{
-          id: 'mock_1',
-          publicTrackingId: 'TRK-2026-X7Y9',
-          title: 'Suspicious Competition Results',
-          status: ReportStatus.INVESTIGATING,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          aiSummary: 'A routine check was filed regarding abnormal performance metrics during the regional qualifiers. An investigator is currently reviewing the telemetry data.',
-          severity: ReportSeverity.HIGH,
-          subjectAthleteId: 'athlete_1',
-          assignedToUserId: 'inv_1',
-          toxicityScore: 0,
-          metadata: {
-            description: 'Mock report fallback',
-            category: 'PERFORMANCE_ANOMALY',
-            urgency: 'MEDIUM'
-          }
-        } as AbuseReport];
-        setReports(defaultMock);
-        localStorage.setItem('hackathon_mock_reports', JSON.stringify(defaultMock));
+        setIsLoading(false);
+        return;
       }
+
+      const defaultMock = [{
+        id: 'mock_1',
+        publicTrackingId: 'TRK-2026-X7Y9',
+        title: 'Suspicious Competition Results',
+        status: ReportStatus.INVESTIGATING,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        aiSummary: 'A routine check was filed regarding abnormal performance metrics during the regional qualifiers. An investigator is currently reviewing the telemetry data.',
+        severity: ReportSeverity.HIGH,
+        subjectAthleteId: 'athlete_1',
+        assignedToUserId: 'inv_1',
+        toxicityScore: 0,
+        metadata: {
+          description: 'Mock report fallback',
+          category: 'PERFORMANCE_ANOMALY',
+          urgency: 'MEDIUM'
+        }
+      } as AbuseReport];
+      setReports(defaultMock);
+      localStorage.setItem('hackathon_mock_reports', JSON.stringify(defaultMock));
+    } catch (err) {
+      console.error(err);
     } finally {
       setIsLoading(false);
     }
