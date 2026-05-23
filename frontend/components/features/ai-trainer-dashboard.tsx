@@ -155,20 +155,30 @@ export function AITrainerDashboard() {
         console.warn('Failed to fetch AI Trainer data, falling back to mock data:', error);
         setData(MOCK_DATA);
       } finally {
-        // Generate chronological model prediction mock data for the graph
-        const chronologicalLogs = [...logs].reverse();
-        const predictions = chronologicalLogs.map((log, index) => {
-          // Normal pattern: a steady, optimal physiological wave
-          const normalPattern = 45 + Math.sin(index / chronologicalLogs.length * Math.PI * 2) * 10;
+        // Use deterministic mock data for the graph so it doesn't change on re-renders
+        const today = new Date();
+        const deterministicPredictions = Array.from({ length: 7 }).map((_, i) => {
+          const d = new Date(today);
+          d.setDate(d.getDate() - (6 - i));
+          
+          const index = i;
+          const normalPattern = 45 + Math.sin(index / 7 * Math.PI * 2) * 10;
+          
+          // Hardcoded realistic physiological curve for the 7 days
+          const injuryCurve = [12, 14, 18, 28, 22, 16, 14];
+          const cnsCurve = [25, 30, 45, 60, 50, 35, 28];
+          const metabolicCurve = [45, 60, 75, 85, 65, 55, 50];
+
           return {
-            date: new Date(log.date).toLocaleDateString('en-US', { weekday: 'short' }),
-            injury_risk: Math.round(Math.random() * 30 + 10),
-            cns_fatigue: Math.round(Math.random() * 40 + 20),
-            metabolic_load: Math.round(Math.random() * 50 + 40),
+            date: d.toLocaleDateString('en-US', { weekday: 'short' }),
+            injury_risk: injuryCurve[i],
+            cns_fatigue: cnsCurve[i],
+            metabolic_load: metabolicCurve[i],
             normal_pattern: Math.round(normalPattern),
           };
         });
-        setModelData(predictions);
+        
+        setModelData(deterministicPredictions);
         setIsLoading(false);
       }
     }
