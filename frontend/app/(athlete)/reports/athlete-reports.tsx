@@ -48,10 +48,15 @@ export default function AthleteReportsPage() {
         title: 'Suspicious Competition Results',
         status: 'INVESTIGATING',
         createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
         aiSummary: 'A routine check was filed regarding abnormal performance metrics during the regional qualifiers. An investigator is currently reviewing the telemetry data.',
         description: 'Mock report fallback',
         category: 'PERFORMANCE_ANOMALY',
         urgency: 'MEDIUM',
+        severity: 'HIGH',
+        subjectAthleteId: 'athlete_1',
+        assignedToUserId: 'inv_1',
+        toxicityScore: 0,
         metadata: {}
       } as AbuseReport]);
     } finally {
