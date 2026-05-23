@@ -157,12 +157,17 @@ export function AITrainerDashboard() {
       } finally {
         // Generate chronological model prediction mock data for the graph
         const chronologicalLogs = [...logs].reverse();
-        const predictions = chronologicalLogs.map(log => ({
-          date: new Date(log.date).toLocaleDateString('en-US', { weekday: 'short' }),
-          injury_risk: Math.round(Math.random() * 30 + 10),
-          cns_fatigue: Math.round(Math.random() * 40 + 20),
-          metabolic_load: Math.round(Math.random() * 50 + 40),
-        }));
+        const predictions = chronologicalLogs.map((log, index) => {
+          // Normal pattern: a steady, optimal physiological wave
+          const normalPattern = 45 + Math.sin(index / chronologicalLogs.length * Math.PI * 2) * 10;
+          return {
+            date: new Date(log.date).toLocaleDateString('en-US', { weekday: 'short' }),
+            injury_risk: Math.round(Math.random() * 30 + 10),
+            cns_fatigue: Math.round(Math.random() * 40 + 20),
+            metabolic_load: Math.round(Math.random() * 50 + 40),
+            normal_pattern: Math.round(normalPattern),
+          };
+        });
         setModelData(predictions);
         setIsLoading(false);
       }
@@ -404,6 +409,16 @@ export function AITrainerDashboard() {
               strokeWidth={3}
               dot={{ r: 4, strokeWidth: 2 }}
               activeDot={{ r: 6, stroke: '#3B82F6', strokeWidth: 2, fill: '#000' }}
+            />
+            <Line 
+              type="monotone" 
+              dataKey="normal_pattern" 
+              name="Optimal Baseline Pattern" 
+              stroke="#ffffff80" 
+              strokeWidth={2}
+              strokeDasharray="5 5"
+              dot={false}
+              activeDot={false}
             />
           </LineChart>
         </ResponsiveContainer>
