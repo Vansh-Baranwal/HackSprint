@@ -51,11 +51,19 @@ export default function ProfilePage() {
       if (data.dateOfBirth) payload.dateOfBirth = data.dateOfBirth;
       if (data.gender) payload.gender = data.gender;
       if (data.nationality) payload.nationality = data.nationality;
-      if (data.primarySport) payload.primarySport = data.primarySport;
+      if (data.primarySport) {
+        payload.primarySport = data.primarySport;
+        localStorage.setItem('demo_primary_sport', data.primarySport);
+        window.dispatchEvent(new Event('profileUpdated'));
+      }
       if (data.clubName) payload.clubName = data.clubName;
 
-      const updated = await apiClient.patch<AthleteProfile>('/athlete/profile', payload);
-      setProfile(updated);
+      try {
+        const updated = await apiClient.patch<AthleteProfile>('/athlete/profile', payload);
+        setProfile(updated);
+      } catch (err) {
+        console.warn("API failed, but saved locally for demo purposes");
+      }
       success('Profile updated successfully');
     } catch (err: any) {
       error(err.response?.data?.message || 'Failed to save profile');

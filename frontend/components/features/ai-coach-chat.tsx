@@ -23,12 +23,34 @@ export function AICoachChat({
   metabolicLoad = 60 
 }: AICoachChatProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [actualSport, setActualSport] = useState(sport);
   const [messages, setMessages] = useState<Message[]>([
     { role: 'assistant', content: `Hi! I'm your Khel Setu AI Coach. I've been analyzing your ${sport} telemetry. How can I help you optimize your recovery today?` }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const loadSport = () => {
+      const savedSport = localStorage.getItem('demo_primary_sport');
+      if (savedSport && savedSport !== actualSport) {
+        setActualSport(savedSport);
+        setMessages(prev => {
+           const newMsg = [...prev];
+           // Only update the greeting if it's the very first message
+           if (newMsg.length === 1 && newMsg[0].role === 'assistant') {
+               newMsg[0].content = `Hi! I'm your Khel Setu AI Coach. I've been analyzing your ${savedSport} telemetry. How can I help you optimize your recovery today?`;
+           }
+           return newMsg;
+        });
+      }
+    };
+
+    loadSport();
+    window.addEventListener('profileUpdated', loadSport);
+    return () => window.removeEventListener('profileUpdated', loadSport);
+  }, [actualSport]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -57,7 +79,7 @@ export function AICoachChat({
         body: JSON.stringify({
           messages: newMessages,
           context: {
-            sport,
+            sport: actualSport,
             injuryRisk,
             cnsFatigue,
             metabolicLoad
