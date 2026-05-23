@@ -97,21 +97,30 @@ const MOCK_DATA: WrappedResponse = {
   isMock: true,
 };
 
-// Generate 7 days of dummy logs for the POST payload
+// Generate 7 days of dummy logs for the POST payload (Deterministic)
 const generateHistoryLogs = () => {
   const logs = [];
   const today = new Date();
+  
+  const mockDuration = [45, 60, 30, 90, 45, 0, 75];
+  const mockCalories = [350, 450, 200, 800, 320, 0, 600];
+  const mockHRV = [55, 52, 60, 45, 58, 65, 50];
+  const mockSleep = [0.85, 0.88, 0.92, 0.78, 0.84, 0.95, 0.82];
+  const mockRestingHR = [52, 54, 50, 58, 53, 48, 55];
+  const mockGlucose = [105, 110, 95, 125, 100, 90, 115];
+
   for (let i = 6; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
+    const index = 6 - i;
     logs.push({
       date: d.toISOString().split('T')[0],
-      workout_duration_minutes: Math.floor(Math.random() * 60) + 30,
-      active_calories: Math.floor(Math.random() * 500) + 200,
-      hrv_rmssd: Math.floor(Math.random() * 40) + 40,
-      sleep_efficiency: 0.8 + Math.random() * 0.15,
-      resting_heart_rate: Math.floor(Math.random() * 15) + 45,
-      blood_glucose_mg_dl: Math.floor(Math.random() * 40) + 90
+      workout_duration_minutes: mockDuration[index],
+      active_calories: mockCalories[index],
+      hrv_rmssd: mockHRV[index],
+      sleep_efficiency: mockSleep[index],
+      resting_heart_rate: mockRestingHR[index],
+      blood_glucose_mg_dl: mockGlucose[index]
     });
   }
   return logs;
