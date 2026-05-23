@@ -122,6 +122,26 @@ export function AICoachChat({
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            key="spline-robot"
+            initial={{ opacity: 0, x: 50, scale: 0.9 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: 50, scale: 0.9 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200, delay: 0.1 }}
+            className="hidden lg:block absolute bottom-0 right-[370px] sm:right-[420px] w-[350px] h-[550px] pointer-events-none"
+          >
+            <iframe 
+              src="https://my.spline.design/genkubgreetingrobot-645VTOuIBQH4E9xC1Ey7IuBa/" 
+              frameBorder="0" 
+              width="100%" 
+              height="100%"
+              className="bg-transparent pointer-events-auto rounded-2xl"
+            ></iframe>
+          </motion.div>
+        )}
+
+        {isOpen && (
+          <motion.div
+            key="chat-box"
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.9 }}
