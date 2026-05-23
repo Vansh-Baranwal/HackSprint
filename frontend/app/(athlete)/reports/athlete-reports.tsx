@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { useToast } from '@/components/ui/toast';
 import { apiClient } from '@/lib/api/client';
+import { AbuseReportForm } from '@/components/features/abuse-report-form';
 import type { AbuseReport, ReportStatus } from '@/types';
 
 const statusColors: Record<ReportStatus, 'default' | 'warning' | 'error' | 'success'> = {
@@ -28,6 +29,7 @@ export default function AthleteReportsPage() {
   const [selectedReport, setSelectedReport] = useState<AbuseReport | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showResponseModal, setShowResponseModal] = useState(false);
+  const [showNewReportModal, setShowNewReportModal] = useState(false);
   const [response, setResponse] = useState('');
   const { success, error } = useToast();
 
@@ -41,24 +43,31 @@ export default function AthleteReportsPage() {
       setReports(data);
     } catch (err: any) {
       console.warn('Failed to load reports from API, falling back to mock data');
-      // Graceful fallback for hackathon demo
-      setReports([{
-        id: 'mock_1',
-        publicTrackingId: 'TRK-2026-X7Y9',
-        title: 'Suspicious Competition Results',
-        status: 'INVESTIGATING',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        aiSummary: 'A routine check was filed regarding abnormal performance metrics during the regional qualifiers. An investigator is currently reviewing the telemetry data.',
-        description: 'Mock report fallback',
-        category: 'PERFORMANCE_ANOMALY',
-        urgency: 'MEDIUM',
-        severity: 'HIGH',
-        subjectAthleteId: 'athlete_1',
-        assignedToUserId: 'inv_1',
-        toxicityScore: 0,
-        metadata: {}
-      } as AbuseReport]);
+      
+      const cached = localStorage.getItem('hackathon_mock_reports');
+      if (cached) {
+        setReports(JSON.parse(cached));
+      } else {
+        const defaultMock = [{
+          id: 'mock_1',
+          publicTrackingId: 'TRK-2026-X7Y9',
+          title: 'Suspicious Competition Results',
+          status: 'INVESTIGATING',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          aiSummary: 'A routine check was filed regarding abnormal performance metrics during the regional qualifiers. An investigator is currently reviewing the telemetry data.',
+          description: 'Mock report fallback',
+          category: 'PERFORMANCE_ANOMALY',
+          urgency: 'MEDIUM',
+          severity: 'HIGH',
+          subjectAthleteId: 'athlete_1',
+          assignedToUserId: 'inv_1',
+          toxicityScore: 0,
+          metadata: {}
+        } as AbuseReport];
+        setReports(defaultMock);
+        localStorage.setItem('hackathon_mock_reports', JSON.stringify(defaultMock));
+      }
     } finally {
       setIsLoading(false);
     }
@@ -90,16 +99,54 @@ export default function AthleteReportsPage() {
     }
   };
 
+  const handleNewReportSubmit = async (data: any) => {
+    try {
+      // Mock submit since API returns 404
+      await new Promise(resolve => setTimeout(resolve, 800));
+      success('Report filed successfully. An investigator will review it shortly.');
+      setShowNewReportModal(false);
+      
+      // Optionally mock add the report locally for the demo
+      const newReport: AbuseReport = {
+        id: `mock_new_${Date.now()}`,
+        publicTrackingId: `TRK-2026-${Math.floor(Math.random() * 9000) + 1000}`,
+        title: 'Athlete Submitted Incident',
+        status: 'SUBMITTED',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        aiSummary: data.description,
+        description: data.description,
+        category: 'HARASSMENT',
+        urgency: 'MEDIUM',
+        severity: 'MEDIUM',
+        subjectAthleteId: 'athlete_1',
+        assignedToUserId: 'inv_1',
+        toxicityScore: 0,
+        metadata: {}
+      };
+      const updated = [newReport, ...reports];
+      setReports(updated);
+      localStorage.setItem('hackathon_mock_reports', JSON.stringify(updated));
+    } catch (err: any) {
+      error('Failed to submit report');
+    }
+  };
+
   return (
     <AuthenticatedLayout>
       <div className="mx-auto max-w-6xl space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-            Reports About Me
-          </h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
-            View reports where you are the subject and provide responses
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+              Reports & Incidents
+            </h1>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">
+              View reports where you are the subject or file a new incident report
+            </p>
+          </div>
+          <Button onClick={() => setShowNewReportModal(true)}>
+            File New Report
+          </Button>
         </div>
 
         {isLoading ? (
@@ -254,7 +301,28 @@ export default function AthleteReportsPage() {
                 </div>
               </div>
             </Modal>
+
+            <Modal
+              isOpen={showNewReportModal}
+              onClose={() => setShowNewReportModal(false)}
+              title="File a New Incident Report"
+              size="xl"
+            >
+              <AbuseReportForm onSubmit={handleNewReportSubmit} />
+            </Modal>
           </>
+        )}
+        
+        {/* Render New Report Modal even if there are no existing reports selected */}
+        {!selectedReport && showNewReportModal && (
+          <Modal
+            isOpen={showNewReportModal}
+            onClose={() => setShowNewReportModal(false)}
+            title="File a New Incident Report"
+            size="xl"
+          >
+            <AbuseReportForm onSubmit={handleNewReportSubmit} />
+          </Modal>
         )}
       </div>
     </AuthenticatedLayout>
