@@ -54,6 +54,11 @@ export default function QRVerificationPage() {
     }
 
     try {
+      // Validate that the scanned QR code contains the required domain
+      if (!scannedText.includes('athletesheild.com/') && !scannedText.includes('athleteshield.com/')) {
+        throw new Error('Invalid QR code. This credential does not belong to Khel Setu.');
+      }
+
       // Mock a successful verification for the hackathon demo
       const mockVerificationData = {
         athleteName: 'Athlete',
@@ -73,7 +78,7 @@ export default function QRVerificationPage() {
 
       setVerificationData(mockVerificationData);
     } catch (err: any) {
-      setError('Failed to verify credential. Please try again later.');
+      setError(err.message || 'Failed to verify credential. Please try again later.');
     } finally {
       setIsVerifying(false);
     }
