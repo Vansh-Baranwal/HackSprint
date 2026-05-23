@@ -21,9 +21,6 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "Khel Setu",
   description: "Secure athlete identity verification platform with end-to-end encryption and privacy-first principles",
-  icons: {
-    icon: '/Khelo_India.svg.png',
-  },
 };
 
 export default function RootLayout({
