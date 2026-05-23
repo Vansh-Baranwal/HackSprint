@@ -140,16 +140,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
       header: 'Actions',
       render: (doc) => (
         <div className="flex items-center gap-2">
-          {onPreview && (
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => onPreview(doc)}
-              title="Preview"
-            >
-              <Eye className="h-4 w-4" />
-            </Button>
-          )}
+
           {onDelete && (
             <Button
               size="sm"

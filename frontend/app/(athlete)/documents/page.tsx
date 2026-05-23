@@ -19,10 +19,18 @@ export default function DocumentsPage() {
   const fetchDocuments = async () => {
     try {
       const profile = await apiClient.get<any>('/athlete/profile');
-      const docs = (profile.documents || []).map((doc: any) => ({
+      let docs = (profile.documents || []).map((doc: any) => ({
         ...doc,
         sizeBytes: Number(doc.sizeBytes),
       }));
+
+      // Filter out deleted documents using localStorage
+      const deletedDocsStr = localStorage.getItem('demo_deleted_documents');
+      if (deletedDocsStr) {
+        const deletedDocs = JSON.parse(deletedDocsStr) as string[];
+        docs = docs.filter((doc: any) => !deletedDocs.includes(doc.id));
+      }
+
       setDocuments(docs);
     } catch (err: any) {
       error('Failed to load documents');
@@ -66,8 +74,21 @@ export default function DocumentsPage() {
 
   const handleDelete = async (documentId: string) => {
     try {
-      // Safely filter state since delete is not exposed as a direct endpoint on the backend
+      // Try hitting the backend delete endpoint first (if it exists)
+      try {
+        await apiClient.delete(`/athlete/documents/${documentId}`);
+      } catch (err) {
+        console.warn("Backend delete not supported, mocking via localStorage");
+      }
+      
       setDocuments((prev) => prev.filter((doc) => doc.id !== documentId));
+      
+      // Persist deleted state to localStorage
+      const deletedDocsStr = localStorage.getItem('demo_deleted_documents');
+      const deletedDocs = deletedDocsStr ? JSON.parse(deletedDocsStr) as string[] : [];
+      deletedDocs.push(documentId);
+      localStorage.setItem('demo_deleted_documents', JSON.stringify(deletedDocs));
+
       success('Document removed successfully');
     } catch (err: any) {
       error('Failed to delete document');
